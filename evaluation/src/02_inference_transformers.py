@@ -1,4 +1,5 @@
 from os import getenv
+from sys import exit
 
 from dotenv import load_dotenv
 from huggingface_hub.errors import LocalEntryNotFoundError
@@ -22,7 +23,7 @@ try:
     )
 except (LocalEntryNotFoundError, OSError) as e:
     print(e)
-    exit(1)
+    exit(0)
 
 # execute inference
 if use_cpu:

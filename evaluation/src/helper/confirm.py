@@ -1,3 +1,5 @@
+from sys import exit
+
 from keyboard import wait
 
 
@@ -6,4 +8,4 @@ def confirm_action(logger, question):
     try:
         wait("enter")
     except KeyboardInterrupt:
-        exit(1)
+        exit(0)
