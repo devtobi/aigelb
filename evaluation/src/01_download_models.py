@@ -1,27 +1,40 @@
 from dotenv import load_dotenv
-from huggingface_hub import hf_hub_download, scan_cache_dir, try_to_load_from_cache
+from huggingface_hub import (
+    CacheNotFound,
+    hf_hub_download,
+    scan_cache_dir,
+    try_to_load_from_cache,
+)
 from transformers import AutoModelForCausalLM, AutoTokenizer, logging
 
 from helper import confirm_action, get_logger, get_model_cache_dir, get_models
 
 
+def is_cached_model(model, model_cache_dir, cached_repo_names):
+    filename = model.gguf_filename.strip()
+
+    if filename:
+        cached_file = try_to_load_from_cache(
+            repo_id=model.repo_id,
+            filename=filename,
+            repo_type="model",
+            cache_dir=model_cache_dir,
+        )
+        return isinstance(cached_file, str)
+
+    return model.repo_id in cached_repo_names
+
+
 def get_cached_models(models, model_cache_dir):
-    huggingface_cache_info = scan_cache_dir(cache_dir=model_cache_dir)
+    try:
+        huggingface_cache_info = scan_cache_dir(cache_dir=model_cache_dir)
+    except CacheNotFound:
+        return []
     cached_repo_names = [repo.repo_id for repo in huggingface_cache_info.repos]
     return [
         model
         for model in models
-        if model.gguf_filename.strip()
-        and isinstance(
-            try_to_load_from_cache(
-                repo_id=model.repo_id,
-                filename=model.gguf_filename,
-                repo_type="model",
-                cache_dir=model_cache_dir,
-            ),
-            str,
-        )
-        or model.repo_id in cached_repo_names
+        if is_cached_model(model, model_cache_dir, cached_repo_names)
     ]
 
 
@@ -35,18 +48,18 @@ def log_requested_models(requested_models, logger):
     log_models(requested_models, logger)
 
 
-def log_cached_models(cached_models, models_length, logger):
-    if len(cached_models) == models_length:
+def log_cached_models(cached_models, amount_models, logger):
+    if len(cached_models) == amount_models:
         logger.info(
             "All models already found in the cache. No downloads required. Quitting..."
         )
-        return
-
+        return False
     if cached_models:
         logger.info(
             "Found models in the cache. The following will not be downloaded again:"
         )
         log_models(cached_models, logger)
+    return True
 
 
 def log_downloadable_models(downloadable_models, logger):
@@ -91,8 +104,9 @@ def download(downloadable_models, model_cache_dir, logger):
             logger.warning(
                 "Interrupted download. Proceeding on next execution. Quitting..."
             )
-            return
-        logger.info("Finished downloading the models from Hugging Face. Quitting...")
+            return False
+    logger.info("Finished downloading the models from Hugging Face. Quitting...")
+    return True
 
 
 def download_models(logger):
@@ -103,13 +117,17 @@ def download_models(logger):
 
     model_cache_dir = get_model_cache_dir()
     cached_models = get_cached_models(models, model_cache_dir)
-    log_cached_models(cached_models, len(models), logger)
+    if not log_cached_models(cached_models, len(models), logger):
+        return
 
     downloadable_models = list(set(models) - set(cached_models))
     log_downloadable_models(downloadable_models, logger)
 
-    confirm_action(logger, "Are you sure you want to download those models?")
-    download(downloadable_models, model_cache_dir, logger)
+    if not confirm_action(logger, "Are you sure you want to download those models?"):
+        return
+
+    if not download(downloadable_models, model_cache_dir, logger):
+        return
 
 
 if __name__ == "__main__":

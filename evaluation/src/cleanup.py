@@ -30,7 +30,8 @@ def clear_cache(logger):
     )
 
     # Confirm before deletion
-    confirm_action(logger, "Do you want to delete those models now?")
+    if not confirm_action(logger, "Do you want to delete those models now?"):
+        return
 
     # Execute deletion
     delete_operation.execute()
