@@ -3,16 +3,20 @@ from os import path
 
 
 class Model:
-    def __init__(self, repo_id, filename, gated):
+    def __init__(self, repo_id, gguf_filename, gated):
         self.repo_id = repo_id
-        self.filename = filename
+        self.gguf_filename = gguf_filename
         self.gated = gated
 
     def __iter__(self):
-        return iter((self.repo_id, self.filename, self.gated))
+        return iter((self.repo_id, self.gguf_filename, self.gated))
 
     def __str__(self):
-        return f"{self.repo_id}: {self.filename}"
+        return (
+            f"{self.repo_id}: {self.gguf_filename}"
+            if self.gguf_filename
+            else f"{self.repo_id}"
+        )
 
 
 def get_models():
