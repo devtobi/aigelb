@@ -1,11 +1,11 @@
-from sys import exit
-
-from keyboard import wait
-
-
 def confirm_action(logger, question):
-    logger.info(f"{question}: Press ENTER to confirm... (Ctrl/Cmd+C to abort)")
-    try:
-        wait("enter")
-    except KeyboardInterrupt:
-        exit(0)
+    entered = "none"
+    while entered != "exit" and entered != "":
+        logger.info(
+            f"{question} Press ENTER to confirm... (Type 'exit' or hit Ctrl+C to exit.)"
+        )
+        try:
+            entered = input()
+        except KeyboardInterrupt:
+            return False
+    return True if not entered else False
