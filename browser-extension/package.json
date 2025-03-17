@@ -1,0 +1,51 @@
+{
+  "name": "aigelb-browser-extension",
+  "description": "manifest.json description",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev:chrome": "concurrently --kill-others-on-fail bun:webserver \"wxt -b chrome\"",
+    "dev:firefox": "concurrently --kill-others-on-fail bun:webserver \"wxt -b firefox\"",
+    "check": "concurrently --kill-others-on-fail --group bun:format:check bun:lint:check bun:typecheck",
+    "fix": "bun run format:fix && bun run lint:fix",
+    "format:check": "prettier . --check",
+    "format:fix": "prettier . --write",
+    "lint:check": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "vue-tsc --build --noEmit",
+    "build": "concurrently --kill-others-on-fail --group bun:build:chrome bun:build:edge bun:build:firefox bun:build:opera bun:build:safari",
+    "build:chrome": "wxt build -b chrome",
+    "build:firefox": "wxt build -b firefox",
+    "build:safari": "wxt build -b safari",
+    "zip": "concurrently --kill-others-on-fail --group bun:zip:chrome bun:zip:edge bun:zip:firefox bun:zip:opera bun:zip:safari",
+    "zip:chrome": "wxt zip -b chrome",
+    "zip:firefox": "wxt zip -b firefox",
+    "zip:safari": "wxt zip -b safari",
+    "webserver": "serve dev -p 8081",
+    "postinstall": "wxt prepare"
+  },
+  "dependencies": {
+    "vue": "3.5.13"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "4.4.1",
+    "@types/chrome": "0.0.309",
+    "@vue/eslint-config-prettier": "10.2.0",
+    "@vue/eslint-config-typescript": "14.5.0",
+    "@vue/tsconfig": "0.7.0",
+    "@wxt-dev/auto-icons": "^1.0.2",
+    "@wxt-dev/module-vue": "1.0.2",
+    "concurrently": "9.1.2",
+    "eslint": "9.22.0",
+    "eslint-plugin-vue": "10.0.0",
+    "prettier": "3.5.3",
+    "serve": "14.2.4",
+    "typescript": "5.8.2",
+    "vue-tsc": "2.2.8",
+    "wxt": "0.19.29"
+  },
+  "trustedDependencies": [
+    "spawn-sync"
+  ]
+}

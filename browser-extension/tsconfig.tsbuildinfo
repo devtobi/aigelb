@@ -1,0 +1,1 @@
+{"root":["./web-ext.config.ts","./wxt.config.ts","./src/components/helloworld.vue","./src/entrypoints/background.ts","./src/entrypoints/content.ts","./src/entrypoints/popup/app.vue","./src/entrypoints/popup/main.ts","./.wxt/wxt.d.ts"],"version":"5.8.2"}
