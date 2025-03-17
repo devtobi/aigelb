@@ -11,9 +11,13 @@ export default defineConfig({
   manifest: ({ manifestVersion }) => ({
     permissions: [],
     host_permissions: [],
-    author: manifestVersion === 3 ? {
-	  email: "devtobi - Tobias Stadler"
-	} : "devtobi - Tobias Stadler",
+    author:
+      manifestVersion === 3
+        ? {
+            email: "devtobi - Tobias Stadler",
+          }
+        : "devtobi - Tobias Stadler",
+    name: "AIGELB - AI German Easy Language Browsing",
     short_name: "AIGELB",
     homepage_url: "https://github.com/devtobi/aigelb",
   }),

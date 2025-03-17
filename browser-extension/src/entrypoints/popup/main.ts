@@ -1,10 +1,7 @@
 import { createApp } from "vue";
 
-import { registerVuePlugins } from "@/plugins";
-
-import "unfonts.css";
-
 import App from "@/entrypoints/popup/App.vue";
+import { registerVuePlugins } from "@/plugins";
 
 const app = createApp(App);
 

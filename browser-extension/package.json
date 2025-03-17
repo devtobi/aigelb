@@ -1,6 +1,6 @@
 {
-  "name": "AIGELB",
-  "description": "AI German Easy Language Browsing - 100% local and safe",
+  "name": "aigelb-browser-extension",
+  "description": "AI-based browser extension to read the web in German Easy Language (Leichte Sprache) using the power of LLMs",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -43,8 +43,6 @@
     "eslint": "9.22.0",
     "eslint-plugin-vue": "10.0.0",
     "prettier": "3.5.3",
-    "sass": "1.85.1",
-    "sass-loader": "16.0.5",
     "serve": "14.2.4",
     "typescript": "5.8.2",
     "unplugin-fonts": "1.3.1",
