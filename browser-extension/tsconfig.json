@@ -2,6 +2,7 @@
   "extends": ["@vue/tsconfig/tsconfig.dom.json", "./.wxt/tsconfig.json"],
   "compilerOptions": {
     "noUncheckedSideEffectImports": true,
-    "tsBuildInfoFile": "./.cache/build.tsbuildinfo"
+    "tsBuildInfoFile": "./.cache/build.tsbuildinfo",
+    "types": ["unplugin-fonts/client"]
   }
 }
