@@ -1,3 +1,4 @@
+import UnpluginFontsPlugin from "unplugin-fonts/vite";
 import { defineConfig } from "wxt";
 
 // See https://wxt.dev/api/config.html
@@ -15,17 +16,32 @@ export default defineConfig({
   },
   hooks: {
     "build:manifestGenerated": (wxt, manifest) => {
-      if (wxt.config.mode === "development") {
-        manifest.name += " (DEV)";
+      if (wxt.config.mode !== "production") {
+        manifest.name += ` (${wxt.config.mode})`;
       }
     },
   },
   imports: false,
   vue: {
     vite: {
-	  features: {
-	    optionsAPI: false
-	  }
-	}
-  }
+      features: {
+        optionsAPI: false,
+      },
+    },
+  },
+  vite: () => ({
+    plugins: [
+      UnpluginFontsPlugin({
+        fontsource: {
+          families: [
+            {
+              name: "Roboto",
+              weights: [100, 300, 400, 500, 700, 900],
+              subset: "latin",
+            },
+          ],
+        },
+      }),
+    ],
+  }),
 });
