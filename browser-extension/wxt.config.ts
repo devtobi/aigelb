@@ -10,7 +10,12 @@ export default defineConfig({
   outDir: "dist",
   manifest: ({ manifestVersion }) => ({
     permissions: [],
-    host_permissions: manifestVersion === 2 ? [] : [],
+    host_permissions: [],
+    author: manifestVersion === 3 ? {
+	  email: "devtobi - Tobias Stadler"
+	} : "devtobi - Tobias Stadler",
+    short_name: "AIGELB",
+    homepage_url: "https://github.com/devtobi/aigelb",
   }),
   runner: {
     startUrls: ["http://localhost:8081"],
@@ -30,6 +35,9 @@ export default defineConfig({
         optionsAPI: false,
       },
     },
+  },
+  autoIcons: {
+    grayscaleOnDevelopment: false,
   },
   vite: () => ({
     plugins: [

@@ -1,9 +1,9 @@
 <template>
   <v-app style="width: 800px">
     <v-container>
-		<p>Das ist ein Test</p>
-		<v-btn :prepend-icon="mdiAccessPoint">Das ist ein Test</v-btn>
-	</v-container>
+      <p>Das ist ein Test</p>
+      <v-btn :prepend-icon="mdiAccessPoint">Das ist ein Test</v-btn>
+    </v-container>
   </v-app>
 </template>
 
