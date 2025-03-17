@@ -1,4 +1,5 @@
 import UnpluginFontsPlugin from "unplugin-fonts/vite";
+import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import { defineConfig } from "wxt";
 
 // See https://wxt.dev/api/config.html
@@ -24,6 +25,7 @@ export default defineConfig({
   imports: false,
   vue: {
     vite: {
+      template: { transformAssetUrls },
       features: {
         optionsAPI: false,
       },
@@ -31,6 +33,9 @@ export default defineConfig({
   },
   vite: () => ({
     plugins: [
+      vuetify({
+        autoImport: false,
+      }),
       UnpluginFontsPlugin({
         fontsource: {
           families: [
