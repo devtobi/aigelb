@@ -14,6 +14,7 @@ stats-*.json
 .cache
 .wxt
 .web-ext.config.ts
+coverage
 
 # Editor directories and files
 .vscode/*

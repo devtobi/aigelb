@@ -15,7 +15,7 @@ export default defineConfigWithVueTs(
   vueTsConfigs.stylistic,
   vuePrettierEslintConfigSkipFormatting,
   {
-    ignores: ["dist", "node_modules", ".wxt", ".idea"],
+    ignores: ["dist", "node_modules", ".wxt", ".idea", "coverage"],
   },
   {
     linterOptions: {
