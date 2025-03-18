@@ -1,11 +1,10 @@
 <template>
   <v-app style="width: 800px">
     <v-container>
-      <p>Das ist ein Test</p>
       <v-btn
         :prepend-icon="mdiAccessPoint"
         @click="sendMessageTest"
-        >Das ist ein Test</v-btn
+        >{{ i18n.t("helloWorld") }}</v-btn
       >
     </v-container>
   </v-app>
@@ -13,6 +12,7 @@
 
 <script setup lang="ts">
 import { mdiAccessPoint } from "@mdi/js";
+import { i18n } from "#i18n";
 import { VApp, VBtn, VContainer } from "vuetify/components";
 import { sendMessage } from "webext-bridge/popup";
 

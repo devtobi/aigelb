@@ -5,12 +5,14 @@ import { defineConfig } from "wxt";
 // See https://wxt.dev/api/config.html
 export default defineConfig({
   extensionApi: "chrome",
-  modules: ["@wxt-dev/auto-icons", "@wxt-dev/module-vue"],
+  modules: [
+    "@wxt-dev/auto-icons",
+    "@wxt-dev/module-vue",
+    "@wxt-dev/i18n/module",
+  ],
   srcDir: "src",
   outDir: "dist",
   manifest: ({ manifestVersion }) => ({
-    permissions: [],
-    host_permissions: [],
     author:
       manifestVersion === 3
         ? {
@@ -19,7 +21,11 @@ export default defineConfig({
         : "devtobi - Tobias Stadler",
     name: "AIGELB - AI German Easy Language Browsing",
     short_name: "AIGELB",
+    description: "__MSG_extDescription__",
     homepage_url: "https://github.com/devtobi/aigelb",
+    default_locale: "de",
+    permissions: [],
+    host_permissions: [],
   }),
   runner: {
     startUrls: ["http://localhost:8081"],
