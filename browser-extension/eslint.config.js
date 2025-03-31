@@ -6,6 +6,7 @@ import {
 } from "@vue/eslint-config-typescript";
 import { ESLint } from "eslint";
 import vueEslintConfig from "eslint-plugin-vue";
+import { globalIgnores } from "eslint/config";
 
 export default defineConfigWithVueTs(
   ESLint.defaultConfig,
@@ -14,9 +15,6 @@ export default defineConfigWithVueTs(
   vueTsConfigs.strict,
   vueTsConfigs.stylistic,
   vuePrettierEslintConfigSkipFormatting,
-  {
-    ignores: ["dist", "node_modules", ".wxt", ".idea", "coverage"],
-  },
   {
     linterOptions: {
       reportUnusedDisableDirectives: "error",
@@ -30,5 +28,6 @@ export default defineConfigWithVueTs(
         { registeredComponentsOnly: false },
       ],
     },
-  }
+  },
+  globalIgnores(["dist", "node_modules", ".wxt", ".idea", "coverage"])
 );
