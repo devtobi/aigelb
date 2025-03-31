@@ -13,6 +13,7 @@ permissions:
 
 env:
   VENV_DIR: .venv
+  WORKING_DIRECTORY: evaluation
 
 jobs:
   check:
@@ -20,14 +21,14 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory:  evaluation/
+        working-directory:  ${{ env.WORKING_DIRECTORY }}/
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Setup python
         uses: actions/setup-python@v5
         with:
-          python-version-file: pyproject.toml
+          python-version-file: ${{ env.WORKING_DIRECTORY }}/pyproject.toml
       - name: Setup poetry package manager
         uses: snok/install-poetry@v1
         with:
