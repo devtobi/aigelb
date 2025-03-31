@@ -1,8 +1,6 @@
 from csv import reader
 from os import path
 
-from huggingface_hub import try_to_load_from_cache
-
 
 class Model:
     def __init__(self, repo_id, gguf_filename, gated):
