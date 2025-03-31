@@ -8,6 +8,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read # access to check out code and install dependencies
+
 jobs:
   check-and-build:
     name: Check and build npm project
