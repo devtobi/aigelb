@@ -26,6 +26,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Setup python
+        id: setup-python
         uses: actions/setup-python@v5
         with:
           python-version-file: ${{ env.WORKING_DIRECTORY }}/pyproject.toml
