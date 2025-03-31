@@ -1,6 +1,8 @@
 from csv import reader
 from os import path
 
+from huggingface_hub import try_to_load_from_cache
+
 
 class Model:
     def __init__(self, repo_id, gguf_filename, gated):
@@ -18,7 +20,6 @@ class Model:
             else f"{self.repo_id}"
         )
 
-
 def get_models():
     dirname = path.dirname(__file__)
     model_path = path.join(dirname, "../../models.csv")
@@ -27,7 +28,6 @@ def get_models():
         csv_reader = reader(csvfile, delimiter=",")
         next(csv_reader, None)  # skip the headers
         return [Model(row[0], row[1], row[2]) for row in csv_reader]
-
 
 def get_model_cache_dir():
     dirname = path.dirname(__file__)
