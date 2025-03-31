@@ -1,6 +1,6 @@
-import { defineRunnerConfig } from "wxt";
+import { defineWebExtConfig } from "wxt";
 
-export default defineRunnerConfig({
+export default defineWebExtConfig({
   binaries: {
     chrome: "/Applications/Chromium.app/Contents/MacOS/Chromium",
     firefox: "firefoxdeveloperedition",

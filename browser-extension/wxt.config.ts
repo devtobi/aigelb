@@ -4,7 +4,6 @@ import { defineConfig } from "wxt";
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
-  extensionApi: "chrome",
   modules: [
     "@wxt-dev/auto-icons",
     "@wxt-dev/module-vue",
@@ -27,7 +26,7 @@ export default defineConfig({
     permissions: [],
     host_permissions: [],
   }),
-  runner: {
+  webExt: {
     startUrls: ["http://localhost:8081"],
   },
   hooks: {
