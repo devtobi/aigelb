@@ -1,0 +1,33 @@
+name: actions CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read # access to check out code and install dependencies
+
+env:
+  WORKING_DIRECTORY: .github/workflows
+
+jobs:
+  check:
+    name: Check GitHub actions
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory:  ${{ env.WORKING_DIRECTORY }}/
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Download actionlint
+        id: download-actionlint
+        run: bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+        shell: bash
+      - name: Run checks
+        run: ${{ steps.download-actionlint.outputs.executable }} -color
+        shell: bash
