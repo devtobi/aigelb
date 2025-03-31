@@ -11,13 +11,16 @@ on:
 permissions:
   contents: read # access to check out code and install dependencies
 
+env:
+  WORKING_DIRECTORY: browser-extension
+
 jobs:
   check-and-build:
     name: Check and build npm project
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory:  browser-extension/
+        working-directory: ${{ env.WORKING_DIRECTORY }}/
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
