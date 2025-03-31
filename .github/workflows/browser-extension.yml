@@ -8,8 +8,8 @@ on:
     branches:
       - main
 
-permissions:
-  contents: read # access to check out code and install dependencies
+        permissions:
+          contents: read # access to check out code and install dependencies
 
 env:
   WORKING_DIRECTORY: browser-extension
