@@ -1,5 +1,5 @@
-import { onMessage } from "webext-bridge/background";
 import { defineBackground } from "#imports";
+import { onMessage } from "webext-bridge/background";
 
 import { TestEventName } from "@/types/TestEvent.ts";
 
