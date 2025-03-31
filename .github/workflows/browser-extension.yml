@@ -10,7 +10,7 @@ on:
 
 jobs:
   check-and-build:
-    name: Lint and build npm project
+    name: Check and build npm project
     runs-on: ubuntu-latest
     defaults:
       run:
