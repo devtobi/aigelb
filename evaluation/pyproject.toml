@@ -11,11 +11,11 @@ readme = "README.md"
 keywords = [ "llm", "evaluation", "metrics", "nlp", "mt", "easylanguage" ]
 requires-python = ">=3.12"
 dependencies = [
-    "dotenv (>=0.9.9,<0.10.0)",
-    "huggingface-hub (>=0.29.2,<0.30.0)",
-    "transformers (>=4.49.0,<5.0.0)",
-    "torch (>=2.6.0,<3.0.0)",
-    "llama-cpp-python (>=0.3.7,<0.4.0)",
+    "dotenv (==0.9.9)",
+    "huggingface-hub (==0.29.3)",
+    "transformers (==4.50.3)",
+    "torch (==2.6.0)",
+    "llama-cpp-python (==0.3.8)",
 ]
 
 [project.scripts]
@@ -27,8 +27,8 @@ packages = [{include = "evaluation", from = "src"}]
 package-mode = false
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.9.10"
+ruff = "0.9.10"
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
+requires = ["poetry-core==2.1.2"]
 build-backend = "poetry.core.masonry.api"
