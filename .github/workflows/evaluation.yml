@@ -24,14 +24,14 @@ jobs:
         working-directory:  ${{ env.WORKING_DIRECTORY }}/
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Setup python
         id: setup-python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@8d9ed9ac5c53483de85588cdf95a591a75ab9f55 # v5
         with:
           python-version-file: ${{ env.WORKING_DIRECTORY }}/pyproject.toml
       - name: Setup poetry package manager
-        uses: snok/install-poetry@v1
+        uses: snok/install-poetry@76e04a911780d5b312d89783f7b1cd627778900a # v1
         with:
           version: latest
           virtualenvs-create: true
@@ -40,7 +40,7 @@ jobs:
           installer-parallel: true
       - name: Load venv if cached
         id: cached-poetry-dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
         with:
           path: ${{ env.VENV_DIR }}
           key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
