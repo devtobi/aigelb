@@ -1,13 +1,13 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"description": "Custom Renovate configuration",
-	"assigneesFromCodeOwners": true,
 	"extends": [
 		// Custom Manager Presets (https://docs.renovatebot.com/presets-customManagers/)
 		"customManagers:githubActionsVersions", // manages _VERSION variables in GitHub Action workflows
 
 		// Default Presets (https://docs.renovatebot.com/presets-default/)
 		":approveMajorUpdates", // major dependency updates need to be approved via dashboard before PR is created
+		":assignAndReview(devtobi)",
 		":automergePatch",
 		":disableRateLimiting", // allows unlimited creation of PRs
 		":enableVulnerabilityAlertsWithLabel(security)", // custom label for security PRs created by Renovatebot
