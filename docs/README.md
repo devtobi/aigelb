@@ -5,7 +5,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/devtobi/aigelb">
-    <img src="../docs/assets/logo.png" alt="AIGELB logo" width="128" height="129">
+    <img src="./assets/logo.png" alt="AIGELB logo" width="128" height="129">
   </a>
 
   <h3 align="center">AIGELB</h3>
