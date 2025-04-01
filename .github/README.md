@@ -102,15 +102,31 @@ The `.env` file inside the `evaluation` directory allows further customization o
 
 ### 1. Downloading models
 
-TODO
+To download the models you selected for evaluation, you need to run the download script using `poetry run python src/01_download_models.py` when you are inside the `evaluation` directory.
 
-### 2. Executing Inference
+The script will read the content of the `models.csv` file and ask you to confirm the download before starting.
 
-TODO
+The downloaded models will be stored in the `.cache` folder inside the `evaluation` directory for later use.
 
-### 3. Calculating metrics
+**Tip:** If you interrupt the model downloads by quitting the script execution, the script will automatically resume the downloads where they stopped.
 
-TODO
+#### Clean up
+
+When experiment with different models your `.cache` folder might fill up quickly and unused models unnecessarly take away storage space.
+
+You can use the cleanup script using `poetry run python src/cleanup.py` to get rid off all the models in your `.cache` directory.
+
+### 2. Preparing data
+
+TBD
+
+### 3. Executing inference
+
+TBD
+
+### 4. Calculating metrics
+
+TBD
 
 <!-- AUTHORS -->
 ## Authors
