@@ -1,0 +1,26 @@
+name: documentation CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read # access to check out code and install dependencies
+
+env:
+  WORKING_DIRECTORY: docs
+
+jobs:
+  check:
+    name: Check documentation
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIRECTORY }}/
+    steps:
+      - name: Run checks
+        uses: DavidAnson/markdownlint-cli2-action@v19
