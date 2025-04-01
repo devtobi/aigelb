@@ -75,7 +75,7 @@ The execution of the Python scripts require you to have a modern version of
 - Python as programming language and
 - Poetry as dependency management tool
 
-installed on your system. Please check out the documentation of those tools for installation instructions.
+installed on your system. Please check out the [Python documentation](https://www.python.org/downloads) and [Poetry documentation](https://python-poetry.org/docs/#installation) for installation instructions.
 
 The exact compatible versions of Python and Poetry can be found in the `pyproject.toml` file inside the `evaluation` directory.
 
