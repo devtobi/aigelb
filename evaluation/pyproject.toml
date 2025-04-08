@@ -27,7 +27,7 @@ packages = [{include = "evaluation", from = "src"}]
 package-mode = false
 
 [tool.poetry.group.dev.dependencies]
-ruff = "0.11.2"
+ruff = "0.11.4"
 
 [build-system]
 requires = ["poetry-core==2.1.2"]
