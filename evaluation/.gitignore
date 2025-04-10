@@ -1,3 +1,4 @@
 .cache
 .idea
 .python-version
+.venv
