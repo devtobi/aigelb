@@ -47,7 +47,7 @@ of different LLMs in regard to the use case "Easy Language" in German.
 #### Evaluation
 
 * [Python](https://www.python.org)
-* [Poetry](https://python-poetry.org)
+* [uv](https://docs.astral.sh/uv/)
 * [HuggingFace Hub](https://huggingface.co)
 * [LangChain](https://www.langchain.com)
 * [HuggingFace Transformers](https://huggingface.co/docs/transformers/index)
@@ -78,24 +78,24 @@ TODO
 The execution of the Python scripts require you to have a modern version of
 
 * Python as programming language and
-* Poetry as dependency management tool
+* uv as dependency management tool
 
 installed on your system.
 Please check out the [Python documentation](https://www.python.org/downloads)
-and [Poetry documentation](https://python-poetry.org/docs/#installation)
+and [uv documentation](https://docs.astral.sh/uv/getting-started/installation/)
 for installation instructions.
 
-The exact compatible versions of Python and Poetry
+The exact compatible version of Python
 can be found in the `pyproject.toml` file inside the `evaluation` directory.
 
 When the requirements above are met,
-you only need to execute `poetry install` inside the `evaluation` directory
-to download the required packages.
+you only need to execute `uv sync` inside the `evaluation` directory
+to setup the virtual environment and download the required packages.
 
 ### Usage
 
-All mentioned scripts can be run via poetry
-using the following command: `poetry run python <script-name>.py`
+All mentioned scripts can be run via uv
+using the following command: `uv run <script-path>.py`
 
 #### Configuration Setup
 
@@ -136,7 +136,7 @@ due to PyTorch being used under the hood.
 
 To download the models you selected for evaluation,
 you need to run the download script
-using `poetry run python src/01_download_models.py`
+using `uv run src/01_download_models.py`
 when you are inside the `evaluation` directory.
 
 The script will read the content of the `models.csv` file
@@ -154,7 +154,7 @@ When you experiment with different models
 your `.cache` folder might fill up quickly
 and unused models unnecessarly take away storage space.
 
-You can use the cleanup script using `poetry run python src/cleanup.py`
+You can use the cleanup script using `uv run python src/cleanup.py`
 to get rid off all the models in your `.cache` directory.
 
 ### 2. Preparing data
