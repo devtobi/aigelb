@@ -11,6 +11,7 @@ export default defineConfig({
   ],
   srcDir: "src",
   outDir: "dist",
+  targetBrowsers: ["chrome", "firefox", "safari"],
   manifest: ({ manifestVersion }) => ({
     author:
       manifestVersion === 3
