@@ -14,7 +14,7 @@ dependencies = [
     "dotenv (==0.9.9)",
     "huggingface-hub[hf-xet] (==0.30.2)",
     "transformers (==4.51.3)",
-    "torch (==2.6.0)",
+    "torch (==2.7.0)",
     "llama-cpp-python (==0.3.8)",
 ]
 
