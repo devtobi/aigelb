@@ -37,9 +37,9 @@
 	"packageRules": [
 		{
 			"description": "Disable automerge for patch-level updates when pre-release version",
-        	"matchUpdateTypes": ["patch"],
+        		"matchUpdateTypes": ["patch"],
 			"matchCurrentVersion": "/^0\\./",
-        	"automerge": false
+        		"automerge": false
 		},
 	]
 }
