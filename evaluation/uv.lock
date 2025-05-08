@@ -83,7 +83,7 @@ dev = [
 requires-dist = [
     { name = "dotenv", specifier = "==0.9.9" },
     { name = "huggingface-hub", extras = ["hf-xet"], specifier = "==0.31.1" },
-    { name = "llama-cpp-python", specifier = "==0.3.8" },
+    { name = "llama-cpp-python", specifier = "==0.3.9" },
     { name = "torch", specifier = "==2.7.0" },
     { name = "transformers", specifier = "==4.51.3" },
 ]
@@ -171,7 +171,7 @@ wheels = [
 
 [[package]]
 name = "llama-cpp-python"
-version = "0.3.8"
+version = "0.3.9"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "diskcache" },
@@ -179,7 +179,7 @@ dependencies = [
     { name = "numpy" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/95/4e/da912ff2bf9bf855c86e8b1ae9fe1eaedf47d75a66728896b533901c4610/llama_cpp_python-0.3.8.tar.gz", hash = "sha256:31c91323b555c025a76a30923cead9f5695da103dd68c15cdbb4509b17f0ed77", size = 67301056, upload-time = "2025-03-12T09:43:51.416Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/de/6d/4a20e676bdf7d9d3523be3a081bf327af958f9bdfe2a564f5cf485faeaec/llama_cpp_python-0.3.9.tar.gz", hash = "sha256:a3a985f558385e2f5de5b663f4e9b0817506d6af98122450142cd98e79216370", size = 67858575, upload-time = "2025-05-08T11:12:05.992Z" }
 
 [[package]]
 name = "markupsafe"
