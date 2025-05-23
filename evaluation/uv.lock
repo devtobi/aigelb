@@ -82,7 +82,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "dotenv", specifier = "==0.9.9" },
-    { name = "huggingface-hub", extras = ["hf-xet"], specifier = "==0.31.4" },
+    { name = "huggingface-hub", extras = ["hf-xet"], specifier = "==0.32.0" },
     { name = "llama-cpp-python", specifier = "==0.3.9" },
     { name = "torch", specifier = "==2.7.0" },
     { name = "transformers", specifier = "==4.52.3" },
@@ -126,20 +126,21 @@ wheels = [
 
 [[package]]
 name = "huggingface-hub"
-version = "0.31.4"
+version = "0.32.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "filelock" },
     { name = "fsspec" },
+    { name = "hf-xet", marker = "platform_machine == 'aarch64' or platform_machine == 'amd64' or platform_machine == 'arm64' or platform_machine == 'x86_64'" },
     { name = "packaging" },
     { name = "pyyaml" },
     { name = "requests" },
     { name = "tqdm" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/05/a0/7445e07427a917399db619e3c7383de3cd723c20d3b3a8a527a096c49a44/huggingface_hub-0.31.4.tar.gz", hash = "sha256:5a7bc710b9f9c028aee5b1476867b4ec5c1b92f043cb364d5fdc54354757e4ce", size = 407736, upload-time = "2025-05-19T09:37:13.73Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f4/ca/8ee27c56ab650d9d3ea095f0ba12ceb202bc8ba7362429dc76c25438df2f/huggingface_hub-0.32.0.tar.gz", hash = "sha256:dd66c9365ea43049ec9b939bdcdb21a0051e1bd70026fc50304e4fb1bb6a15ba", size = 422255, upload-time = "2025-05-23T12:12:13.885Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/33/c7/852d4473788cfd7d79b73951244b87a6d75fdac296c90aeb5e85dbb2fb5e/huggingface_hub-0.31.4-py3-none-any.whl", hash = "sha256:4f70704760296cc69b612916056e9845f5490a33782b924fc531767967acc15d", size = 489319, upload-time = "2025-05-19T09:37:11.506Z" },
+    { url = "https://files.pythonhosted.org/packages/3a/60/90aae898b0a9f3cd65f50718c33b1f1dbfb1527d10db754e99e14e2b0a1d/huggingface_hub-0.32.0-py3-none-any.whl", hash = "sha256:e56e94109649ce6ebdb59b4e393ee3543ec0eca2eab4f41b269e1d885c88d08c", size = 509297, upload-time = "2025-05-23T12:12:11.871Z" },
 ]
 
 [package.optional-dependencies]
