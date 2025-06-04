@@ -53,9 +53,11 @@
     "vite-plugin-vuetify": "2.1.1",
     "vitest": "3.2.1",
     "vue-tsc": "2.2.10",
-    "wxt": "0.20.6"
+    "wxt": "0.20.7"
   },
   "trustedDependencies": [
+    "esbuild",
+    "sharp",
     "spawn-sync"
   ]
 }
