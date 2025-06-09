@@ -122,6 +122,7 @@ Relevant environment variables are the following:
 to fetch gated models that you approved on the platform.
 See [HuggingFace documentation](https://huggingface.co/docs/hub/security-tokens)
 for further information.
+* `HF_HOME` (optional): Custom directory to store cache files and models downloaded for evaluation. If not set, will use default directory `~/.cache/huggingface`
 * `USE_CPU`: `True` or `False` whether you want to use your CPU or GPU for LLM inference.
 
 **Note:** To make GPU inference work on your machine,
@@ -142,8 +143,7 @@ when you are inside the `evaluation` directory.
 The script will read the content of the `models.csv` file
 and ask you to confirm the download before starting.
 
-The downloaded models will be stored in the `.cache` folder
-inside the `evaluation` directory for later use.
+The downloaded models will be stored to the configured cache directory folder for later use.
 
 **Tip:** If you interrupt the model downloads by quitting the script execution,
 the script will automatically resume the downloads where they stopped.
@@ -151,11 +151,13 @@ the script will automatically resume the downloads where they stopped.
 #### Clean up
 
 When you experiment with different models
-your `.cache` folder might fill up quickly
+your cache folder might fill up quickly
 and unused models unnecessarly take away storage space.
 
 You can use the cleanup script using `uv run python src/cleanup.py`
-to get rid off all the models in your `.cache` directory.
+to get rid off all the models in your cache directory.
+
+**Warning:** If you did not set a custom cache directory, this will remove all the models you ever downloaded from the HuggingFace platform, even from other projects.
 
 ### 2. Preparing data
 
