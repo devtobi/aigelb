@@ -33,9 +33,7 @@ def download(downloadable_models: List[Model], logger: Logger) -> bool:
                 # Download standard transformers-based model
                 logger.info(f"Downloading required files for '{model.repo_id}'...")
                 AutoTokenizer.from_pretrained(model.repo_id)
-                AutoModelForCausalLM.from_pretrained(
-                    model.repo_id, force_download=True
-                )
+                AutoModelForCausalLM.from_pretrained(model.repo_id)
         except OSError:
             if model.gated:
                 logger.warning(
