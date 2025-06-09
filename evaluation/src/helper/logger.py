@@ -1,12 +1,12 @@
-from logging import INFO, Formatter, StreamHandler, getLogger
+from logging import INFO, Formatter, Logger, StreamHandler, getLogger
 from sys import stdout
 
 
-def get_logger():
-    logger = getLogger("aigelb-evaluation")
+def get_logger() -> Logger:
+    logger: Logger = getLogger("aigelb-evaluation")
     logger.setLevel(INFO)
-    handler = StreamHandler(stdout)
-    formatter = Formatter(
+    handler: StreamHandler = StreamHandler(stdout)
+    formatter: Formatter = Formatter(
         "%(name)s - %(asctime)s - %(levelname)s - %(message)s",
         datefmt="%d.%m.%Y %H:%M:%S",
     )
