@@ -4,7 +4,7 @@
     "": {
       "name": "aigelb-browser-extension",
       "dependencies": {
-        "@fontsource/roboto": "5.2.5",
+        "@fontsource/roboto": "5.2.6",
         "vue": "3.5.16",
         "vuetify": "3.8.8",
         "webext-bridge": "6.0.1",
@@ -141,7 +141,7 @@
 
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.3.1", "", { "dependencies": { "@eslint/core": "^0.14.0", "levn": "^0.4.1" } }, "sha512-0J+zgWxHN+xXONWIyPWKFMgVuJoZuGiIFu8yxk7RJjxkzpGmyja5wRFqZIVtjDVOQpV+Rw0iOAjYPE2eQyjr0w=="],
 
-    "@fontsource/roboto": ["@fontsource/roboto@5.2.5", "", {}, "sha512-70r2UZ0raqLn5W+sPeKhqlf8wGvUXFWlofaDlcbt/S3d06+17gXKr3VNqDODB0I1ASme3dGT5OJj9NABt7OTZQ=="],
+    "@fontsource/roboto": ["@fontsource/roboto@5.2.6", "", {}, "sha512-hzarG7yAhMoP418smNgfY4fO7UmuUEm5JUtbxCoCcFHT0hOJB+d/qAEyoNjz7YkPU5OjM2LM8rJnW8hfm0JLaA=="],
 
     "@humanfs/core": ["@humanfs/core@0.19.1", "", {}, "sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA=="],
 
