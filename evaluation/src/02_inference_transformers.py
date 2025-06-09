@@ -13,10 +13,6 @@ from transformers import (
     pipeline,
 )
 
-from helper import get_model_cache_dir
-
-model_cache_dir: str = get_model_cache_dir()
-
 # Check CPU / GPU mode
 load_dotenv()
 use_cpu = getenv("USE_CPU") or "True"
@@ -24,10 +20,10 @@ use_cpu = getenv("USE_CPU") or "True"
 # load model
 try:
     tokenizer: PreTrainedTokenizer = cast(PreTrainedTokenizer, AutoTokenizer.from_pretrained(
-        "Qwen/Qwen2.5-0.5B-Instruct", cache_dir=model_cache_dir, local_files_only=True
+        "Qwen/Qwen2.5-0.5B-Instruct", local_files_only=True
     ))
     model: PreTrainedModel = cast(PreTrainedModel, AutoModelForCausalLM.from_pretrained(
-        "Qwen/Qwen2.5-0.5B-Instruct", cache_dir=model_cache_dir, local_files_only=True
+        "Qwen/Qwen2.5-0.5B-Instruct", local_files_only=True
     ))
 except (LocalEntryNotFoundError, OSError) as e:
     print(e)

@@ -1,6 +1,6 @@
 from csv import reader
 from dataclasses import dataclass
-from os import path
+from os import getenv, path
 from typing import Iterator, List, Tuple, Union
 
 
@@ -34,5 +34,4 @@ def get_models() -> List[Model]:
         return [Model(row[0], row[1], row[2] == "True") for row in csv_reader]
 
 def get_model_cache_dir() -> str:
-    dirname: str = path.dirname(__file__)
-    return path.join(dirname, "../../.cache")
+    return getenv("HF_HOME") or "default HuggingFace cache directory (usually ~/.cache/huggingface)"

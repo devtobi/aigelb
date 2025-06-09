@@ -8,13 +8,13 @@ from huggingface_hub import (
     scan_cache_dir,
 )
 
-from helper import confirm_action, get_logger, get_model_cache_dir
+from helper import confirm_action, get_logger
 
 
 def clear_cache(logger: Logger) -> None:
     # Read local cache
     try:
-        huggingface_cache_info: HFCacheInfo = scan_cache_dir(cache_dir=get_model_cache_dir())
+        huggingface_cache_info: HFCacheInfo = scan_cache_dir()
     except CacheNotFound:
         logger.info("No cache folder found. Download some models first. Quitting...")
         return

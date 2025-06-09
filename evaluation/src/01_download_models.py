@@ -5,8 +5,7 @@ from dotenv import load_dotenv
 from huggingface_hub import hf_hub_download
 from transformers import AutoModelForCausalLM, AutoTokenizer, logging
 
-from helper import confirm_action, get_logger, get_model_cache_dir, get_models
-from helper.model import Model
+from helper import Model, confirm_action, get_logger, get_model_cache_dir, get_models
 
 
 def log_models(models: List[Model], logger: Logger) -> None:
@@ -17,8 +16,8 @@ def log_requested_models(requested_models: List[Model], logger: Logger) -> None:
     logger.info("The following models were requested:")
     log_models(requested_models, logger)
 
-def download(downloadable_models: List[Model], model_cache_dir: str, logger: Logger) -> bool:
-    logger.info("Downloading models from Hugging Face...")
+def download(downloadable_models: List[Model], logger: Logger) -> bool:
+    logger.info(f"Downloading models from Hugging Face to '{get_model_cache_dir()}'...")
     for model in downloadable_models:
         try:
             if model.gguf_filename.strip():
@@ -28,15 +27,14 @@ def download(downloadable_models: List[Model], model_cache_dir: str, logger: Log
                     repo_id=model.repo_id,
                     filename=model.gguf_filename,
                     repo_type="model",
-                    cache_dir=model_cache_dir,
                     token=model.gated,
                 )
             else:
                 # Download standard transformers-based model
                 logger.info(f"Downloading required files for '{model.repo_id}'...")
-                AutoTokenizer.from_pretrained(model.repo_id, cache_dir=model_cache_dir)
+                AutoTokenizer.from_pretrained(model.repo_id)
                 AutoModelForCausalLM.from_pretrained(
-                    model.repo_id, cache_dir=model_cache_dir
+                    model.repo_id, force_download=True
                 )
         except OSError:
             if model.gated:
@@ -67,8 +65,7 @@ def download_models(logger: Logger):
     if not confirm_action(logger, "Are you sure you want to download those models?"):
         return
 
-    model_cache_dir: str = get_model_cache_dir()
-    if not download(models, model_cache_dir, logger):
+    if not download(models, logger):
         return
 
 if __name__ == "__main__":
