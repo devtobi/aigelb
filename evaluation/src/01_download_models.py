@@ -1,22 +1,26 @@
+from logging import Logger
+from typing import List
+
 from dotenv import load_dotenv
 from huggingface_hub import hf_hub_download
 from transformers import AutoModelForCausalLM, AutoTokenizer, logging
 
 from helper import confirm_action, get_logger, get_model_cache_dir, get_models
+from helper.model import Model
 
 
-def log_models(models, logger):
+def log_models(models: List[Model], logger: Logger) -> None:
     for mdl in models:
         logger.info(f"| {mdl}")
 
-def log_requested_models(requested_models, logger):
+def log_requested_models(requested_models: List[Model], logger: Logger) -> None:
     logger.info("The following models were requested:")
     log_models(requested_models, logger)
 
-def download(downloadable_models, model_cache_dir, logger):
+def download(downloadable_models: List[Model], model_cache_dir: str, logger: Logger) -> bool:
     logger.info("Downloading models from Hugging Face...")
     for model in downloadable_models:
-        gated = model.gated == "True"
+        gated: bool = model.gated == "True"
         try:
             if model.gguf_filename.strip():
                 # Download GGUF model
@@ -55,22 +59,22 @@ def download(downloadable_models, model_cache_dir, logger):
     logger.info("Finished downloading the models from Hugging Face. Quitting...")
     return True
 
-def download_models(logger):
+def download_models(logger: Logger):
     logging.set_verbosity_error()
 
-    models = get_models()
+    models: List[Model] = get_models()
     log_requested_models(models, logger)
 
     if not confirm_action(logger, "Are you sure you want to download those models?"):
         return
 
-    model_cache_dir = get_model_cache_dir()
+    model_cache_dir: str = get_model_cache_dir()
     if not download(models, model_cache_dir, logger):
         return
 
 if __name__ == "__main__":
     # Load env variable for optional API authentication
-    log = get_logger()
+    log: Logger = get_logger()
     load_dotenv()
 
     download_models(log)

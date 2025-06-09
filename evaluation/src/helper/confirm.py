@@ -1,4 +1,7 @@
-def confirm_action(logger, question) -> bool:
+from logging import Logger
+
+
+def confirm_action(logger: Logger, question: str) -> bool:
     entered: str = "none"
     while entered != "exit" and entered != "":
         logger.info(

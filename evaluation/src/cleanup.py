@@ -1,18 +1,26 @@
-from huggingface_hub import CacheNotFound, scan_cache_dir
+from logging import Logger
+from typing import List
+
+from huggingface_hub import (
+    CacheNotFound,
+    DeleteCacheStrategy,
+    HFCacheInfo,
+    scan_cache_dir,
+)
 
 from helper import confirm_action, get_logger, get_model_cache_dir
 
 
-def clear_cache(logger):
+def clear_cache(logger: Logger) -> None:
     # Read local cache
     try:
-        huggingface_cache_info = scan_cache_dir(cache_dir=get_model_cache_dir())
+        huggingface_cache_info: HFCacheInfo = scan_cache_dir(cache_dir=get_model_cache_dir())
     except CacheNotFound:
         logger.info("No cache folder found. Download some models first. Quitting...")
         return
 
     # Extract revision commit hashes
-    revisions = [
+    revisions: List[str] = [
         revision.commit_hash
         for repo in huggingface_cache_info.repos
         for revision in repo.revisions
@@ -23,7 +31,7 @@ def clear_cache(logger):
         return
 
     # Prepare deletion operation
-    delete_operation = huggingface_cache_info.delete_revisions(*revisions)
+    delete_operation: DeleteCacheStrategy = huggingface_cache_info.delete_revisions(*revisions)
     logger.info(
         f"Found {len(revisions)} models in cache."
         f" Freeing will re-claim {delete_operation.expected_freed_size_str}B"
