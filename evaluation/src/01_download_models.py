@@ -20,7 +20,6 @@ def log_requested_models(requested_models: List[Model], logger: Logger) -> None:
 def download(downloadable_models: List[Model], model_cache_dir: str, logger: Logger) -> bool:
     logger.info("Downloading models from Hugging Face...")
     for model in downloadable_models:
-        gated: bool = model.gated == "True"
         try:
             if model.gguf_filename.strip():
                 # Download GGUF model
@@ -30,7 +29,7 @@ def download(downloadable_models: List[Model], model_cache_dir: str, logger: Log
                     filename=model.gguf_filename,
                     repo_type="model",
                     cache_dir=model_cache_dir,
-                    token=gated,
+                    token=model.gated,
                 )
             else:
                 # Download standard transformers-based model
@@ -40,7 +39,7 @@ def download(downloadable_models: List[Model], model_cache_dir: str, logger: Log
                     model.repo_id, cache_dir=model_cache_dir
                 )
         except OSError:
-            if gated:
+            if model.gated:
                 logger.warning(
                     f'Failed downloading gated model "{model}".'
                     f" Please confirm you added a valid Hugging Face access token"

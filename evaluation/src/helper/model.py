@@ -31,7 +31,7 @@ def get_models() -> List[Model]:
     with open(model_path, newline="") as csvfile:
         csv_reader: Iterator[List[str]] = reader(csvfile, delimiter=",")
         next(csv_reader, None)  # skip the headers
-        return [Model(row[0], row[1], bool(row[2])) for row in csv_reader]
+        return [Model(row[0], row[1], row[2] == "True") for row in csv_reader]
 
 def get_model_cache_dir() -> str:
     dirname: str = path.dirname(__file__)
