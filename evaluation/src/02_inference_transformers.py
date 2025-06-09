@@ -15,7 +15,7 @@ from transformers import (
 
 # Check CPU / GPU mode
 load_dotenv()
-use_cpu = getenv("USE_CPU") or "True"
+use_cpu: bool = getenv("USE_CPU") == "True"
 
 # load model
 try:

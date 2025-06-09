@@ -23,8 +23,8 @@ llama_log_set(log_callback, c_void_p())
 
 # Check CPU / GPU mode
 load_dotenv()
-use_cpu: str = getenv("USE_CPU") or "True"
-gpu_layers: int = 0 if use_cpu == "True" else -1
+use_cpu: bool = getenv("USE_CPU") == "True"
+gpu_layers: int = 0 if use_cpu else -1
 
 # load model
 llm: Llama = Llama.from_pretrained(
