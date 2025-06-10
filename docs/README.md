@@ -92,6 +92,12 @@ When the requirements above are met,
 you only need to execute `uv sync` inside the `evaluation` directory
 to setup the virtual environment and download the required packages.
 
+**Note:** To make inference and hardware acceleration work on your machine, you might have to do additional steps to use the proper backend for your architecture and platform in `llama-cpp-python` (for GGUF inference). You can pass required environment variables like `CMAKE_ARGS` directly to `uv sync`. E.g. for installing on Apple silicon using Metal acceleration execute `CMAKE_ARGS="-DGGML_METAL=on" uv sync`.
+See [official documentation](https://llama-cpp-python.readthedocs.io/en/latest/#supported-backends)
+for further information and up-to-date instructions. 
+`transformers` should auto-detect your backend
+due to PyTorch being used under the hood.
+
 ### Usage
 
 All mentioned scripts can be run via uv
@@ -124,14 +130,6 @@ See [HuggingFace documentation](https://huggingface.co/docs/hub/security-tokens)
 for further information.
 * `HF_HOME` (optional): Custom directory to store cache files and models downloaded for evaluation. If not set, will use default directory `~/.cache/huggingface`
 * `USE_CPU`: `True` or `False` whether you want to use your CPU or GPU for LLM inference.
-
-**Note:** To make GPU inference work on your machine,
-you might have to do additional steps to use your GPU backend
-in `llama-cpp-python` (for GGUF inference).
-See [official documentation](https://llama-cpp-python.readthedocs.io/en/latest/#supported-backends)
-for further information.
-`transformers` should auto-detect your GPU backend
-due to PyTorch being used under the hood.
 
 ### 1. Downloading models
 
