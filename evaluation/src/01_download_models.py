@@ -19,7 +19,7 @@ def download(downloadable_models: List[Model], logger: Logger) -> bool:
     logger.info(f"Downloading models from Hugging Face to '{get_model_cache_dir()}'...")
     for model in downloadable_models:
         try:
-            if model.gguf_filename.strip():
+            if model.is_gguf:
                 # Download GGUF model
                 logger.info(f"Downloading '{model.repo_id}/{model.gguf_filename}'...")
                 hf_hub_download(

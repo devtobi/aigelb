@@ -5,16 +5,24 @@ from typing import Iterator, Tuple, Union
 @dataclass
 class Metric:
 
-    name: str
-    is_corpus_level: bool
+    _name: str
+    _is_corpus_level: bool
+
+    @property
+    def name(self) -> str:
+      return self._name
+
+    @property
+    def is_corpus_level(self) -> bool:
+      return self._is_corpus_level
 
     def __iter__(self) -> Iterator[Union[str, bool]]:
-        return iter(self.as_tuple())
+        return iter(self._as_tuple())
 
     def __str__(self) -> str:
         return (
-            f"{self.name} on {"corpus level" if self.is_corpus_level else 'sentence level'}"
+            f"{self._name} on {"corpus level" if self._is_corpus_level else 'sentence level'}"
         )
 
-    def as_tuple(self) -> Tuple[str, bool]:
-      return self.name, self.is_corpus_level
+    def _as_tuple(self) -> Tuple[str, bool]:
+      return self._name, self._is_corpus_level

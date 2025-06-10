@@ -1,11 +1,13 @@
 from csv import reader
 from typing import Iterator, List, Type, TypeVar
 
+from .file import get_absolute_path
+
 T = TypeVar('T')
 
 def from_csv(cls: Type[T], filepath: str, skip_header = True) -> List[T]:
-    with open(filepath, newline="") as csvfile:
-        # reader: DictReader[str] = csv.DictReader(csvfile, delimiter=",")
+    abs_path: str = get_absolute_path(filepath)
+    with open(abs_path, newline="") as csvfile:
         csv_reader: Iterator[List[str]] = reader(csvfile, delimiter=",")
         if skip_header:
           next(csv_reader, None)
@@ -17,7 +19,6 @@ def from_csv(cls: Type[T], filepath: str, skip_header = True) -> List[T]:
           ]
           instances.append(cls(*converted_row))
         return instances
-
 
 def str_to_bool(value: str) -> bool:
   if value.strip().lower() == 'true':
