@@ -1,0 +1,5 @@
+metric_name,corpus_level
+bleu,False
+bertscore,False
+mtld,False
+flesch_reading_ease,True
