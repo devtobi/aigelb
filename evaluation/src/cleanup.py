@@ -16,7 +16,7 @@ def clear_cache(logger: Logger) -> None:
     try:
         huggingface_cache_info: HFCacheInfo = scan_cache_dir()
     except CacheNotFound:
-        logger.info("No cache folder found. Download some models first. Quitting...")
+        logger.info("No cache folder found. Quitting...")
         return
 
     # Extract revision commit hashes
@@ -37,11 +37,8 @@ def clear_cache(logger: Logger) -> None:
         f" Freeing will re-claim {delete_operation.expected_freed_size_str}B"
     )
 
-    # Confirm before deletion
     if not confirm_action(logger, "Do you want to delete those models now?"):
         return
-
-    # Execute deletion
     delete_operation.execute()
     logger.info("Successfully cleared the cache. Quitting...")
 

@@ -1,5 +1,6 @@
 from logging import INFO, Formatter, Logger, StreamHandler, getLogger
 from sys import stdout
+from typing import Iterable, TypeVar
 
 
 def get_logger() -> Logger:
@@ -13,3 +14,11 @@ def get_logger() -> Logger:
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     return logger
+
+T = TypeVar('T')
+
+def log_list(lst: Iterable[T], logger: Logger, msg: str = "") -> None:
+    if msg:
+        logger.info(msg)
+    for element in lst:
+        logger.info(f"| {element}")
