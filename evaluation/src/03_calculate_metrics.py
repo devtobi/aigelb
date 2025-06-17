@@ -1,6 +1,7 @@
 from typing import List
 
-from utility import FileService, LoggingService, Metric
+from metric import Metric
+from utility import FileService, LoggingService
 
 
 def calculate(metrics: List[Metric]) -> bool:
