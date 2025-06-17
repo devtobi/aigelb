@@ -2,6 +2,7 @@ from ctypes import CFUNCTYPE, c_char_p, c_int, c_void_p
 from logging import INFO, Formatter, Logger, StreamHandler, getLogger
 from sys import stdout
 from typing import Callable, ClassVar, Iterable, Optional, TypeVar
+from transformers import logging
 
 from llama_cpp import (
   llama_log_set,
@@ -65,7 +66,7 @@ class LoggingService:
     return True if not entered else False
 
   @classmethod
-  def disable_llama_cpp_logging(cls) -> None:
+  def mute_llamacpp_logging(cls) -> None:
     def _mute_callback(level, message, user_data):
       # kept empty to mute logging output of the library
       pass
@@ -75,4 +76,8 @@ class LoggingService:
     cls._llama_log_callback = CFUNCTYPE(None, c_int, c_char_p, c_void_p)(cls._llama_mute_callback)
     # pyrefly: ignore
     llama_log_set(cls._llama_log_callback, c_void_p())
+
+  @staticmethod
+  def mute_transformers_logging() -> None:
+    logging.set_verbosity_error()
 

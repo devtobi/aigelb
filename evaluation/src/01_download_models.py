@@ -54,7 +54,7 @@ def download(downloadable_models: List[Model]) -> bool:
     return True
 
 def download_models():
-    logging.set_verbosity_error()
+    LoggingService.mute_transformers_logging()
     models: List[Model] = FileService.from_csv(Model, "models.csv")
     if len(models) == 0:
       LoggingService.info("No models in models.csv. Please add some models first and re-run this script.")

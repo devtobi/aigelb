@@ -16,7 +16,7 @@ load_dotenv()
 use_cpu: bool = getenv("USE_CPU") == "True"
 gpu_layers: int = 0 if use_cpu else -1
 
-LoggingService.disable_llama_cpp_logging()
+LoggingService.mute_llamacpp_logging()
 
 # load model
 llm: Llama = Llama.from_pretrained(
