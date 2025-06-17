@@ -1,13 +1,26 @@
 from os import getenv
 from typing import List
 
-from huggingface_hub import hf_hub_download
+from huggingface_hub import (
+  CacheNotFound,
+  DeleteCacheStrategy,
+  HFCacheInfo,
+  hf_hub_download,
+  scan_cache_dir,
+)
 from pathvalidate import sanitize_filename
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from utility import FileService, KeyboardInterruptError, LoggingService
 
-from .exception import ModelDownloadError, ModelFileEmptyError, ModelFileNotFoundError
+from .exception import (
+  ModelCacheClearError,
+  ModelCacheEmptyError,
+  ModelCacheNotFoundError,
+  ModelDownloadError,
+  ModelFileEmptyError,
+  ModelFileNotFoundError,
+)
 from .model import Model
 
 
@@ -46,6 +59,38 @@ class ModelService:
     for model in models:
       cls._download_model(model)
     LoggingService.info("Finished downloading the models from Hugging Face.")
+
+  @staticmethod
+  def prepare_clear_model_cache() -> DeleteCacheStrategy:
+    # Read local cache
+    try:
+      huggingface_cache_info: HFCacheInfo = scan_cache_dir()
+    except CacheNotFound as exc:
+      raise ModelCacheNotFoundError("The cache directory does not exist, thus nothing needs to be cleared.") from exc
+
+    # Extract revision commit hashes
+    revisions: List[str] = [
+      revision.commit_hash
+      for repo in huggingface_cache_info.repos
+      for revision in repo.revisions
+    ]
+    if not revisions:
+      raise ModelCacheEmptyError("Cache directory found, but no models were downloaded yet.")
+
+    delete_operation: DeleteCacheStrategy = huggingface_cache_info.delete_revisions(*revisions)
+    LoggingService.info(
+      f"Found {len(revisions)} models in cache."
+      f" Freeing will re-claim {delete_operation.expected_freed_size_str}B"
+    )
+    return delete_operation
+
+  @staticmethod
+  def clear_model_cache(strategy: DeleteCacheStrategy) -> None:
+    try:
+      strategy.execute()
+      LoggingService.info("Successfully cleared the cache.")
+    except Exception as exc:
+      raise ModelCacheClearError("Failed to clear the model cache.") from exc
 
   @classmethod
   def _download_model(cls, model: Model) -> None:

@@ -1,45 +1,25 @@
-from typing import List
 
-from huggingface_hub import (
-    CacheNotFound,
-    DeleteCacheStrategy,
-    HFCacheInfo,
-    scan_cache_dir,
-)
 
+from model import ModelCacheEmptyError, ModelCacheNotFoundError, ModelService
 from utility import LoggingService
 
 
 def clear_cache() -> None:
-    # Read local cache
     try:
-        huggingface_cache_info: HFCacheInfo = scan_cache_dir()
-    except CacheNotFound:
-        LoggingService.info("No cache folder found. Quitting...")
-        return
-
-    # Extract revision commit hashes
-    revisions: List[str] = [
-        revision.commit_hash
-        for repo in huggingface_cache_info.repos
-        for revision in repo.revisions
-    ]
-
-    if not revisions:
-        LoggingService.info("Found no models in cache. Nothing to clear. Quitting...")
-        return
-
-    # Prepare deletion operation
-    delete_operation: DeleteCacheStrategy = huggingface_cache_info.delete_revisions(*revisions)
-    LoggingService.info(
-        f"Found {len(revisions)} models in cache."
-        f" Freeing will re-claim {delete_operation.expected_freed_size_str}B"
-    )
-
+      delete_operation = ModelService.prepare_clear_model_cache()
+    except (ModelCacheNotFoundError, ModelCacheEmptyError) as exc:
+      LoggingService.info(str(exc))
+      return
+    except Exception as exc:
+      LoggingService.error(str(exc))
+      return
     if not LoggingService.confirm_action("Do you want to delete those models now?"):
         return
-    delete_operation.execute()
-    LoggingService.info("Successfully cleared the cache. Quitting...")
+    try:
+      ModelService.clear_model_cache(delete_operation)
+    except Exception as exc:
+      LoggingService.error(str(exc))
+      return
 
 
 if __name__ == "__main__":
