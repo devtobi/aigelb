@@ -15,6 +15,9 @@ class LoggingService:
   _llama_log_callback: ClassVar[Optional[LlamaLogCallbackType]] = None  # hold reference to prevent GC
   _llama_mute_callback: ClassVar[Optional[LlamaLogCallbackType]] = None # hold reference to prevent GC
 
+  def __new__(cls, *args, **kwargs):
+    raise TypeError("This utility class cannot be instantiated.")
+
   @classmethod
   def _get_logger(cls) -> Logger:
     if cls._logger is None:
