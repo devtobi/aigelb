@@ -8,7 +8,7 @@ from huggingface_hub import (
     scan_cache_dir,
 )
 
-from helper import confirm_action, get_logger
+from utility import confirm_action, get_logger
 
 
 def clear_cache(logger: Logger) -> None:
