@@ -4,7 +4,13 @@ from dotenv import load_dotenv
 from huggingface_hub import hf_hub_download
 from transformers import AutoModelForCausalLM, AutoTokenizer, logging
 
-from utility import LoggingService, Model, confirm_action, from_csv, get_model_cache_dir
+from utility import (
+    FileService,
+    LoggingService,
+    Model,
+    confirm_action,
+    get_model_cache_dir,
+)
 
 
 def download(downloadable_models: List[Model]) -> bool:
@@ -47,7 +53,7 @@ def download(downloadable_models: List[Model]) -> bool:
 
 def download_models():
     logging.set_verbosity_error()
-    models: List[Model] = from_csv(Model, "models.csv")
+    models: List[Model] = FileService.from_csv(Model, "models.csv")
     if len(models) == 0:
       LoggingService.info("No models in models.csv. Please add some models first and re-run this script.")
       return

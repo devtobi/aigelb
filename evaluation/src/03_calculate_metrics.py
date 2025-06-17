@@ -1,30 +1,23 @@
 from typing import List
 
-from utility import (
-  LoggingService,
-  Metric,
-  confirm_action,
-  from_csv,
-  get_filename,
-  get_files,
-)
+from utility import FileService, LoggingService, Metric, confirm_action
 
 
 def calculate(metrics: List[Metric]) -> bool:
-  file_paths = get_files("results/", "csv")
+  file_paths = FileService.get_files("results/", "csv")
   for file_path in file_paths:
-    filename: str = get_filename(file_path)
+    filename: str = FileService.get_filename(file_path)
     LoggingService.info(f"Calculating metrics for {filename}...")
 
     # TODO
-    lines: List[str] = from_csv(str, file_path, skip_header=False)
+    lines: List[str] = FileService.from_csv(str, file_path, skip_header=False)
     for line in lines:
       LoggingService.info(line)
 
   return True
 
 def calculate_metrics():
-  metrics: List[Metric] = from_csv(Metric, "metrics.csv")
+  metrics: List[Metric] = FileService.from_csv(Metric, "metrics.csv")
   if len(metrics) == 0:
     LoggingService.info("No metrics in metrics.csv. Please add some metrics first and re-run this script.")
     return
