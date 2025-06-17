@@ -3,6 +3,7 @@ from typing import List
 from metric import Metric, MetricService
 from utility import FileService, LoggingService
 
+
 def calculate(metrics: List[Metric]) -> bool:
   file_paths = FileService.get_files("results/", "csv")
   for file_path in file_paths:
@@ -37,5 +38,5 @@ if __name__ == "__main__":
   # wiener = MetricService.get_textstat_function("wiener_sachtextformel")
   # print(wiener("Hallo das ist ein Test."))
 
-  bleu = MetricService.get_evaluate_function("bertscore")
+  bleu = MetricService.get_evaluate_function("bleu")
   print(bleu(predictions=["Hallo das ist ein Test"], references=["Hallo das ist ein Fest"]))

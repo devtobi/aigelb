@@ -1,8 +1,10 @@
-from typing import TypeVar, Any, List
+from typing import Any, Dict, List, Optional, TypeVar
 
-import textstat
 import evaluate
+import textstat
 from lexicalrichness import LexicalRichness
+
+from metric.exception import MetricNotFoundError
 
 T = TypeVar('T')
 
@@ -31,9 +33,11 @@ class MetricService:
         return None
 
       def compute_wrapper(*args, **kwargs):
-        result = metric.compute(*args, **kwargs)
+        result: Optional[Dict] = metric.compute(*args, **kwargs)
+        if result is None:
+          raise MetricNotFoundError(f"Computing '{evaluate_metric_name}' from evaluate library failed.")
         if evaluate_metric_name not in result:
-          raise KeyError(f"The compute result did not contain key '{evaluate_metric_name}'")
+          raise MetricNotFoundError(f"The compute result did not contain key '{evaluate_metric_name}'.")
         return result[evaluate_metric_name]
 
       return compute_wrapper
@@ -48,7 +52,7 @@ class MetricService:
       obj = LexicalRichness(text)
       attr = getattr(obj, attribute, None)
       if not attr:
-        raise AttributeError(f"LexicalRichness has no attribute '{attribute}'")
+        raise MetricNotFoundError(f"Metric '{attribute}' from Lexical Richness not found.")
       if not callable(attr):
         return attr
       else:
