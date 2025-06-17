@@ -7,13 +7,16 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, logging
 from utility import (
     FileService,
     LoggingService,
+)
+
+from model import (
     Model,
-    get_model_cache_dir,
+    ModelService
 )
 
 
 def download(downloadable_models: List[Model]) -> bool:
-    LoggingService.info(f"Downloading models from Hugging Face to '{get_model_cache_dir()}'...")
+    LoggingService.info(f"Downloading models from Hugging Face to '{ModelService.get_model_cache_dir()}'...")
     for model in downloadable_models:
         try:
             if model.is_gguf:

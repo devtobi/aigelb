@@ -1,8 +1,5 @@
 from dataclasses import dataclass
-from os import getenv
 from typing import Iterator, Tuple, Union
-
-from pathvalidate import sanitize_filename
 
 
 @dataclass
@@ -28,14 +25,6 @@ class Model:
     def is_gguf(self) -> bool:
       return self._gguf_filename is not None and self._gguf_filename.strip() != ""
 
-    @property
-    def filename(self) -> str:
-      filename = (
-        f"{self._repo_id}"
-        + (f"__{self._gguf_filename}" if self.is_gguf else "")
-      )
-      return sanitize_filename(filename, replacement_text="_")
-
     def __iter__(self) -> Iterator[Union[str, bool]]:
         return iter(self._as_tuple())
 
@@ -49,5 +38,4 @@ class Model:
     def _as_tuple(self) -> Tuple[str, str, bool]:
       return self._repo_id, self._gguf_filename, self._gated
 
-def get_model_cache_dir() -> str:
-    return getenv("HF_HOME") or "default HuggingFace cache directory (usually ~/.cache/huggingface)"
+
