@@ -1,6 +1,6 @@
 from typing import List
 
-from utility import FileService, LoggingService, Metric, confirm_action
+from utility import FileService, LoggingService, Metric
 
 
 def calculate(metrics: List[Metric]) -> bool:
@@ -22,7 +22,7 @@ def calculate_metrics():
     LoggingService.info("No metrics in metrics.csv. Please add some metrics first and re-run this script.")
     return
   LoggingService.log_list(metrics, "The following metrics were selected:")
-  if not confirm_action( "Are you sure you want to start calculation with those metrics?"):
+  if not LoggingService.confirm_action( "Are you sure you want to start calculation with those metrics?"):
     return
   if not calculate(metrics):
     return

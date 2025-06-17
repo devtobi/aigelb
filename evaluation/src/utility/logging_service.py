@@ -54,6 +54,17 @@ class LoggingService:
         cls._get_logger().info(f"| {element}")
 
   @classmethod
+  def confirm_action(cls, question: str) -> bool:
+    entered: str = "none"
+    while entered != "exit" and entered != "":
+      cls.info(f"{question} Press ENTER to confirm... (Type 'exit' or hit Ctrl+C to exit.)")
+      try:
+        entered = input()
+      except KeyboardInterrupt:
+        return False
+    return True if not entered else False
+
+  @classmethod
   def disable_llama_cpp_logging(cls) -> None:
     def _mute_callback(level, message, user_data):
       # kept empty to mute logging output of the library

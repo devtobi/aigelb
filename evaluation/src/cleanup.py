@@ -7,7 +7,7 @@ from huggingface_hub import (
     scan_cache_dir,
 )
 
-from utility import LoggingService, confirm_action
+from utility import LoggingService
 
 
 def clear_cache() -> None:
@@ -36,7 +36,7 @@ def clear_cache() -> None:
         f" Freeing will re-claim {delete_operation.expected_freed_size_str}B"
     )
 
-    if not confirm_action("Do you want to delete those models now?"):
+    if not LoggingService.confirm_action("Do you want to delete those models now?"):
         return
     delete_operation.execute()
     LoggingService.info("Successfully cleared the cache. Quitting...")

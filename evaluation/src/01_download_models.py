@@ -8,7 +8,6 @@ from utility import (
     FileService,
     LoggingService,
     Model,
-    confirm_action,
     get_model_cache_dir,
 )
 
@@ -59,7 +58,7 @@ def download_models():
       return
     LoggingService.log_list(models, "The following models were requested:")
 
-    if not confirm_action("Are you sure you want to download those models?"):
+    if not LoggingService.confirm_action("Are you sure you want to download those models?"):
         return
     if not download(models):
         return
