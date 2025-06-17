@@ -3,3 +3,6 @@ class ModelFileNotFoundError(Exception):
 
 class ModelFileEmptyError(Exception):
   pass
+
+class ModelDownloadError(Exception):
+  pass
