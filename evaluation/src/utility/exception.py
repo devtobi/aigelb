@@ -1,0 +1,2 @@
+class KeyboardInterruptError(Exception):
+  pass
