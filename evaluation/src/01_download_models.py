@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from huggingface_hub import hf_hub_download
 from transformers import AutoModelForCausalLM, AutoTokenizer, logging
 
-from helper import (
+from utility import (
     Model,
     confirm_action,
     from_csv,
