@@ -5,22 +5,21 @@ from dotenv import load_dotenv
 from huggingface_hub import hf_hub_download
 from transformers import AutoModelForCausalLM, AutoTokenizer, logging
 
-from helper import Model, confirm_action, get_logger, get_model_cache_dir, get_models
+from helper import (
+    Model,
+    confirm_action,
+    from_csv,
+    get_logger,
+    get_model_cache_dir,
+    log_list,
+)
 
-
-def log_models(models: List[Model], logger: Logger) -> None:
-    for mdl in models:
-        logger.info(f"| {mdl}")
-
-def log_requested_models(requested_models: List[Model], logger: Logger) -> None:
-    logger.info("The following models were requested:")
-    log_models(requested_models, logger)
 
 def download(downloadable_models: List[Model], logger: Logger) -> bool:
     logger.info(f"Downloading models from Hugging Face to '{get_model_cache_dir()}'...")
     for model in downloadable_models:
         try:
-            if model.gguf_filename.strip():
+            if model.is_gguf:
                 # Download GGUF model
                 logger.info(f"Downloading '{model.repo_id}/{model.gguf_filename}'...")
                 hf_hub_download(
@@ -56,13 +55,14 @@ def download(downloadable_models: List[Model], logger: Logger) -> bool:
 
 def download_models(logger: Logger):
     logging.set_verbosity_error()
-
-    models: List[Model] = get_models()
-    log_requested_models(models, logger)
+    models: List[Model] = from_csv(Model, "models.csv")
+    if len(models) == 0:
+      logger.info("No models in models.csv. Please add some models first and re-run this script.")
+      return
+    log_list(models, logger, "The following models were requested:")
 
     if not confirm_action(logger, "Are you sure you want to download those models?"):
         return
-
     if not download(models, logger):
         return
 
