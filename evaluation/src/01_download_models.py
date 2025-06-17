@@ -2,16 +2,11 @@ from typing import List
 
 from dotenv import load_dotenv
 from huggingface_hub import hf_hub_download
-from transformers import AutoModelForCausalLM, AutoTokenizer, logging
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from utility import (
-    FileService,
+from model import Model, ModelService
+from utility.logging_service import (
     LoggingService,
-)
-
-from model import (
-    Model,
-    ModelService
 )
 
 
@@ -35,18 +30,18 @@ def download(downloadable_models: List[Model]) -> bool:
                 AutoModelForCausalLM.from_pretrained(model.repo_id)
         except OSError:
             if model.gated:
-                LoggingService.warn(
+                LoggingService.error(
                     f'Failed downloading gated model "{model}".'
                     f" Please confirm you added a valid Hugging Face access token"
                     f" and are granted access to the model files."
                 )
             else:
-                LoggingService.warn(
+                LoggingService.error(
                     f'Failed downloading model "{model}".'
                     f" Please check the entry in models.csv is correct."
                 )
         except KeyboardInterrupt:
-            LoggingService.warn(
+            LoggingService.info(
                 "Interrupted download. Proceeding on next execution. Quitting..."
             )
             return False
@@ -55,11 +50,11 @@ def download(downloadable_models: List[Model]) -> bool:
 
 def download_models():
     LoggingService.mute_transformers_logging()
-    models: List[Model] = FileService.from_csv(Model, "models.csv")
-    if len(models) == 0:
-      LoggingService.info("No models in models.csv. Please add some models first and re-run this script.")
+    try:
+      models: List[Model] = ModelService.read_model_list()
+    except Exception as msg:
+      LoggingService.error(str(msg))
       return
-    LoggingService.log_list(models, "The following models were requested:")
 
     if not LoggingService.confirm_action("Are you sure you want to download those models?"):
         return

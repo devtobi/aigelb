@@ -2,11 +2,11 @@ from ctypes import CFUNCTYPE, c_char_p, c_int, c_void_p
 from logging import INFO, Formatter, Logger, StreamHandler, getLogger
 from sys import stdout
 from typing import Callable, ClassVar, Iterable, Optional, TypeVar
-from transformers import logging
 
 from llama_cpp import (
   llama_log_set,
 )
+from transformers import logging
 
 T = TypeVar('T')
 LlamaLogCallbackType = Callable[[int, bytes, object], None]
@@ -44,8 +44,8 @@ class LoggingService:
     cls._get_logger().info(msg)
 
   @classmethod
-  def warn(cls, msg: str) -> None:
-    cls._get_logger().warning(msg)
+  def error(cls, msg: str) -> None:
+    cls._get_logger().error(msg)
 
   @classmethod
   def log_list(cls, lst: Iterable[T], msg: str = "") -> None:
