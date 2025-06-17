@@ -1,8 +1,7 @@
 from typing import List
 
-from metric import Metric
+from metric import Metric, MetricService
 from utility import FileService, LoggingService
-
 
 def calculate(metrics: List[Metric]) -> bool:
   file_paths = FileService.get_files("results/", "csv")
@@ -29,4 +28,14 @@ def calculate_metrics():
     return
 
 if __name__ == "__main__":
-    calculate_metrics()
+  ttr = MetricService.get_lexical_richness_function("ttr")
+  print(ttr("Hallo das ist ein Test"))
+
+  flesch = MetricService.get_textstat_function("flesch_reading_ease")
+  print(flesch("Hallo das ist ein Test. Der Text ist sehr einfach."))
+
+  # wiener = MetricService.get_textstat_function("wiener_sachtextformel")
+  # print(wiener("Hallo das ist ein Test."))
+
+  bleu = MetricService.get_evaluate_function("bertscore")
+  print(bleu(predictions=["Hallo das ist ein Test"], references=["Hallo das ist ein Fest"]))
