@@ -1,4 +1,3 @@
-from logging import Logger
 from typing import List
 
 from huggingface_hub import (
@@ -8,15 +7,15 @@ from huggingface_hub import (
     scan_cache_dir,
 )
 
-from utility import confirm_action, get_logger
+from utility import LoggingService, confirm_action
 
 
-def clear_cache(logger: Logger) -> None:
+def clear_cache() -> None:
     # Read local cache
     try:
         huggingface_cache_info: HFCacheInfo = scan_cache_dir()
     except CacheNotFound:
-        logger.info("No cache folder found. Quitting...")
+        LoggingService.info("No cache folder found. Quitting...")
         return
 
     # Extract revision commit hashes
@@ -27,22 +26,21 @@ def clear_cache(logger: Logger) -> None:
     ]
 
     if not revisions:
-        logger.info("Found no models in cache. Nothing to clear. Quitting...")
+        LoggingService.info("Found no models in cache. Nothing to clear. Quitting...")
         return
 
     # Prepare deletion operation
     delete_operation: DeleteCacheStrategy = huggingface_cache_info.delete_revisions(*revisions)
-    logger.info(
+    LoggingService.info(
         f"Found {len(revisions)} models in cache."
         f" Freeing will re-claim {delete_operation.expected_freed_size_str}B"
     )
 
-    if not confirm_action(logger, "Do you want to delete those models now?"):
+    if not confirm_action("Do you want to delete those models now?"):
         return
     delete_operation.execute()
-    logger.info("Successfully cleared the cache. Quitting...")
+    LoggingService.info("Successfully cleared the cache. Quitting...")
 
 
 if __name__ == "__main__":
-    log = get_logger()
-    clear_cache(log)
+    clear_cache()
