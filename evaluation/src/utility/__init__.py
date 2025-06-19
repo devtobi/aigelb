@@ -1,5 +1,6 @@
 from typing import List
 
+from .date_service import DateService
 from .exception import KeyboardInterruptError
 from .file_service import FileService
 from .logging_service import LoggingService
@@ -7,5 +8,6 @@ from .logging_service import LoggingService
 __all__: List[str] = [
   "LoggingService",
   "FileService",
+  "DateService",
   "KeyboardInterruptError"
 ]
