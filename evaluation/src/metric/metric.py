@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Iterator, Tuple, Union
 
 
@@ -7,6 +7,7 @@ class Metric:
 
     _name: str
     _is_corpus_level: bool
+    _kwargs: dict[str, str | int | bool] = field(default_factory=lambda: {})
 
     @property
     def name(self) -> str:
@@ -16,13 +17,17 @@ class Metric:
     def is_corpus_level(self) -> bool:
       return self._is_corpus_level
 
-    def __iter__(self) -> Iterator[Union[str, bool]]:
+    @property
+    def kwargs(self) -> dict[str, str | int | bool]:
+      return self._kwargs
+
+    def __iter__(self) -> Iterator[Union[str, bool, dict[str, str | int | bool]]]:
         return iter(self._as_tuple())
 
     def __str__(self) -> str:
         return (
-            f"{self._name} on {"corpus level" if self._is_corpus_level else 'sentence level'}"
+            f"{self._name} with configuration {self._kwargs} on {"corpus level" if self._is_corpus_level else 'sentence level'}"
         )
 
-    def _as_tuple(self) -> Tuple[str, str, bool]:
-      return self._name, self._library, self._is_corpus_level
+    def _as_tuple(self) -> Tuple[str, bool, dict[str, str | int | bool]]:
+      return self._name, self._is_corpus_level, self._kwargs

@@ -7,7 +7,7 @@ class Model:
 
     _repo_id: str
     _gguf_filename: str
-    _gated: bool
+    _gated: bool = False
 
     @property
     def repo_id(self) -> str:

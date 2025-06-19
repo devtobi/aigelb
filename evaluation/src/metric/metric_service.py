@@ -1,8 +1,11 @@
+import statistics
 from typing import Any, Callable, Dict, List, Optional, Tuple, TypeVar
 
 import evaluate
-import textstat
 from lexicalrichness import LexicalRichness
+from textstat import textstat
+
+from utility import LoggingService
 
 from .exception import MetricNotFoundError
 from .metric_library import MetricLibrary
@@ -32,7 +35,13 @@ class MetricService:
   @classmethod
   def _get_textstat_function(cls, metric_function_name: str) -> Optional[Callable]:
     if metric_function_name in cls._get_method_names(textstat):
-      return getattr(textstat, metric_function_name)
+        func = getattr(textstat, metric_function_name)
+
+        def wrapper(text: str, lang: str = "de", *args, **kwargs):
+          LoggingService.info(f"Calculating {metric_function_name} using Textstat library...")
+          textstat.set_lang(lang)
+          return func(text, *args, **kwargs)
+        return wrapper
     return None
 
   @staticmethod
@@ -42,15 +51,20 @@ class MetricService:
       if not hasattr(metric, "compute") or not callable(metric.compute):
         return None
 
-      def compute_wrapper(*args, **kwargs):
-        result: Optional[Dict] = metric.compute(*args, **kwargs)
-        if result is None:
-          raise MetricNotFoundError(f"Computing '{evaluate_metric_name}' from evaluate library failed.")
-        if evaluate_metric_name not in result:
-          raise MetricNotFoundError(f"The compute result did not contain key '{evaluate_metric_name}'.")
-        return result[evaluate_metric_name]
-
-      return compute_wrapper
+      def wrapper(target: Optional[str] = None, *args, **kwargs):
+        LoggingService.info(f"Calculating {evaluate_metric_name} using HuggingFace Evaluate library...")
+        compute_result: Optional[Dict] = metric.compute(*args, **kwargs)
+        if compute_result is None:
+          raise MetricNotFoundError(f"Calculating '{evaluate_metric_name}' using HuggingFace Evaluate library failed.")
+        key = evaluate_metric_name if target is None else target
+        if key not in compute_result:
+          raise MetricNotFoundError(f"The compute result did not contain key '{key}'.")
+        result = compute_result[key]
+        if type(result) is list:
+          return statistics.mean(result)
+        else:
+          return result
+      return wrapper
     except TypeError:
       return None
 
@@ -58,11 +72,12 @@ class MetricService:
   def _get_lexical_richness_function(cls, attribute: str) -> Optional[Callable]:
     if attribute not in cls._get_public_attributes(LexicalRichness):
       return None
-    def wrapper(text, *args, **kwargs):
+    def wrapper(text: str, *args, **kwargs):
+      LoggingService.info(f"Calculating {attribute} using LexicalRichness library...")
       obj = LexicalRichness(text)
       attr = getattr(obj, attribute, None)
       if not attr:
-        raise MetricNotFoundError(f"Metric '{attribute}' from Lexical Richness not found.")
+        raise MetricNotFoundError(f"Metric '{attribute}' using LexicalRichness library not found.")
       if not callable(attr):
         return attr
       else:
