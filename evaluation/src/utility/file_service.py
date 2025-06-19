@@ -1,4 +1,4 @@
-from csv import reader
+from csv import DictReader
 from glob import glob
 from os import path
 from typing import Iterator, List, Type, TypeVar
@@ -14,16 +14,12 @@ class FileService:
   def from_csv(cls, item_type: Type[T], filepath: str, skip_header=True) -> List[T]:
     abs_path: str = cls._get_absolute_path(filepath)
     with open(abs_path, newline="") as csvfile:
-      csv_reader: Iterator[List[str]] = reader(csvfile, delimiter=",")
-      if skip_header:
-        next(csv_reader, None)
+      dict_reader = DictReader(csvfile, delimiter=",")
       instances = []
-      for row in csv_reader:
-        converted_row = [
-          cls._str_to_bool(cell) if cell.strip().lower() in ['true', 'false'] else cell
-          for cell in row
-        ]
-        instances.append(item_type(*converted_row))
+      for row in dict_reader:
+        processed_row = cls._process_row(row)
+        instance = item_type(**processed_row)
+        instances.append(instance)
       return instances
 
   @classmethod
@@ -49,3 +45,11 @@ class FileService:
       return False
     else:
       raise ValueError(f"Cannot convert '{value}' to boolean.")
+
+  @classmethod
+  def _process_row(cls, row: dict) -> dict:
+    return {
+      k: cls._str_to_bool(v) if v.strip().lower() in ['true', 'false'] else v
+      for k, v in row.items()
+    }
+
