@@ -25,7 +25,6 @@ class FileService:
 
   @classmethod
   def _process_row(cls, row: dict) -> dict:
-    print(row)
     result = {}
     for key, val in row.items():
       # Check if is None
