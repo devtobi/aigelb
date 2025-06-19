@@ -2,7 +2,10 @@ from ast import literal_eval
 from csv import DictReader, DictWriter
 from glob import glob
 from os import path
-from typing import List, Type, TypeVar, Protocol
+from typing import List, Protocol, Type, TypeVar
+
+from pathvalidate import sanitize_filename
+
 
 class DictSerializable(Protocol):
   def to_dict(self) -> dict: ...
@@ -35,7 +38,7 @@ class FileService:
     fieldnames = set()
     for row in rows:
       fieldnames.update(row.to_dict().keys())
-    fieldnames = sorted(list(fieldnames))
+    fieldnames = sorted(fieldnames)
     abs_path: str = cls._get_absolute_path(filepath)
     with open(abs_path, mode='w', newline='') as csvfile:
       dict_writer = DictWriter(csvfile, fieldnames=fieldnames)
@@ -73,6 +76,10 @@ class FileService:
   @staticmethod
   def get_filename(filepath: str) -> str:
     return path.basename(filepath)
+
+  @staticmethod
+  def sanitize_file_name(filename: str) -> str:
+    return sanitize_filename(filename, replacement_text="_")
 
   @staticmethod
   def _get_absolute_path(pth: str) -> str:
