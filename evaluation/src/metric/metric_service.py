@@ -5,9 +5,10 @@ import evaluate
 from lexicalrichness import LexicalRichness
 from textstat import textstat
 
-from utility import LoggingService
+from utility import LoggingService, FileService
+from .metric import Metric
 
-from .exception import MetricNotFoundError
+from .exception import MetricNotFoundError, MetricFileEmptyError, MetricFileNotFoundError
 from .metric_library import MetricLibrary
 
 T = TypeVar('T')
@@ -31,6 +32,18 @@ class MetricService:
         return metric, library
 
     raise MetricNotFoundError(f"The requested metric function '{metric_function_name}' is not available.")
+
+  @classmethod
+  def read_metric_list(cls) -> List[Metric]:
+    filename = cls._get_metric_filename()
+    try:
+      metrics = FileService.from_csv(Metric, filename)
+      if len(metrics) == 0:
+        raise MetricFileEmptyError(f"The metric file {filename} contains no valid entries.") from None
+      LoggingService.log_list(metrics, "The following metrics were given:")
+      return metrics
+    except Exception as exc:
+      raise MetricFileNotFoundError(f"The metric file '{filename}' does not exist.'") from exc
 
   @classmethod
   def _get_textstat_function(cls, metric_function_name: str) -> Optional[Callable]:
@@ -94,3 +107,7 @@ class MetricService:
   def _get_public_attributes(obj: Any) -> List[str]:
     attributes = dir(obj)
     return [attr for attr in attributes if not attr.startswith("__")]
+
+  @staticmethod
+  def _get_metric_filename() -> str:
+    return "metrics.csv"

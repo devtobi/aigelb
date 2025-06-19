@@ -1,5 +1,5 @@
-metric_name,corpus_level
+_name,_is_corpus_level,_kwargs
 bleu,False
-bertscore,False
+bertscore,False,{'target': 'f1'}
 mtld,False
 flesch_reading_ease,True

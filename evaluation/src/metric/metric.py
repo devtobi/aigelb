@@ -9,6 +9,10 @@ class Metric:
     _is_corpus_level: bool
     _kwargs: dict[str, str | int | bool] = field(default_factory=lambda: {})
 
+    def __post_init__(self):
+      if self._kwargs is None:
+        self._kwargs = {}
+
     @property
     def name(self) -> str:
       return self._name
