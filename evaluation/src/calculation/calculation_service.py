@@ -3,10 +3,16 @@ from collections.abc import Callable
 from typing import List, Optional
 
 from metric import Metric, MetricService
+from model import Model, ModelService
 from utility import DateService, FileService, LoggingService
 
 from .calculation_result import CalculationResult
-from .exception import CalculationDataLengthMismatchError, CalculationMetricError
+from .exception import (
+    CalculationDataLengthMismatchError,
+    CalculationMetricError,
+    CalculationReferenceFileNotFoundError,
+    CalculationResultsWriteError,
+)
 
 
 class CalculationService:
@@ -31,7 +37,29 @@ class CalculationService:
       filename = f"result_{timestamp_sanitized}.csv"
       filepath = f"{cls._get_results_directory()}/{filename}"
       LoggingService.info(f"Writing calculation results to {filepath}")
-      FileService.to_csv(results, filepath)
+      try:
+        FileService.to_csv(results, filepath)
+      except Exception as exc:
+        raise CalculationResultsWriteError("Error writing calculation results to file") from exc
+
+    @classmethod
+    def read_references_file(cls) -> List[str]:
+      filename = cls._get_reference_file()
+      LoggingService.info(f"Reading references from {filename}")
+      try:
+        return FileService.from_csv_to_string_list(filename)
+      except Exception as exc:
+        raise CalculationReferenceFileNotFoundError("Error reading references from file") from exc
+
+    @classmethod
+    def read_predictions_file(cls, model: Model) -> List[str]:
+      filename = f"{ModelService.get_filename(model)}.csv"
+      filepath = f"{cls._get_predictions_directory()}/{filename}"
+      LoggingService.info(f"Reading predictions from {filepath}")
+      try:
+        return FileService.from_csv_to_string_list(filepath)
+      except Exception as exc:
+        raise CalculationReferenceFileNotFoundError("Error reading references from file") from exc
 
     @staticmethod
     def _calculate_no_references(texts: List[str], func: Callable, metric: Metric) -> float:
@@ -63,3 +91,11 @@ class CalculationService:
     @staticmethod
     def _get_results_directory() -> str:
       return "results"
+
+    @staticmethod
+    def _get_predictions_directory() -> str:
+      return "predictions"
+
+    @staticmethod
+    def _get_reference_file() -> str:
+      return "references.csv"
