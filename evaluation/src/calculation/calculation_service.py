@@ -3,7 +3,9 @@ from collections.abc import Callable
 from typing import List, Optional
 
 from metric import Metric, MetricService
+from utility import DateService, FileService, LoggingService
 
+from .calculation_result import CalculationResult
 from .exception import CalculationDataLengthMismatchError, CalculationMetricError
 
 
@@ -21,6 +23,15 @@ class CalculationService:
         return cls._calculate_no_references(references, function, metric)
       else:
         return cls._calculate_with_references(references, predictions, function, metric)
+
+    @classmethod
+    def write_calculation_results(cls, results: List[CalculationResult]):
+      timestamp: str = DateService.get_timestamp()
+      timestamp_sanitized = FileService.sanitize_file_name(timestamp)
+      filename = f"result_{timestamp_sanitized}.csv"
+      filepath = f"{cls._get_results_directory()}/{filename}"
+      LoggingService.info(f"Writing calculation results to {filepath}")
+      FileService.to_csv(results, filepath)
 
     @staticmethod
     def _calculate_no_references(texts: List[str], func: Callable, metric: Metric) -> float:
@@ -49,4 +60,6 @@ class CalculationService:
       else:
         return func(references=references, predictions=predictions, **metric.kwargs)
 
-
+    @staticmethod
+    def _get_results_directory() -> str:
+      return "results"
