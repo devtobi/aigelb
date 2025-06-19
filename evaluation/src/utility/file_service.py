@@ -1,7 +1,8 @@
 from csv import DictReader
 from glob import glob
 from os import path
-from typing import Iterator, List, Type, TypeVar
+from typing import List, Type, TypeVar
+from ast import literal_eval
 
 T = TypeVar('T')
 
@@ -21,6 +22,29 @@ class FileService:
         instance = item_type(**processed_row)
         instances.append(instance)
       return instances
+
+  @classmethod
+  def _process_row(cls, row: dict) -> dict:
+    print(row)
+    result = {}
+    for key, val in row.items():
+      # Check if is None
+      if val is None:
+        result[key] = None
+        continue
+      val = val.strip()
+      # Try converting to bool
+      if val.lower() in ['true', 'false']:
+        result[key] = cls._str_to_bool(val)
+      # Try converting dict/list/number via literal_eval
+      elif val.startswith('{') or val.startswith('[') or val.isdigit():
+        try:
+          result[key] = literal_eval(val)
+        except (ValueError, SyntaxError):
+          result[key] = val  # Fallback to string if it fails
+      else:
+        result[key] = val
+    return result
 
   @classmethod
   def get_files(cls, pth: str, extension: str) -> List[str]:
@@ -46,10 +70,4 @@ class FileService:
     else:
       raise ValueError(f"Cannot convert '{value}' to boolean.")
 
-  @classmethod
-  def _process_row(cls, row: dict) -> dict:
-    return {
-      k: cls._str_to_bool(v) if v.strip().lower() in ['true', 'false'] else v
-      for k, v in row.items()
-    }
 
