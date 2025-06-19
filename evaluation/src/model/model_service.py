@@ -8,7 +8,6 @@ from huggingface_hub import (
   hf_hub_download,
   scan_cache_dir,
 )
-from pathvalidate import sanitize_filename
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from utility import FileService, KeyboardInterruptError, LoggingService
@@ -39,11 +38,12 @@ class ModelService:
       f"{model.repo_id}"
       + (f"__{model.gguf_filename}" if model.is_gguf else "")
     )
-    return sanitize_filename(filename, replacement_text="_")
+    return FileService.sanitize_file_name(filename)
 
   @classmethod
   def read_model_list(cls) -> List[Model]:
     filename = cls._get_model_filename()
+    LoggingService.info(f"Reading models from {filename}...")
     try:
       models = FileService.from_csv(Model, filename)
       if len(models) == 0:
@@ -63,6 +63,7 @@ class ModelService:
   @staticmethod
   def prepare_clear_model_cache() -> DeleteCacheStrategy:
     # Read local cache
+    LoggingService.info("Collecting model information from cache...")
     try:
       huggingface_cache_info: HFCacheInfo = scan_cache_dir()
     except CacheNotFound as exc:
@@ -86,6 +87,7 @@ class ModelService:
 
   @staticmethod
   def clear_model_cache(strategy: DeleteCacheStrategy) -> None:
+    LoggingService.info("Clearing model information from cache...")
     try:
       strategy.execute()
       LoggingService.info("Successfully cleared the cache.")

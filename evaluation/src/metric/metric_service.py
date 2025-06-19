@@ -40,6 +40,7 @@ class MetricService:
   @classmethod
   def read_metric_list(cls) -> List[Metric]:
     filename = cls._get_metric_filename()
+    LoggingService.info(f"Reading metrics from {filename}...")
     try:
       metrics = FileService.from_csv(Metric, filename)
       if len(metrics) == 0:
