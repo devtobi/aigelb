@@ -19,7 +19,7 @@ class CalculationResult:
     def to_dict(self) -> dict:
       return {'_model_name': self._model_name, **self._metric_results}
 
-    def __iter__(self) -> Iterator[Union[str, bool]]:
+    def __iter__(self) -> Iterator[Union[str, dict[str, float]]]:
         return iter(self._as_tuple())
 
     def __str__(self) -> str:
