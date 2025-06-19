@@ -1,10 +1,14 @@
 from ast import literal_eval
-from csv import DictReader
+from csv import DictReader, DictWriter
 from glob import glob
 from os import path
-from typing import List, Type, TypeVar
+from typing import List, Type, TypeVar, Protocol
+
+class DictSerializable(Protocol):
+  def to_dict(self) -> dict: ...
 
 T = TypeVar('T')
+S = TypeVar('S', bound=DictSerializable)
 
 class FileService:
 
@@ -12,7 +16,7 @@ class FileService:
     raise TypeError("This utility class cannot be instantiated.")
 
   @classmethod
-  def from_csv(cls, item_type: Type[T], filepath: str, skip_header=True) -> List[T]:
+  def from_csv(cls, item_type: Type[T], filepath: str) -> List[T]:
     abs_path: str = cls._get_absolute_path(filepath)
     with open(abs_path, newline="") as csvfile:
       dict_reader = DictReader(csvfile, delimiter=",")
@@ -22,6 +26,22 @@ class FileService:
         instance = item_type(**processed_row)
         instances.append(instance)
       return instances
+
+  @classmethod
+  def to_csv(cls, rows: List[S], filepath: str) -> None:
+    if len(rows) == 0:
+      raise ValueError("Cannot write empty row list to CSV")
+
+    fieldnames = set()
+    for row in rows:
+      fieldnames.update(row.to_dict().keys())
+    fieldnames = sorted(list(fieldnames))
+    abs_path: str = cls._get_absolute_path(filepath)
+    with open(abs_path, mode='w', newline='') as csvfile:
+      dict_writer = DictWriter(csvfile, fieldnames=fieldnames)
+      dict_writer.writeheader()
+      for row in rows:
+        dict_writer.writerow(row.to_dict())
 
   @classmethod
   def _process_row(cls, row: dict) -> dict:
