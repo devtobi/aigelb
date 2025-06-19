@@ -1,18 +1,13 @@
-from typing import Any, Dict, List, Optional, TypeVar
+from typing import Any, Callable, Dict, List, Optional, Tuple, TypeVar
 
 import evaluate
 import textstat
 from lexicalrichness import LexicalRichness
 
-from metric.exception import MetricNotFoundError
+from .exception import MetricNotFoundError
+from .metric_library import MetricLibrary
 
 T = TypeVar('T')
-
-_dispatch = {
-    'textstat': textstat,
-    'evaluate': evaluate,          # package
-    'lexrich': LexicalRichness,    # class
-}
 
 class MetricService:
 
@@ -20,13 +15,28 @@ class MetricService:
     raise TypeError("This class cannot be instantiated.")
 
   @classmethod
-  def get_textstat_function(cls, metric_function_name: str) -> Any:
+  def get_metric_function(cls, metric_function_name: str) -> Tuple[Callable, MetricLibrary]:
+    function_sources: list[Tuple[Callable[[str], Any], MetricLibrary]] = [
+      (cls._get_textstat_function, MetricLibrary.TEXTSTAT),
+      (cls._get_lexical_richness_function, MetricLibrary.LEXICAL_RICHNESS),
+      (cls._get_evaluate_function, MetricLibrary.EVALUATE),
+    ]
+
+    for func_getter, library in function_sources:
+      metric = func_getter(metric_function_name)
+      if metric is not None:
+        return metric, library
+
+    raise MetricNotFoundError(f"The requested metric function '{metric_function_name}' is not available.")
+
+  @classmethod
+  def _get_textstat_function(cls, metric_function_name: str) -> Optional[Callable]:
     if metric_function_name in cls._get_method_names(textstat):
       return getattr(textstat, metric_function_name)
     return None
 
   @staticmethod
-  def get_evaluate_function(evaluate_metric_name: str) -> Any:
+  def _get_evaluate_function(evaluate_metric_name: str) -> Optional[Callable]:
     try:
       metric = evaluate.load(evaluate_metric_name)
       if not hasattr(metric, "compute") or not callable(metric.compute):
@@ -45,7 +55,7 @@ class MetricService:
       return None
 
   @classmethod
-  def get_lexical_richness_function(cls, attribute: str) -> Any:
+  def _get_lexical_richness_function(cls, attribute: str) -> Optional[Callable]:
     if attribute not in cls._get_public_attributes(LexicalRichness):
       return None
     def wrapper(text, *args, **kwargs):

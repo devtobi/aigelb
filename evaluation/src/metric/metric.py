@@ -6,15 +6,11 @@ from typing import Iterator, Tuple, Union
 class Metric:
 
     _name: str
-    _library: str
     _is_corpus_level: bool
 
     @property
     def name(self) -> str:
       return self._name
-
-    def library(self) -> str:
-      return self._library
 
     @property
     def is_corpus_level(self) -> bool:
@@ -25,7 +21,7 @@ class Metric:
 
     def __str__(self) -> str:
         return (
-            f"{self._name} from {self._library} on {"corpus level" if self._is_corpus_level else 'sentence level'}"
+            f"{self._name} on {"corpus level" if self._is_corpus_level else 'sentence level'}"
         )
 
     def _as_tuple(self) -> Tuple[str, str, bool]:
