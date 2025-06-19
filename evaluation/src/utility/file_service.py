@@ -1,8 +1,8 @@
+from ast import literal_eval
 from csv import DictReader
 from glob import glob
 from os import path
 from typing import List, Type, TypeVar
-from ast import literal_eval
 
 T = TypeVar('T')
 

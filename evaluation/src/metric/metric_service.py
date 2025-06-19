@@ -5,10 +5,14 @@ import evaluate
 from lexicalrichness import LexicalRichness
 from textstat import textstat
 
-from utility import LoggingService, FileService
-from .metric import Metric
+from utility import FileService, LoggingService
 
-from .exception import MetricNotFoundError, MetricFileEmptyError, MetricFileNotFoundError
+from .exception import (
+  MetricFileEmptyError,
+  MetricFileNotFoundError,
+  MetricNotFoundError,
+)
+from .metric import Metric
 from .metric_library import MetricLibrary
 
 T = TypeVar('T')
