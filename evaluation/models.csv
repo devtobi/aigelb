@@ -1,3 +1,3 @@
 _repo_id,_gguf_filename,_gated
-TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF,tinyllama-1.1b-chat-v1.0.Q2_K.gguf,False
-Qwen/Qwen2.5-0.5B-Instruct,,False
+TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF,tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+Qwen/Qwen2.5-0.5B-Instruct

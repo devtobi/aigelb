@@ -9,6 +9,10 @@ class Model:
     _gguf_filename: str
     _gated: bool = False
 
+    def __post_init__(self):
+      if self._gated is None:
+        self._gated = False
+
     @property
     def repo_id(self) -> str:
       return self._repo_id
