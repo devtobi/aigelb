@@ -23,7 +23,8 @@ class CalculationService:
     @classmethod
     def calculate_metrics(cls, models: List[Model], metrics: List[Metric]):
       calculation_results: List[CalculationResult] = [
-        cls._calculate_result_for_model(model, metrics) for model in models
+        cls._calculate_result_for_reference(metrics),
+        *[cls._calculate_result_for_model(model, metrics) for model in models]
       ]
       cls._write_calculation_results(calculation_results)
 
@@ -39,6 +40,17 @@ class CalculationService:
       return CalculationResult(_model_name=model.name, _metric_results=metric_results)
 
     @classmethod
+    def _calculate_result_for_reference(cls, metrics: List[Metric]) -> CalculationResult:
+      references = cls._read_references_file()
+      model_name = "reference"
+      metric_results = {}
+      for metric in metrics:
+        metric_csv_name = MetricService.get_metric_csv_name(metric)
+        LoggingService.info(f"Calculating {metric_csv_name} for {model_name}")
+        metric_results[metric_csv_name] = cls._calculate_metric(metric, references)
+      return CalculationResult(_model_name=model_name, _metric_results=metric_results)
+
+    @classmethod
     def _write_calculation_results(cls, results: List[CalculationResult]):
       timestamp: str = DateService.get_timestamp()
       timestamp_sanitized = FileService.sanitize_file_name(timestamp)
@@ -51,10 +63,12 @@ class CalculationService:
         raise CalculationResultsWriteError("Error writing calculation results to file") from exc
 
     @classmethod
-    def _calculate_metric(cls, metric: Metric, references: List[str], predictions: Optional[List[str]] = None) -> float:
+    def _calculate_metric(cls, metric: Metric, references: List[str], predictions: Optional[List[str]] = None) -> Optional[float]:
       function, library = MetricService.get_metric_function(metric.name)
       if predictions is not None and len(predictions) != len(references):
         raise CalculationDataLengthMismatchError("Length of references and predictions did not match!")
+      if library is MetricLibrary.EVALUATE and predictions is None:
+        return None
       used_predictions = predictions if library is MetricLibrary.EVALUATE else None
       if (used_predictions is None) or (len(used_predictions) == 0):
         return cls._calculate_no_references(references, function, metric)
