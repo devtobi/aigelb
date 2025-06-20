@@ -24,7 +24,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "pyrefly (==0.20.0)",
-    "ruff (==0.11.13)",
+    "ruff (==0.12.0)",
 ]
 
 [tool.uv]
