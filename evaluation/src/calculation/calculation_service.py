@@ -22,21 +22,23 @@ class CalculationService:
 
     @classmethod
     def calculate_metrics(cls, models: List[Model], metrics: List[Metric]):
-      print("NOT IMPLEMENTED YET")
+      calculation_results: List[CalculationResult] = [
+        cls._calculate_result_for_model(model, metrics) for model in models
+      ]
+      cls._write_calculation_results(calculation_results)
 
     @classmethod
-    def calculate_result_for_model(cls, model: Model, metrics: List[Metric]) -> CalculationResult:
+    def _calculate_result_for_model(cls, model: Model, metrics: List[Metric]) -> CalculationResult:
       references = cls._read_references_file()
       predictions = cls._read_predictions_file(model)
       metric_results = {}
       for metric in metrics:
         LoggingService.info(f"Calculating {metric.name} for {model.name}")
-        result = cls._calculate_metric(metric, references, predictions)
-        metric_results[metric.name] = result
+        metric_results[metric.name] = cls._calculate_metric(metric, references, predictions)
       return CalculationResult(_model_name=model.name, _metric_results=metric_results)
 
     @classmethod
-    def write_calculation_results(cls, results: List[CalculationResult]):
+    def _write_calculation_results(cls, results: List[CalculationResult]):
       timestamp: str = DateService.get_timestamp()
       timestamp_sanitized = FileService.sanitize_file_name(timestamp)
       filename = f"result_{timestamp_sanitized}.csv"
@@ -80,15 +82,11 @@ class CalculationService:
     @staticmethod
     def _calculate_no_references(texts: List[str], func: Callable, metric: Metric) -> float:
       try:
-        if not metric.is_corpus_level:
-          results = []
-          for text in texts:
-            result = func(text, **metric.kwargs)
-            results.append(result)
-          return statistics.mean(results)
-        else:
-          text = ' '.join(texts)
-          return func(text, **metric.kwargs)
+        if metric.is_corpus_level:
+          combined_text = ' '.join(texts)
+          return func(combined_text, **metric.kwargs)
+        results = [func(text, **metric.kwargs) for text in texts]
+        return statistics.mean(results)
       except Exception as exc:
         raise CalculationMetricError(f"Error calculating {metric.name}!") from exc
 
@@ -96,10 +94,10 @@ class CalculationService:
     @staticmethod
     def _calculate_with_references(references: List[str], predictions: List[str], func: Callable, metric: Metric) -> float:
       if not metric.is_corpus_level:
-        results = []
-        for idx, reference in enumerate(references):
-          result = func(references=[reference], predictions=[predictions[idx]], **metric.kwargs)
-          results.append(result)
+        results = [
+          func(references=[ref], predictions=[pred], **metric.kwargs)
+          for ref, pred in zip(references, predictions)
+        ]
         return statistics.mean(results)
       else:
         return func(references=references, predictions=predictions, **metric.kwargs)
