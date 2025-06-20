@@ -1,5 +1,5 @@
 from ast import literal_eval
-from csv import DictReader, DictWriter
+from csv import QUOTE_MINIMAL, DictReader, DictWriter
 from os import makedirs, path
 from typing import List, Protocol, Type, TypeVar
 
@@ -47,7 +47,7 @@ class FileService:
     abs_path: str = cls._get_absolute_path(filepath)
     makedirs(path.dirname(abs_path), exist_ok=True)
     with open(abs_path, mode='w', newline='') as csvfile:
-      dict_writer = DictWriter(csvfile, fieldnames=fieldnames)
+      dict_writer = DictWriter(csvfile, fieldnames=fieldnames, quoting=QUOTE_MINIMAL)
       dict_writer.writeheader()
       for row in rows:
         dict_writer.writerow(row.to_dict())
