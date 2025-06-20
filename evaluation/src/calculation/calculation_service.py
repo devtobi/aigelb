@@ -2,7 +2,7 @@ import statistics
 from collections.abc import Callable
 from typing import List, Optional
 
-from metric import Metric, MetricService
+from metric import Metric, MetricLibrary, MetricService
 from model import Model, ModelService
 from utility import DateService, FileService, LoggingService
 
@@ -21,14 +21,19 @@ class CalculationService:
       raise TypeError("This class cannot be instantiated.")
 
     @classmethod
-    def calculate_metric(cls, metric: Metric, references: List[str], predictions: Optional[List[str]] = None) -> float:
-      function, _ = MetricService.get_metric_function(metric.name)
-      if predictions is not None and len(predictions) != len(references):
-        raise CalculationDataLengthMismatchError("Length of references and predictions did not match!")
-      if (predictions is None) or (len(predictions) == 0):
-        return cls._calculate_no_references(references, function, metric)
-      else:
-        return cls._calculate_with_references(references, predictions, function, metric)
+    def calculate_metrics(cls, models: List[Model], metrics: List[Metric]):
+      print("NOT IMPLEMENTED YET")
+
+    @classmethod
+    def calculate_result_for_model(cls, model: Model, metrics: List[Metric]) -> CalculationResult:
+      references = cls._read_references_file()
+      predictions = cls._read_predictions_file(model)
+      metric_results = {}
+      for metric in metrics:
+        LoggingService.info(f"Calculating {metric.name} for {model.name}")
+        result = cls._calculate_metric(metric, references, predictions)
+        metric_results[metric.name] = result
+      return CalculationResult(_model_name=model.name, _metric_results=metric_results)
 
     @classmethod
     def write_calculation_results(cls, results: List[CalculationResult]):
@@ -43,7 +48,18 @@ class CalculationService:
         raise CalculationResultsWriteError("Error writing calculation results to file") from exc
 
     @classmethod
-    def read_references_file(cls) -> List[str]:
+    def _calculate_metric(cls, metric: Metric, references: List[str], predictions: Optional[List[str]] = None) -> float:
+      function, library = MetricService.get_metric_function(metric.name)
+      if predictions is not None and len(predictions) != len(references):
+        raise CalculationDataLengthMismatchError("Length of references and predictions did not match!")
+      used_predictions = predictions if library is MetricLibrary.EVALUATE else None
+      if (used_predictions is None) or (len(used_predictions) == 0):
+        return cls._calculate_no_references(references, function, metric)
+      else:
+        return cls._calculate_with_references(references, used_predictions, function, metric)
+
+    @classmethod
+    def _read_references_file(cls) -> List[str]:
       filename = cls._get_reference_file()
       LoggingService.info(f"Reading references from {filename}")
       try:
@@ -52,7 +68,7 @@ class CalculationService:
         raise CalculationReferenceFileNotFoundError("Error reading references from file") from exc
 
     @classmethod
-    def read_predictions_file(cls, model: Model) -> List[str]:
+    def _read_predictions_file(cls, model: Model) -> List[str]:
       filename = f"{ModelService.get_filename(model)}.csv"
       filepath = f"{cls._get_predictions_directory()}/{filename}"
       LoggingService.info(f"Reading predictions from {filepath}")
