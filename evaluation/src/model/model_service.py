@@ -8,7 +8,6 @@ from huggingface_hub import (
   hf_hub_download,
   scan_cache_dir,
 )
-from pathvalidate import sanitize_filename
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from utility import FileService, KeyboardInterruptError, LoggingService
@@ -30,32 +29,25 @@ class ModelService:
     raise TypeError("This class cannot be instantiated.")
 
   @staticmethod
-  def get_model_cache_dir() -> str:
-    return getenv("HF_HOME") or "default HuggingFace cache directory (usually ~/.cache/huggingface)"
-
-  @staticmethod
   def get_filename(model: Model) -> str:
-    filename = (
-      f"{model.repo_id}"
-      + (f"__{model.gguf_filename}" if model.is_gguf else "")
-    )
-    return sanitize_filename(filename, replacement_text="_")
+    return FileService.sanitize_file_name(model.name)
 
   @classmethod
   def read_model_list(cls) -> List[Model]:
     filename = cls._get_model_filename()
+    LoggingService.info(f"Reading models from {filename}...")
     try:
       models = FileService.from_csv(Model, filename)
       if len(models) == 0:
         raise ModelFileEmptyError(f"The model file {filename} contains no valid entries.") from None
-      LoggingService.log_list(models, "The following models were given:")
+      LoggingService.log_list(models, "The following models were found:")
       return models
     except Exception as exc:
       raise ModelFileNotFoundError(f"The model file '{filename}' does not exist.'") from exc
 
   @classmethod
   def download_models(cls, models: List[Model]) -> None:
-    LoggingService.info(f"Downloading models from Hugging Face to '{cls.get_model_cache_dir()}'...")
+    LoggingService.info(f"Downloading models from Hugging Face to '{cls._get_model_cache_dir()}'...")
     for model in models:
       cls._download_model(model)
     LoggingService.info("Finished downloading the models from Hugging Face.")
@@ -63,6 +55,7 @@ class ModelService:
   @staticmethod
   def prepare_clear_model_cache() -> DeleteCacheStrategy:
     # Read local cache
+    LoggingService.info("Collecting model information from cache...")
     try:
       huggingface_cache_info: HFCacheInfo = scan_cache_dir()
     except CacheNotFound as exc:
@@ -86,6 +79,7 @@ class ModelService:
 
   @staticmethod
   def clear_model_cache(strategy: DeleteCacheStrategy) -> None:
+    LoggingService.info("Clearing model information from cache...")
     try:
       strategy.execute()
       LoggingService.info("Successfully cleared the cache.")
@@ -136,3 +130,7 @@ class ModelService:
   @staticmethod
   def _get_model_filename() -> str:
     return "models.csv"
+
+  @staticmethod
+  def _get_model_cache_dir() -> str:
+    return getenv("HF_HOME") or "default HuggingFace cache directory (usually ~/.cache/huggingface)"

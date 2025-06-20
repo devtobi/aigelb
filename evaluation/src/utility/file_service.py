@@ -1,9 +1,16 @@
-from csv import reader
-from glob import glob
-from os import path
-from typing import Iterator, List, Type, TypeVar
+from ast import literal_eval
+from csv import DictReader, DictWriter
+from os import makedirs, path
+from typing import List, Protocol, Type, TypeVar
+
+from pathvalidate import sanitize_filename
+
+
+class DictSerializable(Protocol):
+  def to_dict(self) -> dict: ...
 
 T = TypeVar('T')
+S = TypeVar('S', bound=DictSerializable)
 
 class FileService:
 
@@ -11,29 +18,65 @@ class FileService:
     raise TypeError("This utility class cannot be instantiated.")
 
   @classmethod
-  def from_csv(cls, item_type: Type[T], filepath: str, skip_header=True) -> List[T]:
+  def from_csv(cls, item_type: Type[T], filepath: str) -> List[T]:
     abs_path: str = cls._get_absolute_path(filepath)
-    with open(abs_path, newline="") as csvfile:
-      csv_reader: Iterator[List[str]] = reader(csvfile, delimiter=",")
-      if skip_header:
-        next(csv_reader, None)
+    with open(abs_path, mode='r', newline="") as csvfile:
+      dict_reader = DictReader(csvfile, delimiter=",")
       instances = []
-      for row in csv_reader:
-        converted_row = [
-          cls._str_to_bool(cell) if cell.strip().lower() in ['true', 'false'] else cell
-          for cell in row
-        ]
-        instances.append(item_type(*converted_row))
+      for row in dict_reader:
+        processed_row = cls._process_row(row)
+        instance = item_type(**processed_row)
+        instances.append(instance)
       return instances
 
   @classmethod
-  def get_files(cls, pth: str, extension: str) -> List[str]:
-    abs_path = cls._get_absolute_path(pth)
-    return glob(f"{abs_path}/*.{extension}")
+  def from_csv_to_string_list(cls, filepath: str) -> List[str]:
+    abs_path: str = cls._get_absolute_path(filepath)
+    with open(abs_path, mode='r', encoding='utf-8') as file:
+      return [line.strip() for line in file if line.strip()]
+
+  @classmethod
+  def to_csv(cls, rows: List[S], filepath: str) -> None:
+    if len(rows) == 0:
+      raise ValueError("Cannot write empty row list to CSV")
+
+    fieldnames = set()
+    for row in rows:
+      fieldnames.update(row.to_dict().keys())
+    fieldnames = sorted(fieldnames)
+    abs_path: str = cls._get_absolute_path(filepath)
+    makedirs(path.dirname(abs_path), exist_ok=True)
+    with open(abs_path, mode='w', newline='') as csvfile:
+      dict_writer = DictWriter(csvfile, fieldnames=fieldnames)
+      dict_writer.writeheader()
+      for row in rows:
+        dict_writer.writerow(row.to_dict())
+
+  @classmethod
+  def _process_row(cls, row: dict) -> dict:
+    result = {}
+    for key, val in row.items():
+      # Check if is None
+      if val is None:
+        result[key] = None
+        continue
+      val = val.strip()
+      # Try converting to bool
+      if val.lower() in ['true', 'false']:
+        result[key] = cls._str_to_bool(val)
+      # Try converting dict/list/number via literal_eval
+      elif val.startswith('{') or val.startswith('[') or val.isdigit():
+        try:
+          result[key] = literal_eval(val)
+        except (ValueError, SyntaxError):
+          result[key] = val  # Fallback to string if it fails
+      else:
+        result[key] = val
+    return result
 
   @staticmethod
-  def get_filename(filepath: str) -> str:
-    return path.basename(filepath)
+  def sanitize_file_name(filename: str) -> str:
+    return sanitize_filename(filename, replacement_text="_")
 
   @staticmethod
   def _get_absolute_path(pth: str) -> str:
@@ -49,3 +92,5 @@ class FileService:
       return False
     else:
       raise ValueError(f"Cannot convert '{value}' to boolean.")
+
+

@@ -7,7 +7,11 @@ class Model:
 
     _repo_id: str
     _gguf_filename: str
-    _gated: bool
+    _gated: bool = False
+
+    def __post_init__(self):
+      if self._gated is None:
+        self._gated = False
 
     @property
     def repo_id(self) -> str:
@@ -20,6 +24,10 @@ class Model:
     @property
     def gated(self) -> bool:
       return self._gated
+
+    @property
+    def name(self) -> str:
+      return f"{self._repo_id}" + (f"__{self._gguf_filename}" if self.is_gguf else "")
 
     @property
     def is_gguf(self) -> bool:

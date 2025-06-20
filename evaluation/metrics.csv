@@ -1,5 +1,6 @@
-metric_name,corpus_level
-bleu,False
-bertscore,False
+_name,_is_corpus_level,_kwargs
+bleu,True
+bertscore,True,"{'target': 'f1', 'lang': 'de'}"
+bertscore,True,"{'target': 'precision', 'lang': 'de'}"
 mtld,False
 flesch_reading_ease,True

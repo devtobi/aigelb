@@ -1,31 +1,31 @@
 from typing import List
 
-from utility import FileService, LoggingService, Metric
+from calculation import CalculationService
+from metric import Metric, MetricService
+from model import Model, ModelService
+from utility import KeyboardInterruptError, LoggingService
 
-
-def calculate(metrics: List[Metric]) -> bool:
-  file_paths = FileService.get_files("results/", "csv")
-  for file_path in file_paths:
-    filename: str = FileService.get_filename(file_path)
-    LoggingService.info(f"Calculating metrics for {filename}...")
-
-    # TODO
-    lines: List[str] = FileService.from_csv(str, file_path, skip_header=False)
-    for line in lines:
-      LoggingService.info(line)
-
-  return True
 
 def calculate_metrics():
-  metrics: List[Metric] = FileService.from_csv(Metric, "metrics.csv")
-  if len(metrics) == 0:
-    LoggingService.info("No metrics in metrics.csv. Please add some metrics first and re-run this script.")
+  try:
+    models: List[Model] = ModelService.read_model_list()
+  except Exception as exc:
+    LoggingService.error(str(exc))
     return
-  LoggingService.log_list(metrics, "The following metrics were selected:")
-  if not LoggingService.confirm_action( "Are you sure you want to start calculation with those metrics?"):
+  if not LoggingService.confirm_action("Are you sure you want to use those models for calculation?"):
     return
-  if not calculate(metrics):
+  try:
+    metrics: List[Metric] = MetricService.read_metric_list()
+  except Exception as exc:
+    LoggingService.error(str(exc))
+    return
+  if not LoggingService.confirm_action("Are you sure you want to use those metrics for calculation?"):
+    return
+  try:
+    CalculationService.calculate_metrics(models, metrics)
+  except KeyboardInterruptError as exc:
+    LoggingService.error(str(exc))
     return
 
 if __name__ == "__main__":
-    calculate_metrics()
+  calculate_metrics()
