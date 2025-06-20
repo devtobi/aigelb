@@ -1,6 +1,6 @@
 from ast import literal_eval
 from csv import DictReader, DictWriter
-from os import path
+from os import path, makedirs
 from typing import List, Protocol, Type, TypeVar
 
 from pathvalidate import sanitize_filename
@@ -45,6 +45,7 @@ class FileService:
       fieldnames.update(row.to_dict().keys())
     fieldnames = sorted(fieldnames)
     abs_path: str = cls._get_absolute_path(filepath)
+    makedirs(path.dirname(abs_path), exist_ok=True)
     with open(abs_path, mode='w', newline='') as csvfile:
       dict_writer = DictWriter(csvfile, fieldnames=fieldnames)
       dict_writer.writeheader()
