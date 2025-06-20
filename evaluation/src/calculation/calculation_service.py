@@ -97,25 +97,18 @@ class CalculationService:
     @staticmethod
     def _calculate_no_references(texts: List[str], func: Callable, metric: Metric) -> float:
       try:
-        if metric.is_corpus_level:
-          combined_text = ' '.join(texts)
-          return func(combined_text, **metric.kwargs)
-        results = [func(text, **metric.kwargs) for text in texts]
-        return statistics.mean(results)
+        combined_text = ' '.join(texts)
+        return func(combined_text, **metric.kwargs)
       except Exception as exc:
         raise CalculationMetricError(f"Error calculating {metric.name}!") from exc
 
 
     @staticmethod
     def _calculate_with_references(references: List[str], predictions: List[str], func: Callable, metric: Metric) -> float:
-      if not metric.is_corpus_level:
-        results = [
-          func(references=[ref], predictions=[pred], **metric.kwargs)
-          for ref, pred in zip(references, predictions, strict=True)
-        ]
-        return statistics.mean(results)
-      else:
+      try:
         return func(references=references, predictions=predictions, **metric.kwargs)
+      except Exception as exc:
+        raise CalculationMetricError(f"Error calculating {metric.name}!") from exc
 
     @staticmethod
     def _get_results_directory() -> str:
