@@ -111,7 +111,7 @@ class CalculationService:
       if not metric.is_corpus_level:
         results = [
           func(references=[ref], predictions=[pred], **metric.kwargs)
-          for ref, pred in zip(references, predictions)
+          for ref, pred in zip(references, predictions, strict=True)
         ]
         return statistics.mean(results)
       else:

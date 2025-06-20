@@ -1,6 +1,6 @@
 from ast import literal_eval
 from csv import DictReader, DictWriter
-from os import path, makedirs
+from os import makedirs, path
 from typing import List, Protocol, Type, TypeVar
 
 from pathvalidate import sanitize_filename
