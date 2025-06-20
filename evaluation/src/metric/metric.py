@@ -30,7 +30,7 @@ class Metric:
 
     def __str__(self) -> str:
         return (
-            f"{self._name} with configuration {self._kwargs} on {"corpus level" if self._is_corpus_level else 'sentence level'}"
+            f"{self._name}{f" with configuration {self._kwargs}" if self._kwargs != {} else ""} on {"corpus level" if self._is_corpus_level else 'sentence level'}"
         )
 
     def _as_tuple(self) -> Tuple[str, bool, dict[str, str | int | bool]]:

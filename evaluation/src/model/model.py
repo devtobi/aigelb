@@ -26,6 +26,10 @@ class Model:
       return self._gated
 
     @property
+    def name(self) -> str:
+      return f"{self._repo_id}" + (f"__{self._gguf_filename}" if self.is_gguf else "")
+
+    @property
     def is_gguf(self) -> bool:
       return self._gguf_filename is not None and self._gguf_filename.strip() != ""
 

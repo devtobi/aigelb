@@ -56,7 +56,6 @@ class MetricService:
         func = getattr(textstat, metric_function_name)
 
         def wrapper(text: str, lang: str = "de", *args, **kwargs):
-          LoggingService.info(f"Calculating {metric_function_name} using Textstat library...")
           textstat.set_lang(lang)
           return func(text, *args, **kwargs)
         return wrapper
@@ -70,7 +69,6 @@ class MetricService:
         return None
 
       def wrapper(target: Optional[str] = None, *args, **kwargs):
-        LoggingService.info(f"Calculating {evaluate_metric_name} using HuggingFace Evaluate library...")
         compute_result: Optional[Dict] = metric.compute(*args, **kwargs)
         if compute_result is None:
           raise MetricNotFoundError(f"Calculating '{evaluate_metric_name}' using HuggingFace Evaluate library failed.")
@@ -91,7 +89,6 @@ class MetricService:
     if attribute not in cls._get_public_attributes(LexicalRichness):
       return None
     def wrapper(text: str, *args, **kwargs):
-      LoggingService.info(f"Calculating {attribute} using LexicalRichness library...")
       obj = LexicalRichness(text)
       attr = getattr(obj, attribute, None)
       if not attr:

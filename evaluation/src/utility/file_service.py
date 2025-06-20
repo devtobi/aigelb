@@ -1,6 +1,5 @@
 from ast import literal_eval
 from csv import DictReader, DictWriter
-from glob import glob
 from os import path
 from typing import List, Protocol, Type, TypeVar
 
@@ -73,15 +72,6 @@ class FileService:
       else:
         result[key] = val
     return result
-
-  @classmethod
-  def get_files(cls, pth: str, extension: str) -> List[str]:
-    abs_path = cls._get_absolute_path(pth)
-    return glob(f"{abs_path}/*.{extension}")
-
-  @staticmethod
-  def get_filename(filepath: str) -> str:
-    return path.basename(filepath)
 
   @staticmethod
   def sanitize_file_name(filename: str) -> str:

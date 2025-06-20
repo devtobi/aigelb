@@ -29,16 +29,8 @@ class ModelService:
     raise TypeError("This class cannot be instantiated.")
 
   @staticmethod
-  def get_model_cache_dir() -> str:
-    return getenv("HF_HOME") or "default HuggingFace cache directory (usually ~/.cache/huggingface)"
-
-  @staticmethod
   def get_filename(model: Model) -> str:
-    filename = (
-      f"{model.repo_id}"
-      + (f"__{model.gguf_filename}" if model.is_gguf else "")
-    )
-    return FileService.sanitize_file_name(filename)
+    return FileService.sanitize_file_name(model.name)
 
   @classmethod
   def read_model_list(cls) -> List[Model]:
@@ -55,7 +47,7 @@ class ModelService:
 
   @classmethod
   def download_models(cls, models: List[Model]) -> None:
-    LoggingService.info(f"Downloading models from Hugging Face to '{cls.get_model_cache_dir()}'...")
+    LoggingService.info(f"Downloading models from Hugging Face to '{cls._get_model_cache_dir()}'...")
     for model in models:
       cls._download_model(model)
     LoggingService.info("Finished downloading the models from Hugging Face.")
@@ -138,3 +130,7 @@ class ModelService:
   @staticmethod
   def _get_model_filename() -> str:
     return "models.csv"
+
+  @staticmethod
+  def _get_model_cache_dir() -> str:
+    return getenv("HF_HOME") or "default HuggingFace cache directory (usually ~/.cache/huggingface)"
