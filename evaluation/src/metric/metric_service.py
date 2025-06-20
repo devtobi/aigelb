@@ -52,8 +52,8 @@ class MetricService:
 
   @staticmethod
   def get_metric_csv_name(metric: Metric) -> str:
-    target = metric.kwargs.get("target")
-    return f"{metric.name}_{target}" if target else metric.name
+    kwargs_string = '_'.join(f"{k}_{metric.kwargs[k]}".lower() for k in sorted(metric.kwargs))
+    return f"{metric.name}_{kwargs_string}"
 
   @classmethod
   def _get_textstat_function(cls, metric_function_name: str) -> Optional[Callable]:
