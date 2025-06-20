@@ -33,8 +33,9 @@ class CalculationService:
       predictions = cls._read_predictions_file(model)
       metric_results = {}
       for metric in metrics:
-        LoggingService.info(f"Calculating {metric.name} for {model.name}")
-        metric_results[metric.name] = cls._calculate_metric(metric, references, predictions)
+        metric_csv_name = MetricService.get_metric_csv_name(metric)
+        LoggingService.info(f"Calculating {metric_csv_name} for {model.name}")
+        metric_results[metric_csv_name] = cls._calculate_metric(metric, references, predictions)
       return CalculationResult(_model_name=model.name, _metric_results=metric_results)
 
     @classmethod

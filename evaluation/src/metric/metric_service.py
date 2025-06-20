@@ -50,6 +50,11 @@ class MetricService:
     except Exception as exc:
       raise MetricFileNotFoundError(f"The metric file '{filename}' does not exist.'") from exc
 
+  @staticmethod
+  def get_metric_csv_name(metric: Metric) -> str:
+    target = metric.kwargs.get("target")
+    return f"{metric.name}_{target}" if target else metric.name
+
   @classmethod
   def _get_textstat_function(cls, metric_function_name: str) -> Optional[Callable]:
     if metric_function_name in cls._get_method_names(textstat):
