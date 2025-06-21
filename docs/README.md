@@ -46,12 +46,17 @@ of different LLMs in regard to the use case "Easy Language" in German.
 
 #### Evaluation
 
-* [Python](https://www.python.org)
-* [uv](https://docs.astral.sh/uv/)
-* [HuggingFace Hub](https://huggingface.co)
-* [LangChain](https://www.langchain.com)
-* [HuggingFace Transformers](https://huggingface.co/docs/transformers/index)
-* [llama-cpp-python](https://llama-cpp-python.readthedocs.io)
+* Programming language: [Python](https://www.python.org)
+* Package management: [uv](https://docs.astral.sh/uv/)
+* Model downloads: [HuggingFace Hub](https://huggingface.co)
+* LLM inference:
+  * [HuggingFace Transformers](https://huggingface.co/docs/transformers/index)
+  * [llama-cpp-python](https://llama-cpp-python.readthedocs.io)
+* LLM framework: [LangChain](https://www.langchain.com)
+* Evaluation metrics:
+  * Machine translation: [HuggingFace Evaluate](https://huggingface.co/docs/evaluate/index)
+  * Text readability: [TextStat](https://textstat.org)
+  * Lexical diversity: [LexicalRichness](https://lexicalrichness.readthedocs.io/en/latest/)
 
 #### Browser extension
 
@@ -170,7 +175,52 @@ TBD
 
 ### 4. Calculating metrics
 
-TBD
+#### Configuration
+
+##### Metrics
+
+You can define which metrics you want to evaluate using the `metrics.csv` file.
+The file has the following columns:
+
+* `_name`: name of the metric to calculate, can be any method of the integrated libraries ([HuggingFace Evaluate](https://huggingface.co/docs/evaluate/index), [TextStat](https://textstat.org) or [LexicalRichness](https://lexicalrichness.readthedocs.io/en/latest/))
+* `_kwargs` (optional): Passes additional arguments as a python dictionary to the metric function (check the official docs of the specified metric for more information), must be in the form `"{'parameter': value}"`
+
+**Note**: A special argument in the dictionary is `target`. Because some metrics calculate the results as a dictionary, the `target` argument is required to specify which value of the dictionary to extract. Please check the library documentations for information about method outputs.
+
+Examples:
+* `wiener_sachtextformel,"{'variant': 1}"` calculates `wiener_sachtextformel` from TextStat using `variant: 1`
+* `ttr` calculates `ttr` from LexicalRichness without any additional configuration
+* `bertscore,"{'lang': 'de', 'target': 'f1'}` calculates  `bertscore` from HuggingFace Evaluate using `lang: 'de'` and extracting `f1`from the calculated output dictionary
+
+**Note**: Often setting additional arguments is required for specific metrics, as otherwise no calculation is possible. Check the documentation of the libraries.
+
+**Important**: When using metrics from the [HuggingFace Evaluate](https://huggingface.co/docs/evaluate/index) library, often times additional packages are necessary, e.g. to use `bertscore` the package `bert-score` must be installed.
+This can be done via `uv pip install <package-name>`.
+
+##### References
+
+Metrics from the Machine Translation field require a (gold standard) reference to compare to in order to be calculated. The references can be configured in the `references.csv` file. Each row in that file will be a sentence that is being compared to the generated sentence in the model-specific file of the `predictions` directory.
+
+**Important**: If the sentence contains special characters or commas, the sentences need to be double-quoted, as otherwise those commas will be interpreted as column separators.
+
+#### Execution
+
+To calculate the metrics you selected,
+you need to run the calculation script
+using `uv run src/03_calculate_metrics.py`
+when you are inside the `evaluation` directory.
+
+The script will read the content of the `models.csv` and `metrics.csv` file
+and ask you to confirm the configured models and metrics to use for calculation.
+
+The results will be stored in the `results` directory as `.csv` files and contain:
+* Results based on reference-free metrics for the input data
+* Results based on reference-free metrics for the reference data
+* Results based on all metrics for each model-generated data
+**Note**: The result files include the timestamp in the filename in order to have subsequent calculations with varied metrics not override previous calculation runs.
+
+**Tip:** If you interrupt the model downloads by quitting the script execution,
+the script will automatically resume the downloads where they stopped.
 
 <!-- AUTHORS -->
 ## Authors
