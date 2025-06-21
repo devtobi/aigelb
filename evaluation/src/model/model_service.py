@@ -34,7 +34,6 @@ class ModelService:
   @classmethod
   def read_model_list(cls) -> List[Model]:
     filename = cls._get_model_filename()
-    LoggingService.info(f"Reading models from {filename}...")
     try:
       models = FileService.from_csv(Model, filename)
       if len(models) == 0:
@@ -54,7 +53,6 @@ class ModelService:
   @staticmethod
   def prepare_clear_model_cache() -> DeleteCacheStrategy:
     # Read local cache
-    LoggingService.info("Collecting model information from cache...")
     try:
       huggingface_cache_info: HFCacheInfo = scan_cache_dir()
     except CacheNotFound as exc:
@@ -78,7 +76,6 @@ class ModelService:
 
   @staticmethod
   def clear_model_cache(strategy: DeleteCacheStrategy) -> None:
-    LoggingService.info("Clearing model information from cache...")
     try:
       strategy.execute()
       LoggingService.info("Successfully cleared the cache.")
@@ -101,7 +98,6 @@ class ModelService:
 
   @staticmethod
   def _download_gguf_model(model: Model) -> None:
-    LoggingService.info(f"Downloading '{model.name}'...")
     if model.gguf_filename is None or model.gguf_filename == "":
       raise ModelDownloadError(f"The gguf_filename of {model.repo_id} cannot be empty.")
     try:

@@ -258,6 +258,7 @@ dependencies = [
     { name = "llama-cpp-python" },
     { name = "pathvalidate" },
     { name = "textstat" },
+    { name = "tqdm" },
 ]
 
 [package.dev-dependencies]
@@ -275,6 +276,7 @@ requires-dist = [
     { name = "llama-cpp-python", specifier = "==0.3.9" },
     { name = "pathvalidate", specifier = "==3.3.1" },
     { name = "textstat", specifier = "==0.7.7" },
+    { name = "tqdm", specifier = "==4.67.1" },
 ]
 
 [package.metadata.requires-dev]
