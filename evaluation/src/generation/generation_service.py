@@ -24,4 +24,4 @@ class GenerationService:
 
   @staticmethod
   def _get_source_filename() -> str:
-    return "sources.csv"
+    return "data/sources.csv"

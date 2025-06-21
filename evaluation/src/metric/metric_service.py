@@ -116,4 +116,4 @@ class MetricService:
 
   @staticmethod
   def _get_metric_filename() -> str:
-    return "metrics.csv"
+    return "config/metrics.csv"

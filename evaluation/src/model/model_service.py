@@ -114,7 +114,7 @@ class ModelService:
 
   @staticmethod
   def _get_model_filename() -> str:
-    return "models.csv"
+    return "config/models.csv"
 
   @staticmethod
   def _get_model_cache_dir() -> str:
