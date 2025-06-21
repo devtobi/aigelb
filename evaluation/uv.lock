@@ -244,7 +244,7 @@ wheels = [
 
 [[package]]
 name = "evaluate"
-version = "0.4.3"
+version = "0.4.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "datasets" },
@@ -259,9 +259,9 @@ dependencies = [
     { name = "tqdm" },
     { name = "xxhash" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/5a/a0/10a56e0939ece94c54276e81459cb4101f46f0e9a6f54fc31a35f64e8854/evaluate-0.4.3.tar.gz", hash = "sha256:3a5700cf83aabee9549264e1e5666f116367c61dbd4d38352015e859a5e2098d", size = 65679, upload-time = "2024-09-11T10:15:32Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/96/70/80bd5bd3efce9a89244ae722bef62aa33189b194a9636139feb96c914385/evaluate-0.4.4.tar.gz", hash = "sha256:e02b9bae6a70cccb3bd1c1e46d28de4e9d00b9b76f2889ad48b7b51fa58373a4", size = 65816, upload-time = "2025-06-20T17:48:19.424Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a2/e7/cbca9e2d2590eb9b5aa8f7ebabe1beb1498f9462d2ecede5c9fd9735faaf/evaluate-0.4.3-py3-none-any.whl", hash = "sha256:47d8770bdea76e2c2ed0d40189273027d1a41ccea861bcc7ba12d30ec5d1e517", size = 84010, upload-time = "2024-09-11T10:15:30.018Z" },
+    { url = "https://files.pythonhosted.org/packages/c3/5f/9dd2090e20cd39244a21ebb8b95589d6fa6ceecc587ed943290847d47df1/evaluate-0.4.4-py3-none-any.whl", hash = "sha256:e7e10d2617847a6127f023dd444ba241c7a1c8e3e081f72b15f35686e8220dbd", size = 84097, upload-time = "2025-06-20T17:48:18.004Z" },
 ]
 
 [[package]]
@@ -288,7 +288,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "dotenv", specifier = "==0.9.9" },
-    { name = "evaluate", specifier = "==0.4.3" },
+    { name = "evaluate", specifier = "==0.4.4" },
     { name = "huggingface-hub", specifier = "==0.33.0" },
     { name = "lexicalrichness", specifier = "==0.5.1" },
     { name = "llama-cpp-python", specifier = "==0.3.9" },
