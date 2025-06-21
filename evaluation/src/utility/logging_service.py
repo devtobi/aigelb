@@ -57,7 +57,7 @@ class LoggingService:
   def confirm_action(cls, question: str) -> bool:
     entered: str = "none"
     while entered != "exit" and entered != "":
-      cls.info(f"{question} Press ENTER to confirm... (Type 'exit' or hit Ctrl+C to exit.)")
+      print(f"{question} Press ENTER to confirm... (Type 'exit' or hit Ctrl+C to exit.) ", end="")
       try:
         entered = input()
       except KeyboardInterrupt:
