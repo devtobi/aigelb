@@ -4,5 +4,4 @@
 .venv
 results
 predictions
-references.csv
 __pycache__

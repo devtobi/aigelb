@@ -9,7 +9,12 @@ from huggingface_hub import (
   scan_cache_dir,
 )
 
-from utility import FileService, KeyboardInterruptError, LoggingService
+from utility import (
+  ConfigurationService,
+  FileService,
+  KeyboardInterruptError,
+  LoggingService,
+)
 
 from .exception import (
   ModelCacheClearError,
@@ -33,7 +38,7 @@ class ModelService:
 
   @classmethod
   def read_model_list(cls) -> List[Model]:
-    filename = cls._get_model_filename()
+    filename = cls._get_model_filepath()
     try:
       models = FileService.from_csv(Model, filename)
       if len(models) == 0:
@@ -113,8 +118,8 @@ class ModelService:
       raise ModelDownloadError(f"Failed to download GGUF model '{model.name}'") from exc
 
   @staticmethod
-  def _get_model_filename() -> str:
-    return "models.csv"
+  def _get_model_filepath() -> str:
+    return f"{ConfigurationService.get_config_directory()}/models.csv"
 
   @staticmethod
   def _get_model_cache_dir() -> str:

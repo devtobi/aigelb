@@ -54,7 +54,18 @@ class LoggingService:
         cls._get_logger().info(f"| {element}")
 
   @classmethod
-  def confirm_action(cls, question: str) -> bool:
+  def safe_exec_and_confirm(cls, read_func: Callable[[], T], confirm_msg: str) -> Optional[T]:
+    try:
+      result = read_func()
+    except Exception as exc:
+      LoggingService.error(str(exc))
+      return None
+    if not cls._confirm_action(confirm_msg):
+      return None
+    return result
+
+  @classmethod
+  def _confirm_action(cls, question: str) -> bool:
     entered: str = "none"
     while entered != "exit" and entered != "":
       print(f"{question} Press ENTER to confirm... (Type 'exit' or hit Ctrl+C to exit.) ", end="")
