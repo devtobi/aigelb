@@ -103,35 +103,38 @@ due to PyTorch being used under the hood.
 All mentioned scripts can be run via uv
 using the following command: `uv run <script-path>.py`
 
-#### Configuration Setup
+The `.env` file inside the `evaluation` directory
+allows further customization of the evaluation behaviour
+and will be further explained in the below sections.
 
-Before starting the evaluation, you can define which models you want to evaluate
+### 1. Downloading models
+
+#### Configuration
+
+You can define which models you want to download
 inside the `models.csv` file in the `evaluation` directory.
 You can only use models from the [HuggingFace](https://huggingface.co) platform.
 
 The file has the following columns:
 
-* `huggingface_repo`: repository name of the model (e.g. [google/gemma-3-4b-it](https://huggingface.co/google/gemma-3-4b-it)).
-* `gguf_filename` (optional): Only required when a `.gguf` based model
+* `_repo_id`: repository name of the model (e.g. [google/gemma-3-4b-it](https://huggingface.co/google/gemma-3-4b-it)).
+* `_gguf_filename` (optional): Only required when a `.gguf` based model
 should be download from the repository;
 if kept empty will assume `huggingface_repo` is a standard model compatible with
 the [transformers](https://huggingface.co/docs/transformers/index) library.
-* `gated`: `True` or `False` whether the model is gated
+* `_gated`: `True` or `False` whether the model is gated
 (e.g. when a license agreement consent on HuggingFace
 platform is necessary for your account).
 
-The `.env` file inside the `evaluation` directory
-allows further customization of the evaluation behaviour.
-Relevant environment variables are the following:
+Relevant environment variables for the `.env` file are the following:
 
 * `HF_TOKEN` (optional): HuggingFace token for your account
-to fetch gated models that you approved on the platform.
+to fetch gated models you have access to on the platform.
 See [HuggingFace documentation](https://huggingface.co/docs/hub/security-tokens)
 for further information.
 * `HF_HOME` (optional): Custom directory to store cache files and models downloaded for evaluation. If not set, will use default directory `~/.cache/huggingface`
-* `USE_CPU`: `True` or `False` whether you want to use your CPU or GPU for LLM inference.
 
-### 1. Downloading models
+#### Execution
 
 To download the models you selected for evaluation,
 you need to run the download script
@@ -163,7 +166,7 @@ TBD
 
 ### 3. Executing inference
 
-TBD
+* `USE_CPU`: `True` or `False` whether you want to use your CPU or GPU for LLM inference.
 
 ### 4. Calculating metrics
 
