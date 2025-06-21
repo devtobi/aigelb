@@ -18,6 +18,7 @@ dependencies = [
     "textstat (==0.7.7)",
     "lexicalrichness (==0.5.1)",
     "pathvalidate (==3.3.1)",
+    "tqdm (==4.67.1)",
 ]
 
 [dependency-groups]
