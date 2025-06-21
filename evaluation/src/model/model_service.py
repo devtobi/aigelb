@@ -8,7 +8,6 @@ from huggingface_hub import (
   hf_hub_download,
   scan_cache_dir,
 )
-from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from utility import FileService, KeyboardInterruptError, LoggingService
 
@@ -88,11 +87,10 @@ class ModelService:
 
   @classmethod
   def _download_model(cls, model: Model) -> None:
+    if model.repo_id is None or model.repo_id == "":
+      LoggingService.error("Failed to download a model because the repo_id is empty.")
     try:
-      if model.is_gguf:
-        cls._download_gguf_model(model.repo_id, model.gguf_filename, model.gated)
-      else:
-        cls._download_transformers_model(model.repo_id)
+      cls._download_gguf_model(model)
     except ModelDownloadError as exc:
       if model.gated:
         LoggingService.error(f'Failed downloading gated model "{model}".'
@@ -102,30 +100,21 @@ class ModelService:
         LoggingService.error(str(exc))
 
   @staticmethod
-  def _download_transformers_model(repo_id: str) -> None:
-    LoggingService.info(f"Downloading required files for '{repo_id}'...")
-    try:
-      AutoTokenizer.from_pretrained(repo_id)
-      AutoModelForCausalLM.from_pretrained(repo_id)
-    except KeyboardInterrupt:
-      raise KeyboardInterruptError("The download of the model was interrupted by keyboard. Proceeding on next run.") from None
-    except Exception as exc:
-      raise ModelDownloadError(f"Failed to download transformers model '{repo_id}'") from exc
-
-  @staticmethod
-  def _download_gguf_model(repo_id: str, gguf_filename: str, gated: bool) -> None:
-    LoggingService.info(f"Downloading '{repo_id}/{gguf_filename}'...")
+  def _download_gguf_model(model: Model) -> None:
+    LoggingService.info(f"Downloading '{model.name}'...")
+    if model.gguf_filename is None or model.gguf_filename == "":
+      raise ModelDownloadError(f"The gguf_filename of {model.repo_id} cannot be empty.")
     try:
       hf_hub_download(
-        repo_id=repo_id,
-        filename=gguf_filename,
+        repo_id=model.repo_id,
+        filename=model.gguf_filename,
         repo_type="model",
-        token=gated,
+        token=model.gated,
       )
     except KeyboardInterrupt:
       raise KeyboardInterruptError("The download of the model was interrupted by keyboard. Proceeding on next run.") from None
     except Exception as exc:
-      raise ModelDownloadError(f"Failed to download GGUF model '{gguf_filename}'") from exc
+      raise ModelDownloadError(f"Failed to download GGUF model '{model.name}'") from exc
 
   @staticmethod
   def _get_model_filename() -> str:

@@ -6,7 +6,6 @@ from typing import Callable, ClassVar, Iterable, Optional, TypeVar
 from llama_cpp import (
   llama_log_set,
 )
-from transformers import logging
 
 T = TypeVar('T')
 LlamaLogCallbackType = Callable[[int, bytes, object], None]
@@ -76,8 +75,3 @@ class LoggingService:
     cls._llama_log_callback = CFUNCTYPE(None, c_int, c_char_p, c_void_p)(cls._llama_mute_callback)
     # pyrefly: ignore
     llama_log_set(cls._llama_log_callback, c_void_p())
-
-  @staticmethod
-  def mute_transformers_logging() -> None:
-    logging.set_verbosity_error()
-

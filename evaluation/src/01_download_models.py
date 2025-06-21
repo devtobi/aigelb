@@ -7,7 +7,6 @@ from utility import KeyboardInterruptError, LoggingService
 
 
 def download_models():
-    LoggingService.mute_transformers_logging()
     try:
       models: List[Model] = ModelService.read_model_list()
     except Exception as exc:
