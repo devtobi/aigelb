@@ -11,7 +11,7 @@ def calculate_metrics():
     return
 
   metrics = LoggingService.safe_exec_and_confirm(MetricService.read_metric_list, "Are you sure you want to use those metrics for calculation?")
-  if models is None:
+  if metrics is None:
     return
 
   try:
