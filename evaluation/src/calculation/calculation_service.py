@@ -12,6 +12,7 @@ from .calculation_result import CalculationResult
 from .exception import (
     CalculationDataLengthMismatchError,
     CalculationMetricError,
+    CalculationPredictionsFileNotFoundError,
     CalculationReferenceFileNotFoundError,
     CalculationResultsWriteError,
 )
@@ -102,7 +103,7 @@ class CalculationService:
       try:
         return FileService.from_csv_to_string_list(filename)
       except Exception as exc:
-        raise CalculationReferenceFileNotFoundError("Error reading references from file") from exc
+        raise CalculationReferenceFileNotFoundError(f"The references file '{filename}' does not exist.") from exc
 
     @classmethod
     def _read_predictions_file(cls, model: Model) -> List[str]:
@@ -111,7 +112,7 @@ class CalculationService:
       try:
         return FileService.from_csv_to_string_list(filepath)
       except Exception as exc:
-        raise CalculationReferenceFileNotFoundError("Error reading references from file") from exc
+        raise CalculationPredictionsFileNotFoundError(f"The references file '{filename}' does not exist.") from exc
 
     @staticmethod
     def _calculate_no_references(texts: List[str], func: Callable, metric: Metric) -> float:
@@ -120,7 +121,6 @@ class CalculationService:
         return func(combined_text, **metric.kwargs)
       except Exception as exc:
         raise CalculationMetricError(f"Error calculating {metric.name}!") from exc
-
 
     @staticmethod
     def _calculate_with_references(predictions: List[str], references: List[str], func: Callable, metric: Metric) -> float:

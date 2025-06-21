@@ -47,7 +47,7 @@ class MetricService:
       LoggingService.log_list(metrics, "The following metrics were found:")
       return metrics
     except Exception as exc:
-      raise MetricFileNotFoundError(f"The metric file '{filename}' does not exist.'") from exc
+      raise MetricFileNotFoundError(f"The metric file '{filename}' does not exist.") from exc
 
   @staticmethod
   def get_metric_csv_name(metric: Metric) -> str:
