@@ -219,9 +219,6 @@ The results will be stored in the `results` directory as `.csv` files and contai
 * Results based on all metrics for each model-generated data
 **Note**: The result files include the timestamp in the filename in order to have subsequent calculations with varied metrics not override previous calculation runs.
 
-**Tip:** If you interrupt the model downloads by quitting the script execution,
-the script will automatically resume the downloads where they stopped.
-
 <!-- AUTHORS -->
 ## Authors
 
