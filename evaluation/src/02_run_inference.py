@@ -1,39 +1,26 @@
-from typing import List
 
 from generation import GenerationService
-from model import Model, ModelService
+from model import ModelService
 from utility import ConfigurationService, KeyboardInterruptError, LoggingService
 
 
 def run_inference():
-  try:
-    models: List[Model] = ModelService.read_model_list()
-  except Exception as exc:
-    LoggingService.error(str(exc))
+  models = LoggingService.safe_exec_and_confirm(ModelService.read_model_list, "Are you sure you want to use those models for running inference?")
+  if models is None:
     return
-  if not LoggingService.confirm_action("Are you sure you want to use those models for running inference?"):
+
+  sources = LoggingService.safe_exec_and_confirm(GenerationService.read_source_file, "Are you sure you want to use those sentences for running inference?")
+  if sources is None:
     return
-  try:
-    sources: List[str] = GenerationService.read_source_file()
-  except Exception as exc:
-    LoggingService.error(str(exc))
+
+  system_prompt = LoggingService.safe_exec_and_confirm(GenerationService.read_system_prompt, "Are you sure you want to use this system prompt for running inference?")
+  if system_prompt is None:
     return
-  if not LoggingService.confirm_action("Are you sure you want to use those sentences for running inference?"):
+
+  user_prompt = LoggingService.safe_exec_and_confirm(GenerationService.read_user_prompt, "Are you sure you want to use this user prompt for running inference?")
+  if user_prompt is None:
     return
-  try:
-    system_prompt: str = GenerationService.read_system_prompt()
-  except Exception as exc:
-    LoggingService.error(str(exc))
-    return
-  if not LoggingService.confirm_action("Are you sure you want to use this system prompt for running inference?"):
-    return
-  try:
-    user_prompt: str = GenerationService.read_user_prompt()
-  except Exception as exc:
-    LoggingService.error(str(exc))
-    return
-  if not LoggingService.confirm_action("Are you sure you want to use this user prompt for running inference?"):
-    return
+
   try:
     GenerationService.run_inference(models, sources, system_prompt, user_prompt)
   except KeyboardInterruptError as exc:

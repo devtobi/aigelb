@@ -1,26 +1,19 @@
-from typing import List
 
 from calculation import CalculationService
-from metric import Metric, MetricService
-from model import Model, ModelService
+from metric import MetricService
+from model import ModelService
 from utility import KeyboardInterruptError, LoggingService
 
 
 def calculate_metrics():
-  try:
-    models: List[Model] = ModelService.read_model_list()
-  except Exception as exc:
-    LoggingService.error(str(exc))
+  models = LoggingService.safe_exec_and_confirm(ModelService.read_model_list, "Are you sure you want to use those models for calculation?")
+  if models is None:
     return
-  if not LoggingService.confirm_action("Are you sure you want to use those models for calculation?"):
+
+  metrics = LoggingService.safe_exec_and_confirm(MetricService.read_metric_list, "Are you sure you want to use those metrics for calculation?")
+  if models is None:
     return
-  try:
-    metrics: List[Metric] = MetricService.read_metric_list()
-  except Exception as exc:
-    LoggingService.error(str(exc))
-    return
-  if not LoggingService.confirm_action("Are you sure you want to use those metrics for calculation?"):
-    return
+
   try:
     CalculationService.calculate_metrics(models, metrics)
   except KeyboardInterruptError as exc:
