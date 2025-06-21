@@ -49,9 +49,7 @@ of different LLMs in regard to the use case "Easy Language" in German.
 * Programming language: [Python](https://www.python.org)
 * Package management: [uv](https://docs.astral.sh/uv/)
 * Model downloads: [HuggingFace Hub](https://huggingface.co)
-* LLM inference:
-  * [HuggingFace Transformers](https://huggingface.co/docs/transformers/index)
-  * [llama-cpp-python](https://llama-cpp-python.readthedocs.io)
+* LLM inference: [llama-cpp-python](https://llama-cpp-python.readthedocs.io)
 * LLM framework: [LangChain](https://www.langchain.com)
 * Evaluation metrics:
   * Machine translation: [HuggingFace Evaluate](https://huggingface.co/docs/evaluate/index)
@@ -97,11 +95,9 @@ When the requirements above are met,
 you only need to execute `uv sync` inside the `evaluation` directory
 to setup the virtual environment and download the required packages.
 
-**Note:** To make inference and hardware acceleration work on your machine, you might have to do additional steps to use the proper backend for your architecture and platform in `llama-cpp-python` (for GGUF inference). You can pass required environment variables like `CMAKE_ARGS` directly to `uv sync`. E.g. for installing on Apple silicon using Metal acceleration execute `CMAKE_ARGS="-DGGML_METAL=on" uv sync`.
+**Note:** To make inference and hardware acceleration work on your machine, you might have to do additional steps to use the proper backend for your architecture and platform in `llama-cpp-python`. You can pass required environment variables like `CMAKE_ARGS` directly to `uv sync`. E.g. for installing on Apple silicon using Metal acceleration execute `CMAKE_ARGS="-DGGML_METAL=on" uv sync`.
 See [official documentation](https://llama-cpp-python.readthedocs.io/en/latest/#supported-backends)
-for further information and up-to-date instructions. 
-`transformers` should auto-detect your backend
-due to PyTorch being used under the hood.
+for further information and up-to-date instructions.
 
 ### Usage
 
@@ -118,15 +114,12 @@ and will be further explained in the below sections.
 
 You can define which models you want to download
 inside the `models.csv` file in the `evaluation` directory.
-You can only use models from the [HuggingFace](https://huggingface.co) platform.
+You can only use [GGUF](https://huggingface.co/docs/hub/gguf)-based models from the [HuggingFace](https://huggingface.co) platform.
 
 The file has the following columns:
 
-* `_repo_id`: repository name of the model (e.g. [google/gemma-3-4b-it](https://huggingface.co/google/gemma-3-4b-it)).
-* `_gguf_filename` (optional): Only required when a `.gguf` based model
-should be download from the repository;
-if kept empty will assume `huggingface_repo` is a standard model compatible with
-the [transformers](https://huggingface.co/docs/transformers/index) library.
+* `_repo_id`: repository name of the model (e.g. [bartowski/Llama-3.2-3B-Instruct-GGUF](https://huggingface.co/bartowski/Llama-3.2-3B-Instruct-GGUF)).
+* `_gguf_filename`: filename to select the variant of the model for different quantizations (e.g. [bartowski/Llama-3.2-3B-Instruct-GGUF](https://huggingface.co/bartowski/Llama-3.2-3B-Instruct-GGUF/blob/main/Llama-3.2-3B-Instruct-Q5_K_M.gguf))
 * `_gated`: `True` or `False` whether the model is gated
 (e.g. when a license agreement consent on HuggingFace
 platform is necessary for your account).
@@ -218,9 +211,6 @@ The results will be stored in the `results` directory as `.csv` files and contai
 * Results based on reference-free metrics for the reference data
 * Results based on all metrics for each model-generated data
 **Note**: The result files include the timestamp in the filename in order to have subsequent calculations with varied metrics not override previous calculation runs.
-
-**Tip:** If you interrupt the model downloads by quitting the script execution,
-the script will automatically resume the downloads where they stopped.
 
 <!-- AUTHORS -->
 ## Authors

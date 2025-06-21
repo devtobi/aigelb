@@ -27,21 +27,13 @@ class Model:
 
     @property
     def name(self) -> str:
-      return f"{self._repo_id}" + (f"__{self._gguf_filename}" if self.is_gguf else "")
-
-    @property
-    def is_gguf(self) -> bool:
-      return self._gguf_filename is not None and self._gguf_filename.strip() != ""
+      return f"{self._repo_id}__{self._gguf_filename}"
 
     def __iter__(self) -> Iterator[Union[str, bool]]:
         return iter(self._as_tuple())
 
     def __str__(self) -> str:
-        return (
-            f"{self._repo_id}: {self._gguf_filename}"
-            if self._gguf_filename
-            else f"{self._repo_id}"
-        )
+        return f"{self._repo_id}: {self._gguf_filename}"
 
     def _as_tuple(self) -> Tuple[str, str, bool]:
       return self._repo_id, self._gguf_filename, self._gated
