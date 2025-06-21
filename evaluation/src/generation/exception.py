@@ -1,0 +1,2 @@
+class GenerationSourcesFileNotFoundError(Exception):
+  pass

@@ -3,6 +3,7 @@ from typing import List, Optional
 
 from tqdm import tqdm
 
+from generation import GenerationService
 from metric import Metric, MetricLibrary, MetricService
 from model import Model, ModelService
 from utility import DateService, FileService, LoggingService
@@ -25,6 +26,9 @@ class CalculationService:
     def calculate_metrics(cls, models: List[Model], metrics: List[Metric]):
       calculation_results: List[CalculationResult] = []
 
+      LoggingService.info("Calculating metrics for source...")
+      calculation_results.append(cls._calculate_result_for_source(metrics))
+
       LoggingService.info("Calculating metrics for reference...")
       calculation_results.append(cls._calculate_result_for_reference(metrics))
 
@@ -41,27 +45,29 @@ class CalculationService:
     def _calculate_result_for_model(cls, model: Model, metrics: List[Metric]) -> CalculationResult:
       references = cls._read_references_file()
       predictions = cls._read_predictions_file(model)
-      metric_results = {}
-
-      with tqdm(metrics, leave=False) as pbar:
-        for metric in pbar:
-          metric_csv_name = MetricService.get_metric_csv_name(metric)
-          pbar.set_description(f"-> {metric_csv_name}")
-          metric_results[metric_csv_name] = cls._calculate_metric(metric, predictions, references)
-
-      return CalculationResult(_model_name=model.name, _metric_results=metric_results)
+      return cls._calculate_result(model.name, metrics, predictions, references)
 
     @classmethod
     def _calculate_result_for_reference(cls, metrics: List[Metric]) -> CalculationResult:
       references = cls._read_references_file()
       model_name = "reference"
+      return cls._calculate_result(model_name, metrics, predictions=references)
+
+    @classmethod
+    def _calculate_result_for_source(cls, metrics: List[Metric]) -> CalculationResult:
+      sources = GenerationService.read_source_file()
+      model_name = "source"
+      return cls._calculate_result(model_name, metrics, predictions=sources)
+
+    @classmethod
+    def _calculate_result(cls, model_name: str, metrics: List[Metric], predictions: List[str], references: Optional[List[str]] = None) -> CalculationResult:
       metric_results = {}
 
       with tqdm(metrics, leave=False) as pbar:
         for metric in pbar:
           metric_csv_name = MetricService.get_metric_csv_name(metric)
           pbar.set_description(f"-> {metric_csv_name}")
-          metric_results[metric_csv_name] = cls._calculate_metric(metric, predictions=references)
+          metric_results[metric_csv_name] = cls._calculate_metric(metric, predictions=predictions, references=references)
 
       return CalculationResult(_model_name=model_name, _metric_results=metric_results)
 
@@ -92,7 +98,7 @@ class CalculationService:
 
     @classmethod
     def _read_references_file(cls) -> List[str]:
-      filename = cls._get_reference_file()
+      filename = cls._get_reference_filename()
       try:
         return FileService.from_csv_to_string_list(filename)
       except Exception as exc:
@@ -101,7 +107,7 @@ class CalculationService:
     @classmethod
     def _read_predictions_file(cls, model: Model) -> List[str]:
       filename = f"{ModelService.get_filename(model)}.csv"
-      filepath = f"{cls._get_predictions_directory()}/{filename}"
+      filepath = f"{GenerationService.get_predictions_directory()}/{filename}"
       try:
         return FileService.from_csv_to_string_list(filepath)
       except Exception as exc:
@@ -128,9 +134,5 @@ class CalculationService:
       return "results"
 
     @staticmethod
-    def _get_predictions_directory() -> str:
-      return "predictions"
-
-    @staticmethod
-    def _get_reference_file() -> str:
+    def _get_reference_filename() -> str:
       return "references.csv"
