@@ -1,9 +1,7 @@
 from typing import List
 
-from dotenv import load_dotenv
-
 from model import Model, ModelService
-from utility import KeyboardInterruptError, LoggingService
+from utility import ConfigurationService, KeyboardInterruptError, LoggingService
 
 
 def download_models():
@@ -21,7 +19,5 @@ def download_models():
       return
 
 if __name__ == "__main__":
-    # Load env variable for optional API authentication
-    load_dotenv()
-
+    ConfigurationService.load_environment_configuration()
     download_models()

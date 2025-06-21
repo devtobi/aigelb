@@ -6,7 +6,7 @@ from tqdm import tqdm
 from generation import GenerationService
 from metric import Metric, MetricLibrary, MetricService
 from model import Model, ModelService
-from utility import DateService, FileService, LoggingService
+from utility import ConfigurationService, DateService, FileService, LoggingService
 
 from .calculation_result import CalculationResult
 from .exception import (
@@ -98,7 +98,7 @@ class CalculationService:
 
     @classmethod
     def _read_references_file(cls) -> List[str]:
-      filename = cls._get_reference_filename()
+      filename = cls._get_reference_filepath()
       try:
         return FileService.from_csv_to_string_list(filename)
       except Exception as exc:
@@ -134,5 +134,5 @@ class CalculationService:
       return "results"
 
     @staticmethod
-    def _get_reference_filename() -> str:
-      return "data/references.csv"
+    def _get_reference_filepath() -> str:
+      return f"{ConfigurationService.get_data_directory()}/references.csv"

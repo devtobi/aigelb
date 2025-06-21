@@ -19,7 +19,7 @@ class FileService:
 
   @classmethod
   def from_csv(cls, item_type: Type[T], filepath: str) -> List[T]:
-    abs_path: str = cls._get_absolute_path(filepath)
+    abs_path: str = cls.get_absolute_path(filepath)
     with open(abs_path, mode='r', newline="") as csvfile:
       dict_reader = DictReader(csvfile, delimiter=",")
       instances = []
@@ -31,7 +31,7 @@ class FileService:
 
   @classmethod
   def from_csv_to_string_list(cls, filepath: str) -> List[str]:
-    abs_path: str = cls._get_absolute_path(filepath)
+    abs_path: str = cls.get_absolute_path(filepath)
     with open(abs_path, mode='r', encoding='utf-8') as file:
       return [line.strip() for line in file if line.strip()]
 
@@ -44,7 +44,7 @@ class FileService:
     for row in rows:
       fieldnames.update(row.to_dict().keys())
     fieldnames = sorted(fieldnames)
-    abs_path: str = cls._get_absolute_path(filepath)
+    abs_path: str = cls.get_absolute_path(filepath)
     makedirs(path.dirname(abs_path), exist_ok=True)
     with open(abs_path, mode='w', newline='') as csvfile:
       dict_writer = DictWriter(csvfile, fieldnames=fieldnames, quoting=QUOTE_MINIMAL)
@@ -79,7 +79,7 @@ class FileService:
     return sanitize_filename(filename, replacement_text="_")
 
   @staticmethod
-  def _get_absolute_path(pth: str) -> str:
+  def get_absolute_path(pth: str) -> str:
     this = path.abspath(__file__)
     root = path.dirname(path.dirname(path.dirname(this)))
     return path.join(root, pth)

@@ -1,7 +1,6 @@
 from os import getenv
 from typing import cast
 
-from dotenv import load_dotenv
 from llama_cpp import (
     ChatCompletionRequestSystemMessage,
     ChatCompletionRequestUserMessage,
@@ -9,10 +8,10 @@ from llama_cpp import (
     Llama,
 )
 
-from utility import LoggingService
+from utility import ConfigurationService, LoggingService
 
 # Check CPU / GPU mode
-load_dotenv()
+ConfigurationService.load_environment_configuration()
 use_cpu: bool = getenv("USE_CPU") == "True"
 gpu_layers: int = 0 if use_cpu else -1
 
