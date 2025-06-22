@@ -1,1 +1,2 @@
 Please translate the following text into plain language: {source}
+Please only return the translated text.

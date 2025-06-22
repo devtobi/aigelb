@@ -1,2 +1,6 @@
 _repo_id,_gguf_filename,_gated
-TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF,tinyllama-1.1b-chat-v1.0.Q2_K.gguf
+bartowski/Llama-3.2-3B-Instruct-GGUF,Llama-3.2-3B-Instruct-Q3_K_L.gguf
+Qwen/Qwen3-0.6B-GGUF,Qwen3-0.6B-Q8_0.gguf
+TheBloke/Mistral-7B-Instruct-v0.1-GGUF,mistral-7b-instruct-v0.1.Q2_K.gguf
+tensorblock/Teuken-7B-instruct-commercial-v0.4-GGUF,Teuken-7B-instruct-commercial-v0.4-Q2_K.gguf
+QuantFactory/EuroLLM-9B-Instruct-GGUF,EuroLLM-9B-Instruct.Q2_K.gguf
