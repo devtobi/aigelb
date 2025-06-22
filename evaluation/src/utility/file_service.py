@@ -59,6 +59,13 @@ class FileService:
         dict_writer.writerow(row.to_dict())
 
   @classmethod
+  def to_file(cls, filepath: str, content: str) -> None:
+    abs_path: str = cls.get_absolute_path(filepath)
+    makedirs(path.dirname(abs_path), exist_ok=True)
+    with open(abs_path, mode="w", newline="", encoding='utf-8') as file:
+      file.write(content)
+
+  @classmethod
   def count_csv_lines(cls, filepath: str) -> int:
     abs_path: str = cls.get_absolute_path(filepath)
     with open(abs_path, mode="r", newline="", encoding="utf-8") as file:
