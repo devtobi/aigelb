@@ -76,7 +76,8 @@ class GenerationService:
     try:
       completion_response: CreateChatCompletionResponse = cast(CreateChatCompletionResponse, llm.create_chat_completion(
         messages=[system_message, user_message],
-        response_format=cls._get_response_format()
+        response_format=cls._get_response_format(),
+        temperature=cls._get_temperature(),
       ))
     except KeyboardInterrupt:
         raise KeyboardInterruptError(f"The inference was interrupted by keyboard. Generation will be resumed on next run. Otherwise delete {cls._get_timestamp_filepath()} manually.") from None
@@ -226,3 +227,8 @@ class GenerationService:
   def _get_structured_output_key() -> str:
     value = ConfigurationService.get_environment_variable("STRUCTURED_OUTPUT_KEY")
     return value if value is not None else "result"
+
+  @staticmethod
+  def _get_temperature() -> float:
+    value = ConfigurationService.get_environment_variable("TEMPERATURE")
+    return float(value) if value is not None else 0.2
