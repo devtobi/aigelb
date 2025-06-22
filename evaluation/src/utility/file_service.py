@@ -1,6 +1,6 @@
 from ast import literal_eval
-from csv import QUOTE_MINIMAL, DictReader, DictWriter, reader, writer
-from os import makedirs, path
+from csv import QUOTE_ALL, DictReader, DictWriter, reader, writer
+from os import makedirs, path, remove
 from typing import Any, List, Protocol, Type, TypeVar
 
 from pathvalidate import sanitize_filename
@@ -53,7 +53,7 @@ class FileService:
     abs_path: str = cls.get_absolute_path(filepath)
     makedirs(path.dirname(abs_path), exist_ok=True)
     with open(abs_path, mode='w', newline='') as csvfile:
-      dict_writer = DictWriter(csvfile, fieldnames=fieldnames, quoting=QUOTE_MINIMAL)
+      dict_writer = DictWriter(csvfile, fieldnames=fieldnames, quoting=QUOTE_ALL)
       dict_writer.writeheader()
       for row in rows:
         dict_writer.writerow(row.to_dict())
@@ -64,6 +64,17 @@ class FileService:
     makedirs(path.dirname(abs_path), exist_ok=True)
     with open(abs_path, mode="w", newline="", encoding='utf-8') as file:
       file.write(content)
+
+  @classmethod
+  def delete_file(cls, filepath) -> None:
+    abs_path: str = cls.get_absolute_path(filepath)
+    if path.exists(abs_path):
+      remove(abs_path)
+
+  @classmethod
+  def exists_file(cls, filepath) -> bool:
+    abs_path: str = cls.get_absolute_path(filepath)
+    return path.exists(abs_path)
 
   @classmethod
   def count_csv_lines(cls, filepath: str) -> int:
@@ -77,7 +88,7 @@ class FileService:
     abs_path: str = cls.get_absolute_path(filepath)
     makedirs(path.dirname(abs_path), exist_ok=True)
     with open(abs_path, mode="a", newline="", encoding="utf-8") as file:
-      file_writer = writer(file, quoting=QUOTE_MINIMAL)
+      file_writer = writer(file, quoting=QUOTE_ALL)
       if isinstance(row, list):
         file_writer.writerow(row)
       else:
