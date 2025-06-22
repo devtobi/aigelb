@@ -5,7 +5,7 @@ import evaluate
 from lexicalrichness import LexicalRichness
 from textstat import textstat
 
-from utility import FileService, LoggingService
+from utility import ConfigurationService, FileService, LoggingService
 
 from .exception import (
   MetricFileEmptyError,
@@ -39,7 +39,7 @@ class MetricService:
 
   @classmethod
   def read_metric_list(cls) -> List[Metric]:
-    filename = cls._get_metric_filename()
+    filename = cls._get_metric_filepath()
     try:
       metrics = FileService.from_csv(Metric, filename)
       if len(metrics) == 0:
@@ -47,7 +47,7 @@ class MetricService:
       LoggingService.log_list(metrics, "The following metrics were found:")
       return metrics
     except Exception as exc:
-      raise MetricFileNotFoundError(f"The metric file '{filename}' does not exist.'") from exc
+      raise MetricFileNotFoundError(f"The metric file '{filename}' does not exist.") from exc
 
   @staticmethod
   def get_metric_csv_name(metric: Metric) -> str:
@@ -115,5 +115,5 @@ class MetricService:
     return [attr for attr in attributes if not attr.startswith("__")]
 
   @staticmethod
-  def _get_metric_filename() -> str:
-    return "metrics.csv"
+  def _get_metric_filepath() -> str:
+    return f"{ConfigurationService.get_config_directory()}/metrics.csv"

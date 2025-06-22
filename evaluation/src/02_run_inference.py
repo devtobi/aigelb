@@ -1,39 +1,35 @@
-from os import getenv
-from typing import cast
-
-from dotenv import load_dotenv
-from llama_cpp import (
-    ChatCompletionRequestSystemMessage,
-    ChatCompletionRequestUserMessage,
-    CreateChatCompletionResponse,
-    Llama,
+from generation import GenerationService
+from model import ModelService
+from utility import (
+  ConfigurationService,
+  KeyboardInterruptError,
+  LoggingService,
 )
 
-from utility import LoggingService
 
-# Check CPU / GPU mode
-load_dotenv()
-use_cpu: bool = getenv("USE_CPU") == "True"
-gpu_layers: int = 0 if use_cpu else -1
+def run_inference():
+  models = LoggingService.safe_exec_and_confirm(ModelService.read_model_list, "Are you sure you want to use those models for running inference?")
+  if models is None:
+    return
 
-LoggingService.mute_llamacpp_logging()
+  sources = LoggingService.safe_exec_and_confirm(GenerationService.read_source_file, "Are you sure you want to use those sentences for running inference?")
+  if sources is None:
+    return
 
-# load model
-llm: Llama = Llama.from_pretrained(
-    "TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF",
-    "tinyllama-1.1b-chat-v1.0.Q2_K.gguf",
-    local_files_only=True,
-    verbose=False,
-    n_gpu_layers=gpu_layers,
-)
+  system_prompt = LoggingService.safe_exec_and_confirm(GenerationService.read_system_prompt, "Are you sure you want to use this system prompt for running inference?")
+  if system_prompt is None:
+    return
 
-# execute inference
-system_message: ChatCompletionRequestSystemMessage = { "role": "system", "content": "You are an AI that always uses capital words when responding." }
-user_message: ChatCompletionRequestUserMessage = { "role": "user", "content": "Tell me a little story about bees." }
-completion_response: CreateChatCompletionResponse = cast(CreateChatCompletionResponse, llm.create_chat_completion(
-    messages=[system_message, user_message],
-    max_tokens=1000,
-))
+  user_prompt = LoggingService.safe_exec_and_confirm(GenerationService.read_user_prompt, "Are you sure you want to use this user prompt for running inference?")
+  if user_prompt is None:
+    return
 
-content: CreateChatCompletionResponse = completion_response
-print(content)
+  try:
+    GenerationService.run_inference(models, sources, system_prompt, user_prompt)
+  except KeyboardInterruptError as exc:
+    LoggingService.info(str(exc))
+    return
+
+if __name__ == "__main__":
+    ConfigurationService.load_environment_configuration()
+    run_inference()
