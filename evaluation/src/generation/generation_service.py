@@ -6,7 +6,7 @@ from llama_cpp import (
   ChatCompletionRequestSystemMessage,
   ChatCompletionRequestUserMessage,
   CreateChatCompletionResponse,
-  Llama,
+  Llama
 )
 from tqdm import tqdm
 
@@ -103,6 +103,8 @@ class GenerationService:
       return Llama(
         model_path=model_path,
         n_gpu_layers=cls._get_gpu_layers(),
+        n_threads=cls._get_num_threads(),
+        n_threads_batch=cls._get_num_threads(),
         n_ctx=cls._get_context_length(),
         verbose=False
       )
@@ -169,10 +171,6 @@ class GenerationService:
     return f"{predictions_directory}{timestamp_part}/{model_filename}"
 
   @staticmethod
-  def _get_gpu_layers() -> int:
-    return 0 if ConfigurationService.get_environment_variable("USE_CPU") == "True" else -1
-
-  @staticmethod
   def _get_source_filepath() -> str:
     return f"{ConfigurationService.get_data_directory()}/sources.csv"
 
@@ -225,6 +223,10 @@ class GenerationService:
     }
 
   @staticmethod
+  def _get_gpu_layers() -> int:
+    return 0 if ConfigurationService.get_environment_variable("USE_CPU") == "True" else -1
+
+  @staticmethod
   def _get_structured_output_key() -> str:
     value = ConfigurationService.get_environment_variable("STRUCTURED_OUTPUT_KEY")
     return value if value is not None else "result"
@@ -238,3 +240,8 @@ class GenerationService:
   def _get_context_length() -> int:
     value = ConfigurationService.get_environment_variable("CONTEXT_LENGTH")
     return int(value) if value is not None else 0
+
+  @staticmethod
+  def _get_num_threads() -> int:
+    value = ConfigurationService.get_environment_variable("NUM_THREADS")
+    return int(value) if value is not None else None
