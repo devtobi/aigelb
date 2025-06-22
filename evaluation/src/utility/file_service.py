@@ -2,6 +2,7 @@ from ast import literal_eval
 from csv import QUOTE_ALL, DictReader, DictWriter, reader, writer
 from os import makedirs, path, remove
 from typing import Any, List, Protocol, Type, TypeVar
+from json import loads
 
 from pathvalidate import sanitize_filename
 
@@ -21,7 +22,7 @@ class FileService:
   def from_csv(cls, item_type: Type[T], filepath: str) -> List[T]:
     abs_path: str = cls.get_absolute_path(filepath)
     with open(abs_path, mode="r", newline="", encoding="utf-8") as csvfile:
-      dict_reader = DictReader(csvfile, delimiter=",")
+      dict_reader = DictReader(csvfile)
       instances = []
       for row in dict_reader:
         processed_row = cls._process_row(row)
@@ -32,8 +33,9 @@ class FileService:
   @classmethod
   def from_csv_to_string_list(cls, filepath: str) -> List[str]:
     abs_path: str = cls.get_absolute_path(filepath)
-    with open(abs_path, mode="r", newline="", encoding="utf-8") as file:
-      return [line.strip() for line in file if line.strip()]
+    with open(abs_path, mode="r", newline="", encoding="utf-8") as csvfile:
+      csv_reader = reader(csvfile)
+      return [row[0] for row in csv_reader if row and row[0].strip()]
 
   @classmethod
   def from_file_to_string(cls, filepath: str) -> str:
@@ -93,6 +95,11 @@ class FileService:
         file_writer.writerow(row)
       else:
         file_writer.writerow([row])
+
+  @staticmethod
+  def extract_value_from_json(json_string: str, key: str) -> str:
+    json_representation = loads(json_string)
+    return json_representation[key]
 
   @classmethod
   def _process_row(cls, row: dict) -> dict:

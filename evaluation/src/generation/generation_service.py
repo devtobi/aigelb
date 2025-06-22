@@ -2,6 +2,7 @@ from typing import List, Optional, cast
 
 from huggingface_hub import hf_hub_download
 from llama_cpp import (
+  ChatCompletionRequestResponseFormat,
   ChatCompletionRequestSystemMessage,
   ChatCompletionRequestUserMessage,
   CreateChatCompletionResponse,
@@ -74,7 +75,8 @@ class GenerationService:
     user_message: ChatCompletionRequestUserMessage = {"role": "user", "content": user_prompt}
     try:
       completion_response: CreateChatCompletionResponse = cast(CreateChatCompletionResponse, llm.create_chat_completion(
-        messages=[system_message, user_message]
+        messages=[system_message, user_message],
+        response_format=cls._get_response_format()
       ))
     except KeyboardInterrupt:
         raise KeyboardInterruptError(f"The inference was interrupted by keyboard. Generation will be resumed on next run. Otherwise delete {cls._get_timestamp_filepath()} manually.") from None
@@ -107,9 +109,10 @@ class GenerationService:
 
   @classmethod
   def _write_prediction(cls, model: Model, prediction: str, timestamp: Optional[str] = None) -> None:
+    parsed_prediction = FileService.extract_value_from_json(prediction, cls._get_structured_output_key())
     filepath = cls._get_predictions_filepath(model, timestamp)
     try:
-      FileService.append_to_csv(filepath, prediction)
+      FileService.append_to_csv(filepath, parsed_prediction)
     except Exception as exc:
       raise GenerationPredictionWriteError(f"Failed to write prediction to '{filepath}'") from exc
 
@@ -207,3 +210,19 @@ class GenerationService:
     lockpath = cls._get_timestamp_filepath()
     FileService.delete_file(lockpath)
 
+  @classmethod
+  def _get_response_format(cls) -> ChatCompletionRequestResponseFormat:
+    key = cls._get_structured_output_key()
+    return {
+      "type": "json_object",
+      "schema": {
+        "type": "object",
+        "properties": { key: {"type": "string"} },
+        "required": [key],
+      },
+    }
+
+  @staticmethod
+  def _get_structured_output_key() -> str:
+    value = ConfigurationService.get_environment_variable("STRUCTURED_OUTPUT_KEY")
+    return value if value is not None else "result"
