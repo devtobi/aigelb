@@ -1,7 +1,7 @@
 from ast import literal_eval
-from csv import QUOTE_MINIMAL, DictReader, DictWriter
+from csv import QUOTE_MINIMAL, DictReader, DictWriter, reader, writer
 from os import makedirs, path
-from typing import List, Protocol, Type, TypeVar
+from typing import Any, List, Protocol, Type, TypeVar
 
 from pathvalidate import sanitize_filename
 
@@ -57,6 +57,24 @@ class FileService:
       dict_writer.writeheader()
       for row in rows:
         dict_writer.writerow(row.to_dict())
+
+  @classmethod
+  def count_csv_lines(cls, filepath: str) -> int:
+    abs_path: str = cls.get_absolute_path(filepath)
+    with open(abs_path, mode="r", newline="", encoding="utf-8") as file:
+      csv_reader = reader(file)
+      return sum(1 for _ in csv_reader)
+
+  @classmethod
+  def append_to_csv(cls, filepath: str, row: Any | List[Any]) -> None:
+    abs_path: str = cls.get_absolute_path(filepath)
+    makedirs(path.dirname(abs_path), exist_ok=True)
+    with open(abs_path, mode="a", newline="", encoding="utf-8") as file:
+      file_writer = writer(file, quoting=QUOTE_MINIMAL)
+      if isinstance(row, list):
+        file_writer.writerow(row)
+      else:
+        file_writer.writerow([row])
 
   @classmethod
   def _process_row(cls, row: dict) -> dict:
