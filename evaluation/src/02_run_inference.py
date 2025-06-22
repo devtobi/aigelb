@@ -1,6 +1,10 @@
 from generation import GenerationService
 from model import ModelService
-from utility import ConfigurationService, KeyboardInterruptError, LoggingService
+from utility import (
+  ConfigurationService,
+  KeyboardInterruptError,
+  LoggingService,
+)
 
 
 def run_inference():
