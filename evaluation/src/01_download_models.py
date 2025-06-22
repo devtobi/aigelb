@@ -11,7 +11,7 @@ def download_models():
   try:
     ModelService.download_models(models)
   except KeyboardInterruptError as exc:
-    LoggingService.error(str(exc))
+    LoggingService.info(str(exc))
     return
 
 if __name__ == "__main__":

@@ -10,7 +10,13 @@ from llama_cpp import (
 from tqdm import tqdm
 
 from model import Model, ModelService
-from utility import ConfigurationService, DateService, FileService, LoggingService
+from utility import (
+  ConfigurationService,
+  DateService,
+  FileService,
+  KeyboardInterruptError,
+  LoggingService,
+)
 
 from .exception import (
   GenerationModelInferenceError,
@@ -70,6 +76,8 @@ class GenerationService:
       completion_response: CreateChatCompletionResponse = cast(CreateChatCompletionResponse, llm.create_chat_completion(
         messages=[system_message, user_message]
       ))
+    except KeyboardInterrupt:
+        raise KeyboardInterruptError(f"The inference was interrupted by keyboard. Generation will be resumed on next run. Otherwise delete {cls._get_timestamp_filepath()} manually.") from None
     except Exception as exc:
       raise GenerationModelInferenceError(f"Failed running chat completion on '{model_name}'") from exc
     answer = completion_response['choices'][0]['message']['content']

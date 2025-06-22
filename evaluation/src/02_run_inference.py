@@ -27,7 +27,7 @@ def run_inference():
   try:
     GenerationService.run_inference(models, sources, system_prompt, user_prompt)
   except KeyboardInterruptError as exc:
-    LoggingService.error(str(exc))
+    LoggingService.info(str(exc))
     return
 
 if __name__ == "__main__":

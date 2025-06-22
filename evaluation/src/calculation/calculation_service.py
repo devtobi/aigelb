@@ -6,7 +6,13 @@ from tqdm import tqdm
 from generation import GenerationService
 from metric import Metric, MetricLibrary, MetricService
 from model import Model, ModelService
-from utility import ConfigurationService, DateService, FileService, LoggingService
+from utility import (
+    ConfigurationService,
+    DateService,
+    FileService,
+    KeyboardInterruptError,
+    LoggingService,
+)
 
 from .calculation_result import CalculationResult
 from .exception import (
@@ -34,11 +40,14 @@ class CalculationService:
       calculation_results.append(cls._calculate_result_for_reference(metrics))
 
       LoggingService.info("Calculating metrics for models...")
-      with tqdm(models) as pbar:
-        for model in pbar:
-          pbar.set_description(model.name)
-          result = cls._calculate_result_for_model(model, metrics)
-          calculation_results.append(result)
+      try:
+        with tqdm(models) as pbar:
+          for model in pbar:
+            pbar.set_description(model.name)
+            result = cls._calculate_result_for_model(model, metrics)
+            calculation_results.append(result)
+      except KeyboardInterrupt:
+        raise KeyboardInterruptError("The calculation was interrupted by keyboard. Please re-run script to restart calculation.") from None
 
       cls._write_calculation_results(calculation_results)
 
