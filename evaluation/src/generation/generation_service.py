@@ -103,6 +103,7 @@ class GenerationService:
       return Llama(
         model_path=model_path,
         n_gpu_layers=cls._get_gpu_layers(),
+        n_ctx=cls._get_context_length(),
         verbose=False
       )
     except Exception as exc:
@@ -232,3 +233,8 @@ class GenerationService:
   def _get_temperature() -> float:
     value = ConfigurationService.get_environment_variable("TEMPERATURE")
     return float(value) if value is not None else 0.2
+
+  @staticmethod
+  def _get_context_length() -> int:
+    value = ConfigurationService.get_environment_variable("CONTEXT_LENGTH")
+    return int(value) if value is not None else 0
