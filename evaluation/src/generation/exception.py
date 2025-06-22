@@ -12,3 +12,15 @@ class GenerationUserPromptFileEmptyError(Exception):
 
 class GenerationUserPromptFileMissingTemplateError(Exception):
   pass
+
+class GenerationModelNotFoundError(Exception):
+  pass
+
+class GenerationModelLoadError(Exception):
+  pass
+
+class GenerationModelInferenceError(Exception):
+  pass
+
+class GenerationPredictionWriteError(Exception):
+  pass

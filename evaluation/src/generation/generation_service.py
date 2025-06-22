@@ -1,4 +1,4 @@
-from typing import List, cast
+from typing import List, Optional, cast
 
 from huggingface_hub import hf_hub_download
 from llama_cpp import (
@@ -7,11 +7,16 @@ from llama_cpp import (
   CreateChatCompletionResponse,
   Llama,
 )
+from tqdm import tqdm
 
-from model import Model
-from utility import ConfigurationService, FileService, LoggingService
+from model import Model, ModelService
+from utility import ConfigurationService, DateService, FileService, LoggingService
 
 from .exception import (
+  GenerationModelInferenceError,
+  GenerationModelLoadError,
+  GenerationModelNotFoundError,
+  GenerationPredictionWriteError,
   GenerationSourcesFileNotFoundError,
   GenerationSystemPromptFileNotFoundError,
   GenerationUserPromptFileEmptyError,
@@ -27,37 +32,68 @@ class GenerationService:
 
   @classmethod
   def run_inference(cls, models: List[Model], sources: List[str], system_prompt: str, user_prompt: str) -> None:
+    LoggingService.info("Running inference for models...")
     LoggingService.mute_llamacpp_logging()
-    LoggingService.error("NOT IMPLEMENTED YET.")
+    timestamp = DateService.get_timestamp()
+    with tqdm(models) as pbar:
+      for model in pbar:
+        pbar.set_description(model.name)
+        cls._run_inference_for_model(model, sources, system_prompt, user_prompt, timestamp)
+    LoggingService.info(f"Finished running inference for models. Written results to {cls._get_predictions_filepath(timestamp=timestamp)}")
 
   @classmethod
-  def run_chat_completion(cls, llm: Llama, system_prompt: str, user_prompt: str) -> str:
+  def _run_inference_for_model(cls, model: Model, sources: List[str], system_prompt: str, user_prompt: str, timestamp: Optional[str] = None) -> None:
+    llm = cls._load_model(model)
+    with tqdm(sources, desc="-> Running inference cycles", leave=False) as pbar:
+      for source in pbar:
+        u_prompt = user_prompt.replace(cls._get_user_prompt_template_string(), source)
+        result = cls._run_chat_completion(llm, model.name, system_prompt, u_prompt)
+        cls._write_prediction(model, result, timestamp)
+
+  @classmethod
+  def _run_chat_completion(cls, llm: Llama, model_name: str, system_prompt: str, user_prompt: str) -> str:
     system_message: ChatCompletionRequestSystemMessage = {"role": "system", "content": system_prompt}
     user_message: ChatCompletionRequestUserMessage = {"role": "user", "content": user_prompt}
-    completion_response: CreateChatCompletionResponse = cast(CreateChatCompletionResponse, llm.create_chat_completion(
-      messages=[system_message, user_message],
-      max_tokens=1000,
-    ))
-    print(completion_response)
+    try:
+      completion_response: CreateChatCompletionResponse = cast(CreateChatCompletionResponse, llm.create_chat_completion(
+        messages=[system_message, user_message],
+        max_tokens=1000,
+      ))
+    except Exception as exc:
+      raise GenerationModelInferenceError(f"Failed running chat completion on '{model_name}'") from exc
     answer = completion_response['choices'][0]['message']['content']
     return "" if answer is None else answer
 
   @classmethod
   def _load_model(cls, model: Model) -> Llama:
     # get model_path
-    model_path = hf_hub_download(
-      repo_id=model.repo_id,
-      filename=model.gguf_filename,
-      local_files_only=True
-    )
+    try:
+      model_path = hf_hub_download(
+        repo_id=model.repo_id,
+        filename=model.gguf_filename,
+        local_files_only=True
+      )
+    except Exception as exc:
+      raise GenerationModelNotFoundError(f"The model {model.name} could not be found") from exc
 
     # load model into (V)RAM
-    return Llama(
-      model_path=model_path,
-      n_gpu_layers=cls._get_gpu_layers(),
-      verbose=False,
-      n_ctx=512,
-    )
+    try:
+      return Llama(
+        model_path=model_path,
+        n_gpu_layers=cls._get_gpu_layers(),
+        verbose=False,
+        n_ctx=512,
+      )
+    except Exception as exc:
+      raise GenerationModelLoadError(f"The model {model.name} could not be loaded") from exc
+
+  @classmethod
+  def _write_prediction(cls, model: Model, prediction: str, timestamp: Optional[str] = None) -> None:
+    filepath = cls._get_predictions_filepath(model, timestamp)
+    try:
+      FileService.append_to_csv(filepath, prediction)
+    except Exception as exc:
+      raise GenerationPredictionWriteError(f"Failed to write prediction to '{filepath}'") from exc
 
   @classmethod
   def read_source_file(cls) -> List[str]:
@@ -102,6 +138,13 @@ class GenerationService:
   def get_predictions_directory() -> str:
     return "predictions"
 
+  @classmethod
+  def _get_predictions_filepath(cls, model: Optional[Model] = None, timestamp: Optional[str] = None) -> str:
+    model_filename = ModelService.get_filename(model) if model is not None else ""
+    predictions_directory = cls.get_predictions_directory()
+    timestamp_part = f"/{FileService.sanitize_file_name(timestamp)}" if timestamp is not None else ""
+    return f"{predictions_directory}{timestamp_part}/{model_filename}"
+
   @staticmethod
   def _get_gpu_layers() -> int:
     return 0 if ConfigurationService.get_environment_variable("USE_CPU") == "True" else -1
@@ -121,3 +164,8 @@ class GenerationService:
   @staticmethod
   def _get_user_prompt_template_string() -> str:
     return "{source}"
+
+  @classmethod
+  def _get_timestamp_from_lockfile(cls) -> str:
+    return "NOT IMPLEMENTED YET"
+
