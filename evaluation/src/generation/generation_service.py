@@ -34,21 +34,33 @@ class GenerationService:
   def run_inference(cls, models: List[Model], sources: List[str], system_prompt: str, user_prompt: str) -> None:
     LoggingService.info("Running inference for models...")
     LoggingService.mute_llamacpp_logging()
-    timestamp = DateService.get_timestamp()
+    timestamp = cls._get_timestamp_from_lockfile()
     with tqdm(models) as pbar:
       for model in pbar:
         pbar.set_description(model.name)
         cls._run_inference_for_model(model, sources, system_prompt, user_prompt, timestamp)
+    cls._remove_timestamp_file()
     LoggingService.info(f"Finished running inference for models. Written results to {cls._get_predictions_filepath(timestamp=timestamp)}")
 
   @classmethod
   def _run_inference_for_model(cls, model: Model, sources: List[str], system_prompt: str, user_prompt: str, timestamp: Optional[str] = None) -> None:
     llm = cls._load_model(model)
-    with tqdm(sources, desc="-> Running inference cycles", leave=False) as pbar:
-      for source in pbar:
-        u_prompt = user_prompt.replace(cls._get_user_prompt_template_string(), source)
+    predictions_filepath = cls._get_predictions_filepath(model, timestamp)
+    sources_count = len(sources)
+    if FileService.exists_file(predictions_filepath):
+      count = FileService.count_csv_lines(predictions_filepath)
+      if count == sources_count:
+        return
+      for i in tqdm(range(count, sources_count), desc="-> Running inference cycles", initial=count + 1, total=sources_count):
+        u_prompt = user_prompt.replace(cls._get_user_prompt_template_string(), sources[i])
         result = cls._run_chat_completion(llm, model.name, system_prompt, u_prompt)
         cls._write_prediction(model, result, timestamp)
+    else:
+      with tqdm(sources, desc="-> Running inference cycles", leave=False) as pbar:
+        for source in pbar:
+          u_prompt = user_prompt.replace(cls._get_user_prompt_template_string(), source)
+          result = cls._run_chat_completion(llm, model.name, system_prompt, u_prompt)
+          cls._write_prediction(model, result, timestamp)
 
   @classmethod
   def _run_chat_completion(cls, llm: Llama, model_name: str, system_prompt: str, user_prompt: str) -> str:
@@ -56,8 +68,7 @@ class GenerationService:
     user_message: ChatCompletionRequestUserMessage = {"role": "user", "content": user_prompt}
     try:
       completion_response: CreateChatCompletionResponse = cast(CreateChatCompletionResponse, llm.create_chat_completion(
-        messages=[system_message, user_message],
-        max_tokens=1000,
+        messages=[system_message, user_message]
       ))
     except Exception as exc:
       raise GenerationModelInferenceError(f"Failed running chat completion on '{model_name}'") from exc
@@ -81,8 +92,7 @@ class GenerationService:
       return Llama(
         model_path=model_path,
         n_gpu_layers=cls._get_gpu_layers(),
-        verbose=False,
-        n_ctx=512,
+        verbose=False
       )
     except Exception as exc:
       raise GenerationModelLoadError(f"The model {model.name} could not be loaded") from exc
@@ -165,7 +175,27 @@ class GenerationService:
   def _get_user_prompt_template_string() -> str:
     return "{source}"
 
+  @staticmethod
+  def _get_timestamp_filename() -> str:
+    return "timestamp.lock"
+
+  @classmethod
+  def _get_timestamp_filepath(cls) -> str:
+    return f"{cls.get_predictions_directory()}/{cls._get_timestamp_filename()}"
+
   @classmethod
   def _get_timestamp_from_lockfile(cls) -> str:
-    return "NOT IMPLEMENTED YET"
+    lockpath = cls._get_timestamp_filepath()
+    if FileService.exists_file(lockpath):
+      return FileService.from_file_to_string(lockpath)
+    else:
+      timestamp = DateService.get_timestamp()
+      sanitized_timestamp = FileService.sanitize_file_name(timestamp)
+      FileService.to_file(lockpath, sanitized_timestamp)
+      return timestamp
+
+  @classmethod
+  def _remove_timestamp_file(cls) -> None:
+    lockpath = cls._get_timestamp_filepath()
+    FileService.delete_file(lockpath)
 
