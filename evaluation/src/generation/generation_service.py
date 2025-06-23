@@ -2,6 +2,7 @@ from typing import List, Optional, cast
 
 from huggingface_hub import hf_hub_download
 from llama_cpp import (
+  ChatCompletionRequestResponseFormat,
   ChatCompletionRequestSystemMessage,
   ChatCompletionRequestUserMessage,
   CreateChatCompletionResponse,
@@ -74,7 +75,9 @@ class GenerationService:
     user_message: ChatCompletionRequestUserMessage = {"role": "user", "content": user_prompt}
     try:
       completion_response: CreateChatCompletionResponse = cast(CreateChatCompletionResponse, llm.create_chat_completion(
-        messages=[system_message, user_message]
+        messages=[system_message, user_message],
+        response_format=cls._get_response_format(),
+        temperature=cls._get_temperature(),
       ))
     except KeyboardInterrupt:
         raise KeyboardInterruptError(f"The inference was interrupted by keyboard. Generation will be resumed on next run. Otherwise delete {cls._get_timestamp_filepath()} manually.") from None
@@ -100,6 +103,9 @@ class GenerationService:
       return Llama(
         model_path=model_path,
         n_gpu_layers=cls._get_gpu_layers(),
+        n_threads=cls._get_num_threads(),
+        n_threads_batch=cls._get_num_threads(),
+        n_ctx=cls._get_context_length(),
         verbose=False
       )
     except Exception as exc:
@@ -107,9 +113,10 @@ class GenerationService:
 
   @classmethod
   def _write_prediction(cls, model: Model, prediction: str, timestamp: Optional[str] = None) -> None:
+    parsed_prediction = FileService.extract_value_from_json(prediction, cls._get_structured_output_key())
     filepath = cls._get_predictions_filepath(model, timestamp)
     try:
-      FileService.append_to_csv(filepath, prediction)
+      FileService.append_to_csv(filepath, parsed_prediction)
     except Exception as exc:
       raise GenerationPredictionWriteError(f"Failed to write prediction to '{filepath}'") from exc
 
@@ -164,10 +171,6 @@ class GenerationService:
     return f"{predictions_directory}{timestamp_part}/{model_filename}"
 
   @staticmethod
-  def _get_gpu_layers() -> int:
-    return 0 if ConfigurationService.get_environment_variable("USE_CPU") == "True" else -1
-
-  @staticmethod
   def _get_source_filepath() -> str:
     return f"{ConfigurationService.get_data_directory()}/sources.csv"
 
@@ -207,3 +210,38 @@ class GenerationService:
     lockpath = cls._get_timestamp_filepath()
     FileService.delete_file(lockpath)
 
+  @classmethod
+  def _get_response_format(cls) -> ChatCompletionRequestResponseFormat:
+    key = cls._get_structured_output_key()
+    return {
+      "type": "json_object",
+      "schema": {
+        "type": "object",
+        "properties": { key: {"type": "string"} },
+        "required": [key],
+      },
+    }
+
+  @staticmethod
+  def _get_gpu_layers() -> int:
+    return 0 if ConfigurationService.get_environment_variable("USE_CPU") == "True" else -1
+
+  @staticmethod
+  def _get_structured_output_key() -> str:
+    value = ConfigurationService.get_environment_variable("STRUCTURED_OUTPUT_KEY")
+    return value if value is not None else "result"
+
+  @staticmethod
+  def _get_temperature() -> float:
+    value = ConfigurationService.get_environment_variable("TEMPERATURE")
+    return float(value) if value is not None else 0.2
+
+  @staticmethod
+  def _get_context_length() -> int:
+    value = ConfigurationService.get_environment_variable("CONTEXT_LENGTH")
+    return int(value) if value is not None else 0
+
+  @staticmethod
+  def _get_num_threads() -> Optional[int]:
+    value = ConfigurationService.get_environment_variable("NUM_THREADS")
+    return int(value) if value is not None else None
