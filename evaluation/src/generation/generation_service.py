@@ -6,7 +6,7 @@ from llama_cpp import (
   ChatCompletionRequestSystemMessage,
   ChatCompletionRequestUserMessage,
   CreateChatCompletionResponse,
-  Llama
+  Llama,
 )
 from tqdm import tqdm
 
@@ -242,6 +242,6 @@ class GenerationService:
     return int(value) if value is not None else 0
 
   @staticmethod
-  def _get_num_threads() -> int:
+  def _get_num_threads() -> Optional[int]:
     value = ConfigurationService.get_environment_variable("NUM_THREADS")
     return int(value) if value is not None else None

@@ -1,8 +1,8 @@
 from ast import literal_eval
 from csv import QUOTE_ALL, DictReader, DictWriter, reader, writer
+from json import loads
 from os import makedirs, path, remove
 from typing import Any, List, Protocol, Type, TypeVar
-from json import loads
 
 from pathvalidate import sanitize_filename
 
