@@ -1,6 +1,6 @@
 from ast import literal_eval
 from csv import QUOTE_ALL, DictReader, DictWriter, reader, writer
-from json import loads
+from json import JSONDecodeError, loads
 from os import listdir, makedirs, path, remove
 from typing import Any, List, LiteralString, Protocol, Type, TypeVar, cast
 
@@ -98,8 +98,11 @@ class FileService:
 
   @staticmethod
   def extract_value_from_json(json_string: str, key: str) -> str:
-    json_representation = loads(json_string)
-    return json_representation[key]
+    try:
+      json_representation = loads(json_string)
+      return json_representation[key]
+    except JSONDecodeError:
+      return ""
 
   @classmethod
   def get_directories(cls, dirpath: str) -> List[str]:
