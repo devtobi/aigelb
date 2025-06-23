@@ -83,10 +83,7 @@ class CalculationService:
 
     @classmethod
     def _write_calculation_results(cls, results: List[CalculationResult]):
-      timestamp: str = DateService.get_timestamp()
-      timestamp_sanitized = FileService.sanitize_file_name(timestamp)
-      filename = f"result_{timestamp_sanitized}.csv"
-      filepath = f"{cls._get_results_directory()}/{filename}"
+      filepath = cls._get_resultsfile_path()
       LoggingService.info(f"Writing calculation results to {filepath}")
       try:
         FileService.to_csv(results, filepath)
@@ -117,7 +114,7 @@ class CalculationService:
     @classmethod
     def _read_predictions_file(cls, model: Model) -> List[str]:
       filename = f"{ModelService.get_filename(model)}.csv"
-      filepath = f"{GenerationService.get_predictions_directory()}/{filename}"
+      filepath = f"{GenerationService.get_predictions_directory()}/{cls._get_latest_prediction_directory()}/{filename}"
       try:
         return FileService.from_csv_to_string_list(filepath)
       except Exception as exc:
@@ -137,6 +134,19 @@ class CalculationService:
         return func(predictions=predictions, references=references, **metric.kwargs)
       except Exception as exc:
         raise CalculationMetricError(f"Error calculating {metric.name}!") from exc
+
+    @staticmethod
+    def _get_latest_prediction_directory() -> Optional[str]:
+      predictions_dir = GenerationService.get_predictions_directory()
+      directories = FileService.get_directories(predictions_dir)
+      return max(directories) if directories else None
+
+    @classmethod
+    def _get_resultsfile_path(cls) -> str:
+      results_timestamp: str = DateService.get_timestamp()
+      results_timestamp_sanitized = FileService.sanitize_file_name(results_timestamp)
+      filename = f"{results_timestamp_sanitized}.csv"
+      return f"{cls._get_results_directory()}/{cls._get_latest_prediction_directory()}/{filename}"
 
     @staticmethod
     def _get_results_directory() -> str:
