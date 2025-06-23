@@ -1,8 +1,8 @@
 from ast import literal_eval
 from csv import QUOTE_ALL, DictReader, DictWriter, reader, writer
 from json import loads
-from os import makedirs, path, remove
-from typing import Any, List, Protocol, Type, TypeVar
+from os import listdir, makedirs, path, remove
+from typing import Any, List, LiteralString, Protocol, Type, TypeVar, cast
 
 from pathvalidate import sanitize_filename
 
@@ -100,6 +100,14 @@ class FileService:
   def extract_value_from_json(json_string: str, key: str) -> str:
     json_representation = loads(json_string)
     return json_representation[key]
+
+  @classmethod
+  def get_directories(cls, dirpath: str) -> List[str]:
+    abs_path = cls.get_absolute_path(dirpath)
+    return [
+      entry for entry in listdir(abs_path)
+      if path.isdir(path.join(cast(LiteralString, abs_path), cast(LiteralString,entry)))
+    ]
 
   @classmethod
   def _process_row(cls, row: dict) -> dict:
