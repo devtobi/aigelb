@@ -246,11 +246,11 @@ when you are inside the `evaluation` directory.
 The script will read the content of the `models.csv` and `metrics.csv` file
 and ask you to confirm the configured models and metrics to use for calculation.
 
-The results will be stored in the `results` directory as `.csv` files and contain:
-* Results based on reference-free metrics for the input data
-* Results based on reference-free metrics for the reference data
-* Results based on all metrics for each model-generated data
-**Note**: The result files include the timestamp in the filename in order to have subsequent calculations with varied metrics not override previous calculation runs.
+The predictions used for calculation will always be taken from the latest folder inside the `predictions` directory.
+The results will be stored in the `results` directory inside a folder named after the generation timestamp as `.csv` files containing the timestamp of metric calculation (`results/<timestamp-generation>/<timestamp-calculation>.csv`). The result file contains:
+1. Results based on reference-free metrics for the input data
+2. Results based on reference-free metrics for the reference data
+3. Results based on all metrics for each model-generated data
 
 <!-- AUTHORS -->
 ## Authors
