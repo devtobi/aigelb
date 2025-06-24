@@ -50,7 +50,6 @@ of different LLMs in regard to the use case "Easy Language" in German.
 * Package management: [uv](https://docs.astral.sh/uv/)
 * Model downloads: [HuggingFace Hub](https://huggingface.co)
 * LLM inference: [llama-cpp-python](https://llama-cpp-python.readthedocs.io)
-* LLM framework: [LangChain](https://www.langchain.com)
 * Evaluation metrics:
   * Machine translation: [HuggingFace Evaluate](https://huggingface.co/docs/evaluate/index)
   * Text readability: [TextStat](https://textstat.org)
@@ -104,9 +103,9 @@ for further information and up-to-date instructions.
 All mentioned scripts can be run via uv
 using the following command: `uv run <script-path>.py`
 
-The `.env` file inside the `evaluation` directory
-allows further customization of the evaluation behaviour
-and will be further explained in the below sections.
+The files inside the `config` directory
+allow further customization of the behaviour
+and will be further explained in the sections below.
 
 ### 1. Downloading models
 
@@ -124,7 +123,7 @@ The file has the following columns:
 (e.g. when a license agreement consent on HuggingFace
 platform is necessary for your account).
 
-Relevant environment variables for the `.env` file are the following:
+Relevant environment variables for the `config.env` file are the following:
 
 * `HF_TOKEN` (optional): HuggingFace token for your account
 to fetch gated models you have access to on the platform.
@@ -162,9 +161,39 @@ to get rid off all the models in your cache directory.
 
 TBD
 
-### 3. Executing inference
+### 3. Running inference
 
-* `USE_CPU`: `True` or `False` whether you want to use your CPU or GPU for LLM inference.
+#### Configuration
+
+##### Source data
+
+The source data can be configured in the `data/sources.csv` file. Each row in that file will be a sentence that is being passed to the LLM in the configured user prompt.
+
+**Important**: The entries must be quoted using double quotes to not interpret `,` inside the source sentences as a column separator.
+
+##### System prompt
+
+The system prompt can be configured inside the `config/system_prompt.txt` file. Usally the role of the LLM as well as instructions are defined here. One can also include examples to guide the LLM using in-context-learning.
+
+##### User prompt
+
+The user prompt can be configured in the `config/user_prompt.txt` file. It contains the specific task as hand (e.g. translating a specific sentence into plain language).
+
+**Important**: The user prompt must contain `{source}` to insert the specific source sentence into the user prompt at LLM inferene time.
+
+##### Inference
+
+Relevant environment variables for the `config.env` are the following:
+
+* `USE_CPU` (optional): `True` or `False` whether CPU or GPU should be used for LLM inference. If not set, will use GPU.
+* `NUM_THREADS` (optional): Number of threads to use when running CPU inference. If not set, will be automatically inferred based on system capabilities
+* `CONTEXT_LENGTH` (optional): Context length to use for inference, can speed up performance when decreased, needs to be bug enough for prompt tokens to fit. If not set, will infer the context length from the given model.
+* `STRUCTURED_OUTPUT_KEY` (optional): Key for the JSON object to expect from LLM generation used to improve LLM generation via Structured Output, not part of the final result. If not set `result` will be used as key.
+* `TEMPERATURE` (optional): Temperature to use for model inference for controlling creativity. If not set `0.2` will be used.
+
+#### Execution
+
+TODO
 
 ### 4. Calculating metrics
 
@@ -199,7 +228,7 @@ Metrics from the Machine Translation field require a (gold standard) reference t
 #### Execution
 
 To calculate the metrics you selected,
-you need to run the calculation script
+you need to run the calculation script≈
 using `uv run src/03_calculate_metrics.py`
 when you are inside the `evaluation` directory.
 
