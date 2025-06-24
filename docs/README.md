@@ -50,7 +50,6 @@ of different LLMs in regard to the use case "Easy Language" in German.
 * Package management: [uv](https://docs.astral.sh/uv/)
 * Model downloads: [HuggingFace Hub](https://huggingface.co)
 * LLM inference: [llama-cpp-python](https://llama-cpp-python.readthedocs.io)
-* LLM framework: [LangChain](https://www.langchain.com)
 * Evaluation metrics:
   * Machine translation: [HuggingFace Evaluate](https://huggingface.co/docs/evaluate/index)
   * Text readability: [TextStat](https://textstat.org)
@@ -104,9 +103,9 @@ for further information and up-to-date instructions.
 All mentioned scripts can be run via uv
 using the following command: `uv run <script-path>.py`
 
-The `.env` file inside the `evaluation` directory
-allows further customization of the evaluation behaviour
-and will be further explained in the below sections.
+The files inside the `config` directory
+allow further customization of the behaviour
+and will be further explained in the sections below.
 
 ### 1. Downloading models
 
@@ -124,7 +123,7 @@ The file has the following columns:
 (e.g. when a license agreement consent on HuggingFace
 platform is necessary for your account).
 
-Relevant environment variables for the `.env` file are the following:
+Relevant environment variables for the `config.env` file are the following:
 
 * `HF_TOKEN` (optional): HuggingFace token for your account
 to fetch gated models you have access to on the platform.
@@ -162,9 +161,50 @@ to get rid off all the models in your cache directory.
 
 TBD
 
-### 3. Executing inference
+### 3. Running inference
 
-* `USE_CPU`: `True` or `False` whether you want to use your CPU or GPU for LLM inference.
+#### Configuration
+
+##### Source data
+
+The source data can be configured in the `data/sources.csv` file. Each row in that file will be a sentence that is being passed to the LLM in the configured user prompt.
+
+**Important**: The entries must be quoted using double quotes to not interpret `,` inside the source sentences as a column separator.
+
+##### System prompt
+
+The system prompt can be configured inside the `config/system_prompt.txt` file. Usally the role of the LLM as well as instructions are defined here. One can also include examples to guide the LLM using in-context-learning.
+
+##### User prompt
+
+The user prompt can be configured in the `config/user_prompt.txt` file. It contains the specific task as hand (e.g. translating a specific sentence into plain language).
+
+**Important**: The user prompt must contain `{source}` to insert the specific source sentence into the user prompt at LLM inferene time.
+
+##### Inference
+
+Relevant environment variables for the `config.env` are the following:
+
+* `USE_CPU` (optional): `True` or `False` whether CPU or GPU should be used for LLM inference. If not set, will use GPU.
+* `NUM_THREADS` (optional): Number of threads to use when running CPU inference. If not set, will be automatically inferred based on system capabilities
+* `CONTEXT_LENGTH` (optional): Context length to use for inference, can speed up performance when decreased, needs to be bug enough for prompt tokens to fit. If not set, will infer the context length from the given model.
+* `STRUCTURED_OUTPUT_KEY` (optional): Key for the JSON object to expect from LLM generation used to improve LLM generation via Structured Output, not part of the final result. If not set `result` will be used as key.
+* `TEMPERATURE` (optional): Temperature to use for model inference for controlling creativity. If not set `0.2` will be used.
+
+#### Execution
+
+To run the LLM inference,
+you need to run the inference script
+using `uv run src/02_run_inference.py`
+when you are inside the `evaluation` directory.
+
+The script will read the content of `sources.csv`, `system_prompt.csv`, `user_prompt.csv` and `models.csv` and ask for confirmation before starting inference.
+
+The script will sequentially load the configured models and use each configured source sentence in an isolated inference execution.
+The results are stored in the `results` folder inside a directory named by the timestamp of generation start. Inside will be a `.csv`file for each used model.
+
+**Tip**: Depending on the amount of models, the amount of configured sentences and the capabilities of the system this task can take from a few minutes to a couple of days.
+Thus a lockfile mechanism has been implemented that allows for interrupting and later on resuming the inference task. A lockfile named `timestamp.lock` will be placed in the `predictions` folder in this case.
 
 ### 4. Calculating metrics
 
@@ -206,11 +246,11 @@ when you are inside the `evaluation` directory.
 The script will read the content of the `models.csv` and `metrics.csv` file
 and ask you to confirm the configured models and metrics to use for calculation.
 
-The results will be stored in the `results` directory as `.csv` files and contain:
-* Results based on reference-free metrics for the input data
-* Results based on reference-free metrics for the reference data
-* Results based on all metrics for each model-generated data
-**Note**: The result files include the timestamp in the filename in order to have subsequent calculations with varied metrics not override previous calculation runs.
+The predictions used for calculation will always be taken from the latest folder inside the `predictions` directory.
+The results will be stored in the `results` directory inside a folder named after the generation timestamp as `.csv` files containing the timestamp of metric calculation (`results/<timestamp-generation>/<timestamp-calculation>.csv`). The result file contains:
+1. Results based on reference-free metrics for the input data
+2. Results based on reference-free metrics for the reference data
+3. Results based on all metrics for each model-generated data
 
 <!-- AUTHORS -->
 ## Authors
