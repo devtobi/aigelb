@@ -193,7 +193,18 @@ Relevant environment variables for the `config.env` are the following:
 
 #### Execution
 
-TODO
+To run the LLM inference,
+you need to run the inference script
+using `uv run src/02_run_inference.py`
+when you are inside the `evaluation` directory.
+
+The script will read the content of `sources.csv`, `system_prompt.csv`, `user_prompt.csv` and `models.csv` and ask for confirmation before starting inference.
+
+The script will sequentially load the configured models and use each configured source sentence in an isolated inference execution.
+The results are stored in the `results` folder inside a directory named by the timestamp of generation start. Inside will be a `.csv`file for each used model.
+
+**Tip**: Depending on the amount of models, the amount of configured sentences and the capabilities of the system this task can take from a few minutes to a couple of days.
+Thus a lockfile mechanism has been implemented that allows for interrupting and later on resuming the inference task. A lockfile named `timestamp.lock` will be placed in the `predictions` folder in this case.
 
 ### 4. Calculating metrics
 
@@ -228,7 +239,7 @@ Metrics from the Machine Translation field require a (gold standard) reference t
 #### Execution
 
 To calculate the metrics you selected,
-you need to run the calculation script≈
+you need to run the calculation script
 using `uv run src/03_calculate_metrics.py`
 when you are inside the `evaluation` directory.
 
