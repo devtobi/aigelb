@@ -118,7 +118,7 @@ You can only use [GGUF](https://huggingface.co/docs/hub/gguf)-based models from 
 The file has the following columns:
 
 * `_repo_id`: repository name of the model (e.g. [bartowski/Llama-3.2-3B-Instruct-GGUF](https://huggingface.co/bartowski/Llama-3.2-3B-Instruct-GGUF)).
-* `_gguf_filename`: filename to select the variant of the model for different quantizations (e.g. [bartowski/Llama-3.2-3B-Instruct-GGUF](https://huggingface.co/bartowski/Llama-3.2-3B-Instruct-GGUF/blob/main/Llama-3.2-3B-Instruct-Q5_K_M.gguf))
+* `_gguf_filename`: filename to select the variant of the model for different quantizations (e.g. [Llama-3.2-3B-Instruct-Q5_K_M.gguf](https://huggingface.co/bartowski/Llama-3.2-3B-Instruct-GGUF/blob/main/Llama-3.2-3B-Instruct-Q5_K_M.gguf))
 * `_gated`: `True` or `False` whether the model is gated
 (e.g. when a license agreement consent on HuggingFace
 platform is necessary for your account).
