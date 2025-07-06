@@ -23,7 +23,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "pyrefly (==0.22.1)",
+    "pyrefly (==0.22.2)",
     "ruff (==0.12.2)",
 ]
 
