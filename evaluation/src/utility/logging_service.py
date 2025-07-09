@@ -1,7 +1,7 @@
 from ctypes import CFUNCTYPE, c_char_p, c_int, c_void_p
 from logging import INFO, Formatter, Logger, StreamHandler, getLogger
 from sys import stdout
-from typing import Callable, ClassVar, Iterable, Optional, TypeVar
+from typing import Callable, ClassVar, Iterable, Optional, TypeVar, cast
 
 from llama_cpp import (
   llama_log_set,
@@ -62,7 +62,7 @@ class LoggingService:
       return None
     if not cls._confirm_action(confirm_msg):
       return None
-    return result
+    return cast(Optional[T], result)
 
   @classmethod
   def _confirm_action(cls, question: str) -> bool:
