@@ -15,16 +15,6 @@ export default createVuetify({
     },
   },
   theme: {
-    themes: {
-      light: {
-        colors: {
-          primary: "#FFA300",
-          secondary: "#FFFFFF",
-          accent: "#FFFFFF",
-          success: "#69BE28",
-          error: "#FF0000",
-        },
-      },
-    },
+    defaultTheme: "system",
   },
 });
