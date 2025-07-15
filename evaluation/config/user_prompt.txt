@@ -1,2 +1,2 @@
-Please translate the following text into plain language: {source}
-Please only return the translated text.
+Bitte übersetzen Sie den folgenden Text ein einfaches Deutsch: {source}
+Bitte geben Sie nur den übersetzten Text zurück.
