@@ -3,8 +3,6 @@ bartowski/aya-expanse-8b-GGUF,aya-expanse-8b-Q8_0.gguf
 bartowski/EuroLLM-9B-Instruct-GGUF,EuroLLM-9B-Instruct-Q8_0.gguf
 bartowski/Llama-3.1-SauerkrautLM-8b-Instruct-GGUF,Llama-3.1-SauerkrautLM-8b-Instruct-Q8_0.gguf
 bartowski/Mistral-Nemo-Instruct-2407-GGUF,Mistral-Nemo-Instruct-2407-Q6_K_L.gguf
-mradermacher/LLaMmlein_7B_chat-GGUF,LLaMmlein_7B_chat.Q8_0.gguf
-mradermacher/Teuken-7B-instruct-commercial-v0.4-GGUF,Teuken-7B-instruct-commercial-v0.4.Q8_0.gguf
 mradermacher/Tower-Plus-9B-GGUF,Tower-Plus-9B.Q8_0.gguf
 unsloth/DeepSeek-R1-0528-Qwen3-8B-GGUF,DeepSeek-R1-0528-Qwen3-8B-UD-Q8_K_XL.gguf
 unsloth/gemma-3-12b-it-GGUF,gemma-3-12b-it-UD-Q6_K_XL.gguf
