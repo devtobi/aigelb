@@ -168,7 +168,7 @@ class GenerationService:
     model_filename = ModelService.get_filename(model) if model is not None else ""
     predictions_directory = cls.get_predictions_directory()
     timestamp_part = f"/{FileService.sanitize_file_name(timestamp)}" if timestamp is not None else ""
-    return f"{predictions_directory}{timestamp_part}/{model_filename}.csv"
+    return f"{predictions_directory}{timestamp_part}/{model_filename}.csv" if model_filename else f"{predictions_directory}{timestamp_part}/"
 
   @staticmethod
   def _get_source_filepath() -> str:
