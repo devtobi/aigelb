@@ -1,11 +1,11 @@
 _repo_id,_gguf_filename,_gated
-bartowski/aya-expanse-8b-GGUF,aya-expanse-8b-Q8_0.gguf
-bartowski/EuroLLM-9B-Instruct-GGUF,EuroLLM-9B-Instruct-Q8_0.gguf
+unsloth/Llama-3.1-8B-Instruct-GGUF,Llama-3.1-8B-Instruct-UD-Q8_K_XL.gguf
 bartowski/Llama-3.1-SauerkrautLM-8b-Instruct-GGUF,Llama-3.1-SauerkrautLM-8b-Instruct-Q8_0.gguf
 bartowski/Mistral-Nemo-Instruct-2407-GGUF,Mistral-Nemo-Instruct-2407-Q6_K_L.gguf
-mradermacher/Tower-Plus-9B-GGUF,Tower-Plus-9B.Q8_0.gguf
-unsloth/DeepSeek-R1-0528-Qwen3-8B-GGUF,DeepSeek-R1-0528-Qwen3-8B-UD-Q8_K_XL.gguf
-unsloth/gemma-3-12b-it-GGUF,gemma-3-12b-it-UD-Q6_K_XL.gguf
-unsloth/Llama-3.1-8B-Instruct-GGUF,Llama-3.1-8B-Instruct-UD-Q8_K_XL.gguf
+bartowski/EuroLLM-9B-Instruct-GGUF,EuroLLM-9B-Instruct-Q8_0.gguf
+bartowski/aya-expanse-8b-GGUF,aya-expanse-8b-Q8_0.gguf
 unsloth/phi-4-GGUF,phi-4-Q5_K_M.gguf
+unsloth/gemma-3-12b-it-GGUF,gemma-3-12b-it-UD-Q6_K_XL.gguf
 unsloth/Qwen3-14B-GGUF,Qwen3-14B-UD-Q5_K_XL.gguf
+unsloth/DeepSeek-R1-0528-Qwen3-8B-GGUF,DeepSeek-R1-0528-Qwen3-8B-UD-Q8_K_XL.gguf
+mradermacher/Tower-Plus-9B-GGUF,Tower-Plus-9B.Q8_0.gguf
