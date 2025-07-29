@@ -44,7 +44,6 @@ class PreprocessService:
 
     sources = FileService.from_csv(str, cls._get_data_filepath(), source_column_name, column_separator)
     references = FileService.from_csv(str, cls._get_data_filepath(), reference_column_name, column_separator)
-    LoggingService.log_list(sources)
 
     FileService.to_csv(sources, cls.get_source_filepath(), simple_list=True)
     FileService.to_csv(references, cls.get_reference_filepath(), simple_list=True)
