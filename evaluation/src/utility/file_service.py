@@ -1,9 +1,10 @@
 from ast import literal_eval
-from csv import QUOTE_ALL, DictReader, DictWriter, reader, writer
-from json import JSONDecodeError, loads
+from csv import QUOTE_ALL
+from io import StringIO
 from os import listdir, makedirs, path, remove
 from typing import Any, List, LiteralString, Optional, Protocol, Type, TypeVar, cast
 
+from pandas import DataFrame, json_normalize, notna, read_csv, read_json
 from pathvalidate import sanitize_filename
 
 
@@ -21,25 +22,26 @@ class FileService:
   @classmethod
   def from_csv(cls, item_type: Type[T], filepath: str, column_name: Optional[str] = None) -> List[T]:
     abs_path: str = cls.get_absolute_path(filepath)
-    with open(abs_path, mode="r", newline="", encoding="utf-8") as csvfile:
-      dict_reader = DictReader(csvfile)
+    df = read_csv(abs_path, sep=",", encoding="utf-8")
 
-      if column_name:
-        return [cast(T, row[column_name])  for row in dict_reader if column_name in row]
+    if column_name:
+      if column_name in df.columns:
+        return [cast(T, val) for val in df[column_name].dropna()]
+      else:
+        return []
 
-      instances = []
-      for row in dict_reader:
-        processed_row = cls._process_row(row)
-        instance = item_type(**processed_row)
-        instances.append(instance)
-      return instances
+    instances = []
+    for _, row in df.iterrows():
+      processed_row = cls._process_row(row.to_dict())
+      instance = item_type(**processed_row)
+      instances.append(instance)
+    return instances
 
   @classmethod
   def from_csv_to_string_list(cls, filepath: str) -> List[str]:
     abs_path: str = cls.get_absolute_path(filepath)
-    with open(abs_path, mode="r", newline="", encoding="utf-8") as csvfile:
-      csv_reader = reader(csvfile)
-      return [row[0] for row in csv_reader if row and row[0].strip()]
+    df = read_csv(abs_path, header=None, sep=",", encoding="utf-8")
+    return [str(val).strip() for val in df.iloc[:, 0] if notna(val) and str(val).strip()]
 
   @classmethod
   def from_file_to_string(cls, filepath: str) -> str:
@@ -49,26 +51,18 @@ class FileService:
 
   @classmethod
   def to_csv(cls, rows: List[S], filepath: str, simple_list: bool = False) -> None:
-    if len(rows) == 0:
+    if not rows:
       raise ValueError("Cannot write empty row list to CSV")
 
     abs_path: str = cls.get_absolute_path(filepath)
     makedirs(path.dirname(abs_path), exist_ok=True)
 
-    with open(abs_path, mode='w', newline='') as csvfile:
-      if simple_list:
-        csv_writer = writer(csvfile, quoting=QUOTE_ALL)
-        for item in rows:
-          csv_writer.writerow([item])  # Wrap in a list to treat as a row
-      else:
-        fieldnames = set()
-        for row in rows:
-          fieldnames.update(row.to_dict().keys())
-        fieldnames = sorted(fieldnames)
-        dict_writer = DictWriter(csvfile, fieldnames=fieldnames, quoting=QUOTE_ALL)
-        dict_writer.writeheader()
-        for row in rows:
-          dict_writer.writerow(row.to_dict())
+    if simple_list:
+      df = DataFrame([[item] for item in rows])
+    else:
+      df = DataFrame([row.to_dict() for row in rows])
+
+    df.to_csv(abs_path, index=False, header=not simple_list, quoting=QUOTE_ALL)
 
   @classmethod
   def to_file(cls, filepath: str, content: str) -> None:
@@ -98,27 +92,26 @@ class FileService:
   @classmethod
   def count_csv_lines(cls, filepath: str) -> int:
     abs_path: str = cls.get_absolute_path(filepath)
-    with open(abs_path, mode="r", newline="", encoding="utf-8") as file:
-      csv_reader = reader(file)
-      return sum(1 for _ in csv_reader)
+    df = read_csv(abs_path, sep=",", encoding="utf-8", header=None)
+    return len(df)
 
   @classmethod
   def append_to_csv(cls, filepath: str, row: Any | List[Any]) -> None:
     abs_path: str = cls.get_absolute_path(filepath)
     makedirs(path.dirname(abs_path), exist_ok=True)
-    with open(abs_path, mode="a", newline="", encoding="utf-8") as file:
-      file_writer = writer(file, quoting=QUOTE_ALL)
-      if isinstance(row, list):
-        file_writer.writerow(row)
-      else:
-        file_writer.writerow([row])
+
+    row_data = [row] if isinstance(row, list) else [[row]]
+    df = DataFrame(row_data)
+    df.to_csv(abs_path, mode="a", index=False, header=False, quoting=QUOTE_ALL)
 
   @staticmethod
   def extract_value_from_json(json_string: str, key: str) -> str:
     try:
-      json_representation = loads(json_string)
-      return json_representation[key]
-    except JSONDecodeError:
+      buf = StringIO(json_string)
+      json_series = read_json(buf, typ='series', orient='index')
+      df = json_normalize([json_series.to_dict()])
+      return str(df.at[0, key])
+    except (ValueError, KeyError, TypeError):
       return ""
 
   @classmethod
@@ -133,22 +126,28 @@ class FileService:
   def _process_row(cls, row: dict) -> dict:
     result = {}
     for key, val in row.items():
-      # Check if is None
+      # Pass through None
       if val is None:
         result[key] = None
         continue
-      val = val.strip()
-      # Try converting to bool
-      if val.lower() in ['true', 'false']:
-        result[key] = cls._str_to_bool(val)
-      # Try converting dict/list/number via literal_eval
-      elif val.startswith('{') or val.startswith('[') or val.isdigit():
-        try:
-          result[key] = literal_eval(val)
-        except (ValueError, SyntaxError):
-          result[key] = val  # Fallback to string if it fails
+
+      # Convert non-string values to string (if needed) for uniform processing
+      if isinstance(val, str):
+        val_str = val.strip()
       else:
-        result[key] = val
+        val_str = str(val).strip()
+
+      # Try to convert boolean-like strings
+      if val_str.lower() in ['true', 'false']:
+        result[key] = cls._str_to_bool(val_str)
+      # Try to parse lists, dicts, or numeric values
+      elif val_str.startswith('{') or val_str.startswith('[') or val_str.isdigit():
+        try:
+          result[key] = literal_eval(val_str)
+        except (ValueError, SyntaxError):
+          result[key] = val_str  # Fallback to cleaned string
+      else:
+        result[key] = val_str
     return result
 
   @staticmethod
@@ -169,5 +168,3 @@ class FileService:
       return False
     else:
       raise ValueError(f"Cannot convert '{value}' to boolean.")
-
-
