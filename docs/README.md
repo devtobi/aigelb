@@ -159,7 +159,26 @@ to get rid off all the models in your cache directory.
 
 ### 2. Preparing data
 
-TBD
+#### Configuration
+
+Relevant environment variables for the `config.env` file are the following:
+
+* `SOURCES_COLUMN_NAME` (optional): Name of the column in the `.csv` file to use as sources. If not set, will default to `source`.
+* `REFERENCES_COLUMN_NAME` (optional): Name of the column in the `.csv` file to use as references. If not set, will default to `reference`.
+* `DOWNLOAD_URL` (optional): Download URL for the `.csv` file to use as data source
+
+**Note**: If the variable `DOWNLOAD_URL` is not set, the script will try to load the data from an existing file in `data/data.csv`.
+
+#### Execution
+
+To run the data preparation,
+you need to run the prepare script
+using `uv run src/02_prepare_data.py`
+when you are inside the `evaluation` directory.
+
+The script will optionally download the configured `.csv` file and save it to `data/data.csv`. It then processes this file using configured columns to extract the source and reference columns. The content of those columns will be saved to `data/sources.csv` and `data/references.csv`.
+
+**Warning**: No automatic data cleaning is performed, so the evaluation highly depends on the quality and corrent sentence-alignment of the data!
 
 ### 3. Running inference
 
@@ -167,7 +186,7 @@ TBD
 
 ##### Source data
 
-The source data can be configured in the `data/sources.csv` file. Each row in that file will be a sentence that is being passed to the LLM in the configured user prompt.
+The source data can be manually configured in the `data/sources.csv` file (if not automatically created via [Preparing data](#2-preparing-data)). Each row in that file will be a sentence that is being passed to the LLM in the configured user prompt.
 
 **Important**: The entries must be quoted using double quotes to not interpret `,` inside the source sentences as a column separator.
 
@@ -195,7 +214,7 @@ Relevant environment variables for the `config.env` are the following:
 
 To run the LLM inference,
 you need to run the inference script
-using `uv run src/02_run_inference.py`
+using `uv run src/03_run_inference.py`
 when you are inside the `evaluation` directory.
 
 The script will read the content of `sources.csv`, `system_prompt.csv`, `user_prompt.csv` and `models.csv` and ask for confirmation before starting inference.
@@ -232,7 +251,7 @@ This can be done via `uv pip install <package-name>`.
 
 ##### References
 
-Metrics from the Machine Translation field require a (gold standard) reference to compare to in order to be calculated. The references can be configured in the `references.csv` file. Each row in that file will be a sentence that is being compared to the generated sentence in the model-specific file of the `predictions` directory.
+Metrics from the Machine Translation field require a (gold standard) reference to compare to in order to be calculated. The references can manually be configured in the `references.csv` file (if not automatically created via [Preparing data](#2-preparing-data)). Each row in that file will be a sentence that is being compared to the generated sentence in the model-specific file of the `predictions` directory.
 
 **Important**: If the sentence contains special characters or commas, the sentences need to be double-quoted, as otherwise those commas will be interpreted as column separators.
 
@@ -240,7 +259,7 @@ Metrics from the Machine Translation field require a (gold standard) reference t
 
 To calculate the metrics you selected,
 you need to run the calculation script
-using `uv run src/03_calculate_metrics.py`
+using `uv run src/04_calculate_metrics.py`
 when you are inside the `evaluation` directory.
 
 The script will read the content of the `models.csv` and `metrics.csv` file

@@ -11,6 +11,7 @@ from llama_cpp import (
 from tqdm import tqdm
 
 from model import Model, ModelService
+from preprocess import PreprocessService
 from utility import (
   ConfigurationService,
   DateService,
@@ -122,7 +123,7 @@ class GenerationService:
 
   @classmethod
   def read_source_file(cls) -> List[str]:
-    filename = cls._get_source_filepath()
+    filename = PreprocessService.get_source_filepath()
     try:
       sources = FileService.from_csv_to_string_list(filename)
       LoggingService.info(f"In total {len(sources)} sentences were found in the sources.")
@@ -169,10 +170,6 @@ class GenerationService:
     predictions_directory = cls.get_predictions_directory()
     timestamp_part = f"/{FileService.sanitize_file_name(timestamp)}" if timestamp is not None else ""
     return f"{predictions_directory}{timestamp_part}/{model_filename}.csv" if model_filename else f"{predictions_directory}{timestamp_part}/"
-
-  @staticmethod
-  def _get_source_filepath() -> str:
-    return f"{ConfigurationService.get_data_directory()}/sources.csv"
 
   @staticmethod
   def _get_system_prompt_filepath() -> str:

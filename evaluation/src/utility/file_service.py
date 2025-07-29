@@ -2,7 +2,7 @@ from ast import literal_eval
 from csv import QUOTE_ALL, DictReader, DictWriter, reader, writer
 from json import JSONDecodeError, loads
 from os import listdir, makedirs, path, remove
-from typing import Any, List, LiteralString, Protocol, Type, TypeVar, cast
+from typing import Any, List, LiteralString, Optional, Protocol, Type, TypeVar, cast
 
 from pathvalidate import sanitize_filename
 
@@ -19,10 +19,14 @@ class FileService:
     raise TypeError("This utility class cannot be instantiated.")
 
   @classmethod
-  def from_csv(cls, item_type: Type[T], filepath: str) -> List[T]:
+  def from_csv(cls, item_type: Type[T], filepath: str, column_name: Optional[str] = None) -> List[T]:
     abs_path: str = cls.get_absolute_path(filepath)
     with open(abs_path, mode="r", newline="", encoding="utf-8") as csvfile:
       dict_reader = DictReader(csvfile)
+
+      if column_name:
+        return [cast(T, row[column_name])  for row in dict_reader if column_name in row]
+
       instances = []
       for row in dict_reader:
         processed_row = cls._process_row(row)
@@ -44,27 +48,40 @@ class FileService:
       return file.read()
 
   @classmethod
-  def to_csv(cls, rows: List[S], filepath: str) -> None:
+  def to_csv(cls, rows: List[S], filepath: str, simple_list: bool = False) -> None:
     if len(rows) == 0:
       raise ValueError("Cannot write empty row list to CSV")
 
-    fieldnames = set()
-    for row in rows:
-      fieldnames.update(row.to_dict().keys())
-    fieldnames = sorted(fieldnames)
     abs_path: str = cls.get_absolute_path(filepath)
     makedirs(path.dirname(abs_path), exist_ok=True)
+
     with open(abs_path, mode='w', newline='') as csvfile:
-      dict_writer = DictWriter(csvfile, fieldnames=fieldnames, quoting=QUOTE_ALL)
-      dict_writer.writeheader()
-      for row in rows:
-        dict_writer.writerow(row.to_dict())
+      if simple_list:
+        csv_writer = writer(csvfile, quoting=QUOTE_ALL)
+        for item in rows:
+          csv_writer.writerow([item])  # Wrap in a list to treat as a row
+      else:
+        fieldnames = set()
+        for row in rows:
+          fieldnames.update(row.to_dict().keys())
+        fieldnames = sorted(fieldnames)
+        dict_writer = DictWriter(csvfile, fieldnames=fieldnames, quoting=QUOTE_ALL)
+        dict_writer.writeheader()
+        for row in rows:
+          dict_writer.writerow(row.to_dict())
 
   @classmethod
   def to_file(cls, filepath: str, content: str) -> None:
     abs_path: str = cls.get_absolute_path(filepath)
     makedirs(path.dirname(abs_path), exist_ok=True)
     with open(abs_path, mode="w", newline="", encoding='utf-8') as file:
+      file.write(content)
+
+  @classmethod
+  def to_file_bytes(cls, filepath: str, content: bytes) -> None:
+    abs_path: str = cls.get_absolute_path(filepath)
+    makedirs(path.dirname(abs_path), exist_ok=True)
+    with open(abs_path, mode="wb") as file:
       file.write(content)
 
   @classmethod
