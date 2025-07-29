@@ -25,7 +25,7 @@ class FileService:
       dict_reader = DictReader(csvfile)
 
       if column_name:
-        return [row[column_name] for row in dict_reader if column_name in row]
+        return [cast(T, row[column_name])  for row in dict_reader if column_name in row]
 
       instances = []
       for row in dict_reader:
