@@ -27,8 +27,10 @@ class FileService:
     # Replace pandas nan With None
     df = df.astype(object).where(df.notna(), None)
 
-    if column_name:
-      return [cast(T, val) for val in df.get(column_name, [])]
+    if column_name in df.columns:
+      return [cast(T, val) for val in df[column_name]]
+    else:
+      return []
 
     instances = []
     for _, row in df.iterrows():
