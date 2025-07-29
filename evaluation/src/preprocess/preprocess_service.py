@@ -24,20 +24,26 @@ class PreprocessService:
     return download_url
 
   @classmethod
-  def read_columns(cls) -> Tuple[str, str]:
+  def read_column_data(cls) -> Tuple[str, str, str]:
     source_column = cls._get_sources_column_name()
     reference_column = cls._get_references_column_name()
+    column_separator = cls._get_column_separator()
     LoggingService.info(f"Configured source column name as: {source_column}")
     LoggingService.info(f"Configured reference column name as: {reference_column}")
-    return source_column, reference_column
+    LoggingService.info(f"Configured column separator as: {column_separator}")
+    return source_column, reference_column, column_separator
 
   @classmethod
-  def get_data(cls, download_url: str, columns: Tuple[str, str]) -> None:
+  def get_data(cls, download_url: str, column_data: Tuple[str, str, str]) -> None:
     if download_url != "":
       cls._download_file(download_url)
 
-    sources = FileService.from_csv(str, cls._get_data_filepath(), columns[0])
-    references = FileService.from_csv(str, cls._get_data_filepath(), columns[1])
+    source_column_name = column_data[0]
+    reference_column_name = column_data[1]
+    column_separator = column_data[2]
+
+    sources = FileService.from_csv(str, cls._get_data_filepath(), source_column_name, column_separator)
+    references = FileService.from_csv(str, cls._get_data_filepath(), reference_column_name, column_separator)
 
     FileService.to_csv(sources, cls.get_source_filepath(), simple_list=True)
     FileService.to_csv(references, cls.get_reference_filepath(), simple_list=True)
@@ -70,6 +76,11 @@ class PreprocessService:
   def _get_references_column_name() -> str:
     column_name: str | None = ConfigurationService.get_environment_variable("REFERENCES_COLUMN_NAME")
     return column_name if column_name is not None else "reference"
+
+  @staticmethod
+  def _get_column_separator() -> str:
+    column_separator: str | None = ConfigurationService.get_environment_variable("COLUMN_SEPARATOR")
+    return column_separator if column_separator is not None else ","
 
   @staticmethod
   def _get_data_filepath() -> str:
