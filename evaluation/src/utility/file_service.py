@@ -20,21 +20,19 @@ class FileService:
     raise TypeError("This utility class cannot be instantiated.")
 
   @classmethod
-  def from_csv(cls, item_type: Type[T], filepath: str, column_name: Optional[str] = None) -> List[T]:
+  def from_csv(cls, item_type: Type[T], filepath: str, column_name: Optional[str] = None, separator: str = ",") -> List[T]:
     abs_path: str = cls.get_absolute_path(filepath)
-    df = read_csv(abs_path, sep=",", encoding="utf-8")
+    df = read_csv(abs_path, sep=separator, encoding="utf-8")
 
-    # Replace pandas nan With None
+    # Replace pandas nan with None
     df = df.astype(object).where(df.notna(), None)
 
-    if column_name in df.columns:
+    if column_name:
       return [cast(T, val) for val in df[column_name]]
-    else:
-      return []
 
     instances = []
-    for _, row in df.iterrows():
-      processed_row = cls._process_row(row.to_dict())
+    for row in df.to_dict(orient="records"):
+      processed_row = cls._process_row(row)
       instance = item_type(**processed_row)
       instances.append(instance)
     return instances

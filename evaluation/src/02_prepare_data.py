@@ -8,7 +8,7 @@ def get_data() -> None:
   if download_url is None:
     return
 
-  columns = LoggingService.safe_exec_and_confirm(PreprocessService.read_columns, "Are you sure you want to use those columns?")
+  columns = LoggingService.safe_exec_and_confirm(PreprocessService.read_column_data, "Are you sure you want to use this column configuration?")
   if columns is None:
     return
 
