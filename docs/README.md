@@ -165,6 +165,7 @@ Relevant environment variables for the `config.env` file are the following:
 
 * `SOURCES_COLUMN_NAME` (optional): Name of the column in the `.csv` file to use as sources. If not set, will default to `source`.
 * `REFERENCES_COLUMN_NAME` (optional): Name of the column in the `.csv` file to use as references. If not set, will default to `reference`.
+* `COLUMN_SEPARATOR` (optional): Configures the CSV selector character used inside the used data source `.csv` file. If not set, will expect the file to use `,` as a separator.
 * `DOWNLOAD_URL` (optional): Download URL for the `.csv` file to use as data source
 
 **Note**: If the variable `DOWNLOAD_URL` is not set, the script will try to load the data from an existing file in `data/data.csv`.
