@@ -1,5 +1,7 @@
-from preprocess import PreprocessService
 from utility import ConfigurationService, KeyboardInterruptError, LoggingService
+
+ConfigurationService.load_environment_configuration()
+from preprocess import PreprocessService
 
 
 def get_data() -> None:
@@ -19,5 +21,4 @@ def get_data() -> None:
     return
 
 if __name__ == "__main__":
-    ConfigurationService.load_environment_configuration()
     get_data()
