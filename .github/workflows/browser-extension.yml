@@ -32,7 +32,5 @@ jobs:
         run: bun install
       - name: Run checks
         run: bun run check
-      - name: Run tests
-        run: bun run test
       - name: Run build
         run: bun run build

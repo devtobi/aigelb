@@ -1,16 +1,13 @@
 import { defineBackground } from "#imports";
-import { onMessage } from "webext-bridge/background";
 
-import { TestEventName } from "@/types/TestEvent.ts";
+import { onMessage } from "@/utility/messaging";
 
 export default defineBackground({
   type: "module",
   main() {
-    onMessage(TestEventName, (bridgeMessage) => {
-      console.debug(bridgeMessage);
-      return {
-        length: bridgeMessage.data.message.length,
-      };
+    onMessage("testEvent", (message) => {
+      console.debug(`BACKGROUND - Received: ${message.data}`);
+      return message.data.length;
     });
   },
 });

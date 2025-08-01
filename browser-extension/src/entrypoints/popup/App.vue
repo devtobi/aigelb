@@ -14,18 +14,11 @@
 import { mdiAccessPoint } from "@mdi/js";
 import { i18n } from "#i18n";
 import { VApp, VBtn, VContainer } from "vuetify/components";
-import { sendMessage } from "webext-bridge/popup";
 
-import { TestEventName } from "@/types/TestEvent.ts";
+import { sendMessage } from "@/utility/messaging.ts";
 
 async function sendMessageTest() {
-  const response = await sendMessage(
-    TestEventName,
-    {
-      message: "hello world",
-    },
-    "background"
-  );
-  console.debug(response);
+  const length = await sendMessage("testEvent", "hello world");
+  console.debug(`POPUP - Received: ${length}`);
 }
 </script>
