@@ -1,10 +1,12 @@
-from generation import GenerationService
-from model import ModelService
 from utility import (
   ConfigurationService,
   KeyboardInterruptError,
   LoggingService,
 )
+
+ConfigurationService.load_environment_configuration()
+from generation import GenerationService
+from model import ModelService
 
 
 def run_inference():
@@ -31,5 +33,4 @@ def run_inference():
     return
 
 if __name__ == "__main__":
-    ConfigurationService.load_environment_configuration()
     run_inference()

@@ -12,5 +12,6 @@ ignore = [
     "C901",  # too complex
     "W191",  # indentation contains tabs
     "D401",  # imperative mood
-    "E501"   # line too long
+    "E501",  # line too long
+    "E402"   # module level import not at top of file (due to env loading)
 ]
