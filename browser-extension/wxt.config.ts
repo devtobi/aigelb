@@ -1,3 +1,5 @@
+import type { WxtViteConfig } from "wxt";
+
 import UnpluginFontsPlugin from "unplugin-fonts/vite";
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import { defineConfig } from "wxt";
@@ -49,22 +51,23 @@ export default defineConfig({
   autoIcons: {
     grayscaleOnDevelopment: false,
   },
-  vite: () => ({
-    plugins: [
-      vuetify({
-        autoImport: false,
-      }),
-      UnpluginFontsPlugin({
-        fontsource: {
-          families: [
-            {
-              name: "Roboto",
-              weights: [100, 300, 400, 500, 700, 900],
-              subset: "latin",
-            },
-          ],
-        },
-      }),
-    ],
-  }),
+  vite: () =>
+    ({
+      plugins: [
+        vuetify({
+          autoImport: false,
+        }),
+        UnpluginFontsPlugin({
+          fontsource: {
+            families: [
+              {
+                name: "Roboto",
+                weights: [100, 300, 400, 500, 700, 900],
+                subset: "latin",
+              },
+            ],
+          },
+        }),
+      ],
+    }) as WxtViteConfig,
 });

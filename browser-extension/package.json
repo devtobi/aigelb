@@ -29,14 +29,13 @@
   },
   "dependencies": {
     "@fontsource/roboto": "5.2.6",
+    "@webext-core/messaging": "2.3.0",
     "vue": "3.5.18",
-    "vuetify": "3.9.2",
-    "webext-bridge": "6.0.1"
+    "vuetify": "3.9.2"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.5.1",
     "@mdi/js": "7.4.47",
-    "@vitest/coverage-v8": "3.2.4",
     "@vue/eslint-config-prettier": "10.2.0",
     "@vue/eslint-config-typescript": "14.6.0",
     "@vue/tsconfig": "0.7.0",
@@ -51,7 +50,6 @@
     "typescript": "5.8.3",
     "unplugin-fonts": "1.4.0",
     "vite-plugin-vuetify": "2.1.1",
-    "vitest": "3.2.4",
     "vue-tsc": "3.0.4",
     "wxt": "0.20.7"
   },
