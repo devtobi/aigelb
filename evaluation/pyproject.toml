@@ -12,7 +12,7 @@ keywords = [ "llm", "evaluation", "metrics", "nlp", "mt", "easylanguage" ]
 requires-python = "==3.13.5"
 dependencies = [
     "dotenv (==0.9.9)",
-    "huggingface_hub (==0.33.5)",
+    "huggingface_hub (==0.34.3)",
     "llama-cpp-python (==0.3.14)",
     "evaluate (==0.4.5)",
     "textstat (==0.7.8)",
