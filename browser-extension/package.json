@@ -14,8 +14,6 @@
     "lint:check": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "vue-tsc --build --noEmit",
-    "test": "vitest run",
-    "test:coverage": "vitest run --coverage",
     "build": "concurrently --kill-others-on-fail --group bun:build:chrome bun:build:firefox bun:build:safari",
     "build:chrome": "wxt build -b chrome",
     "build:firefox": "wxt build -b firefox",
