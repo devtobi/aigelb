@@ -41,7 +41,7 @@
     "@wxt-dev/i18n": "0.2.4",
     "@wxt-dev/module-vue": "1.0.2",
     "concurrently": "9.2.0",
-    "eslint": "9.32.0",
+    "eslint": "9.33.0",
     "eslint-plugin-vue": "10.4.0",
     "prettier": "3.6.2",
     "serve": "14.2.4",
