@@ -118,7 +118,7 @@ class CalculationService:
       try:
         return FileService.from_csv_to_string_list(filepath)
       except Exception as exc:
-        raise CalculationPredictionsFileNotFoundError(f"The references file '{filename}' does not exist.") from exc
+        raise CalculationPredictionsFileNotFoundError(f"The predictions file '{filename}' does not exist.") from exc
 
     @staticmethod
     def _calculate_no_references(texts: List[str], func: Callable, metric: Metric) -> float:

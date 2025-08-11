@@ -1,7 +1,13 @@
+from utility import (
+  ConfigurationService,
+  KeyboardInterruptError,
+  LoggingService,
+)
+
+ConfigurationService.load_environment_configuration()
 from calculation import CalculationService
 from metric import MetricService
 from model import ModelService
-from utility import KeyboardInterruptError, LoggingService
 
 
 def calculate_metrics():
