@@ -48,7 +48,7 @@
     "typescript": "5.9.2",
     "unplugin-fonts": "1.4.0",
     "vite-plugin-vuetify": "2.1.2",
-    "vue-tsc": "3.0.4",
+    "vue-tsc": "3.0.5",
     "wxt": "0.20.7"
   },
   "trustedDependencies": [
