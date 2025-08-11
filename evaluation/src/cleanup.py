@@ -1,7 +1,8 @@
+from utility import ConfigurationService, LoggingService
 
+ConfigurationService.load_environment_configuration()
 
 from model import ModelService
-from utility import LoggingService
 
 
 def clear_cache() -> None:
