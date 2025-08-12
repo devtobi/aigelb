@@ -49,7 +49,7 @@ export default defineConfig({
     },
   },
   autoIcons: {
-    grayscaleOnDevelopment: false,
+    developmentIndicator: "overlay",
   },
   vite: () =>
     ({
