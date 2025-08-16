@@ -295,7 +295,7 @@ requires-dist = [
     { name = "evaluate", specifier = "==0.4.5" },
     { name = "huggingface-hub", specifier = "==0.34.4" },
     { name = "lexicalrichness", specifier = "==0.5.1" },
-    { name = "llama-cpp-python", specifier = "==0.3.15" },
+    { name = "llama-cpp-python", specifier = "==0.3.16" },
     { name = "pandas", specifier = "==2.3.1" },
     { name = "pathvalidate", specifier = "==3.3.1" },
     { name = "textstat", specifier = "==0.7.8" },
@@ -526,7 +526,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/d6/4a/f67555e6cce1f3c44
 
 [[package]]
 name = "llama-cpp-python"
-version = "0.3.15"
+version = "0.3.16"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "diskcache" },
@@ -534,7 +534,7 @@ dependencies = [
     { name = "numpy" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ce/fa/8917d9655d105f7675106a6076c489ed23d79d42b79bad56a444c9458735/llama_cpp_python-0.3.15.tar.gz", hash = "sha256:a2cf42935a9ff9e55804db01d6827b4862d7ab10ae72ea8e38b7d180d2c640f3", size = 50649779, upload-time = "2025-08-07T13:56:54.856Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e4/b4/c8cd17629ced0b9644a71d399a91145aedef109c0333443bef015e45b704/llama_cpp_python-0.3.16.tar.gz", hash = "sha256:34ed0f9bd9431af045bb63d9324ae620ad0536653740e9bb163a2e1fcb973be6", size = 50688636, upload-time = "2025-08-15T04:58:29.212Z" }
 
 [[package]]
 name = "markupsafe"
