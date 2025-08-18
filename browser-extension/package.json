@@ -29,7 +29,7 @@
     "@fontsource/roboto": "5.2.6",
     "@webext-core/messaging": "2.3.0",
     "vue": "3.5.18",
-    "vuetify": "3.9.4"
+    "vuetify": "3.9.5"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.6.2",
