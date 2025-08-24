@@ -6,6 +6,14 @@ import "unfonts.css";
 import "vuetify/styles";
 import "@/styles/override.css";
 
+import { de, en } from "vuetify/locale";
+
+import { useBrowser } from "@/composables/useBrowser.ts";
+import { mapLangToVuetify } from "@/utility/i18n.ts";
+
+const { getUILanguage } = useBrowser();
+const uiLanguage = mapLangToVuetify(getUILanguage());
+
 export default createVuetify({
   icons: {
     defaultSet: "mdi",
@@ -16,5 +24,10 @@ export default createVuetify({
   },
   theme: {
     defaultTheme: "system",
+  },
+  locale: {
+    locale: uiLanguage,
+    fallback: "de",
+    messages: { de, en },
   },
 });

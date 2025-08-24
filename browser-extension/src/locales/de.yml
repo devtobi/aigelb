@@ -1,2 +1,8 @@
-extDescription: Browsererweiterung zum Lesen des Internets in Leichter Sprache mit Hilfe von LLMs
-helloWorld: Hallo Welt!
+manifestName: AIGELB - AI German Easy Language Browsing (KI-gestütztes Browsen in deutscher Leichter Sprache)
+manifestDescription: Browsererweiterung zum Lesen des Internets in Leichter Sprache mit Hilfe von LLMs
+common:
+  appBar:
+    versionPrefix: "Version"
+onboarding:
+  header:
+    subTitle: AI German Easy Language Browsing (KI-gestütztes Browsen in deutscher Leichter Sprache)

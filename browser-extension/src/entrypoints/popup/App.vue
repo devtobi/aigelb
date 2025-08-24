@@ -4,7 +4,7 @@
       <v-btn
         :prepend-icon="mdiAccessPoint"
         @click="sendMessageTest"
-        >{{ i18n.t("helloWorld") }}</v-btn
+        >Message test</v-btn
       >
     </v-container>
   </v-app>
@@ -12,7 +12,6 @@
 
 <script setup lang="ts">
 import { mdiAccessPoint } from "@mdi/js";
-import { i18n } from "#i18n";
 import { VApp, VBtn, VContainer } from "vuetify/components";
 
 import { sendMessage } from "@/utility/messaging.ts";

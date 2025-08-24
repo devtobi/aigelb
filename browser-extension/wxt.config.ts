@@ -21,9 +21,9 @@ export default defineConfig({
             email: "devtobi - Tobias Stadler",
           }
         : "devtobi - Tobias Stadler",
-    name: "AIGELB - AI German Easy Language Browsing",
+    name: "__MSG_manifestName__",
     short_name: "AIGELB",
-    description: "__MSG_extDescription__",
+    description: "__MSG_manifestDescription__",
     homepage_url: "https://github.com/devtobi/aigelb",
     default_locale: "de",
     permissions: [],

@@ -1,2 +1,8 @@
-extDescription: Browser extension to read the web in German Easy Language (Leichte Sprache) using the power of LLMs
-helloWorld: Hello world!
+manifestName: AIGELB (AI German Easy Language Browsing)
+manifestDescription: Browser extension to read the web in German Easy Language (Leichte Sprache) using the power of LLMs
+common:
+  appBar:
+    versionPrefix: "Version"
+onboarding:
+  header:
+    subTitle: AI German Easy Language Browsing
