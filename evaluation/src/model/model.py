@@ -1,5 +1,5 @@
-from dataclasses import dataclass
-from typing import Iterator, Tuple, Union
+from dataclasses import dataclass, field
+from typing import Iterator, Optional, Tuple, Union
 
 
 @dataclass
@@ -7,7 +7,7 @@ class Model:
 
     _repo_id: str
     _gguf_filename: str
-    _gated: bool = False
+    _gated: Optional[bool] = field(default=None)
 
     def __post_init__(self):
       if self._gated is None:
@@ -23,7 +23,7 @@ class Model:
 
     @property
     def gated(self) -> bool:
-      return self._gated
+      return self._gated is True
 
     @property
     def name(self) -> str:
@@ -36,6 +36,6 @@ class Model:
         return f"{self._repo_id}: {self._gguf_filename}"
 
     def _as_tuple(self) -> Tuple[str, str, bool]:
-      return self._repo_id, self._gguf_filename, self._gated
+      return self._repo_id, self._gguf_filename, self.gated
 
 
