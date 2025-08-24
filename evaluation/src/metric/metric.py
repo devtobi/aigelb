@@ -1,12 +1,12 @@
 from dataclasses import dataclass, field
-from typing import Iterator, Tuple, Union
+from typing import Iterator, Optional, Tuple, Union
 
 
 @dataclass
 class Metric:
 
     _name: str
-    _kwargs: dict[str, str | int | bool] = field(default_factory=lambda: {})
+    _kwargs: Optional[dict[str, str | int | bool]] = field(default=None)
 
     def __post_init__(self):
       if self._kwargs is None:
@@ -18,7 +18,7 @@ class Metric:
 
     @property
     def kwargs(self) -> dict[str, str | int | bool]:
-      return self._kwargs
+      return self._kwargs or {}
 
     def __iter__(self) -> Iterator[Union[str, dict[str, str | int | bool]]]:
         return iter(self._as_tuple())
@@ -29,4 +29,4 @@ class Metric:
         )
 
     def _as_tuple(self) -> Tuple[str, dict[str, str | int | bool]]:
-      return self._name, self._kwargs
+      return self._name, self.kwargs
