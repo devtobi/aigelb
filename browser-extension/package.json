@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@fontsource/roboto": "5.2.6",
+    "@vueuse/core": "13.7.0",
     "@webext-core/messaging": "2.3.0",
     "vue": "3.5.18",
     "vuetify": "3.9.5"
