@@ -10,7 +10,7 @@ export function useBrowser() {
   }
 
   function getUILanguage() {
-    return browser.i18n.getUILanguage();
+    return browser.i18n?.getUILanguage();
   }
 
   return {
