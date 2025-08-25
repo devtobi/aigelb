@@ -1,8 +1,8 @@
-manifestName: AIGELB - AI German Easy Language Browsing (KI-gestütztes Browsen in deutscher Leichter Sprache)
+manifestName: AIGELB (KI-gestütztes Browsen in Leichter Sprache)
 manifestDescription: Browsererweiterung zum Lesen des Internets in Leichter Sprache mit Hilfe von LLMs
 common:
   appBar:
-    versionPrefix: "Version"
+    versionPrefix: Version
 onboarding:
   header:
     subTitle: AI German Easy Language Browsing (KI-gestütztes Browsen in deutscher Leichter Sprache)
