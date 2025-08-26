@@ -42,27 +42,13 @@
 
         <!-- Setup Instructions -->
         <v-card
-          title="Schritte zur Einrichtung"
+          title="Ersteinrichtung"
           :prepend-icon="mdiCog"
           class="mb-8 pa-3"
           elevation="3"
         >
           <v-card-text>
-            <ol class="list-decimal pl-6">
-              <li>
-                Download and install the AIGELB extension from the official
-                store.
-              </li>
-              <li>
-                Pin the extension to your browser toolbar for quick access.
-              </li>
-              <li>Open a German webpage and click the AIGELB icon.</li>
-              <li>Choose “Translate to Easy Language.”</li>
-              <li>
-                The page will be automatically simplified for better
-                readability.
-              </li>
-            </ol>
+            <setup-stepper />
           </v-card-text>
         </v-card>
 
@@ -196,6 +182,7 @@ import {
 import CardLink from "@/components/common/CardLink.vue";
 import TheAppBar from "@/components/common/TheAppBar.vue";
 import TheAppIcon from "@/components/common/TheAppIcon.vue";
+import SetupStepper from "@/components/onboarding/SetupStepper.vue";
 import { useBrowser } from "@/composables/useBrowser.ts";
 
 const { openOptionsPage, closeWindow } = useBrowser();
