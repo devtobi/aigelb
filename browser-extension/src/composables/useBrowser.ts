@@ -13,9 +13,18 @@ export function useBrowser() {
     return browser.i18n?.getUILanguage();
   }
 
+  async function isPinnedInToolbar() {
+    const userSettings = browser.action?.getUserSettings
+      ? await browser.action?.getUserSettings()
+      : undefined;
+    if (!userSettings) return true;
+    return !!userSettings.isOnToolbar;
+  }
+
   return {
     openOptionsPage,
     closeWindow,
     getUILanguage,
+    isPinnedInToolbar,
   };
 }
