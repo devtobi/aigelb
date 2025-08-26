@@ -35,5 +35,6 @@ export async function downloadModel(ollamaPullUrl: string) {
     console.debug(
       `Downloading model from ${ollamaPullUrl} failed: ${error instanceof Error ? error.message : String(error)}`
     );
+    return null;
   }
 }
