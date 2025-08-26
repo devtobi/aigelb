@@ -68,6 +68,7 @@
             :disabled="isModelAvailable === true"
             :repo="LLM_HUGGINGFACE_REPO"
             :file="LLM_HUGGINGFACE_FILE"
+            @download-completed="checkModelAvailable"
           />
         </template>
       </v-stepper-vertical-item>

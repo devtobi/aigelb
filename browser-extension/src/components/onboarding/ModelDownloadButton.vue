@@ -1,27 +1,34 @@
 <template>
   <v-btn
+    :loading="downloading"
     :prepend-icon="mdiDownload"
     variant="tonal"
     :text="downloadText"
     :disabled="disabled"
+    @click="downloadModel"
   >
     <template #loader>
-      <v-progress-circular
-        class="mt-3"
-        :model-value="downloadProgressPercent"
-        color="warning"
-        indeterminate
-      />
+      <div>
+        <v-progress-circular
+          :model-value="downloadProgressPercent"
+          size="20"
+          class="mr-2"
+          color="warning"
+        />
+        <span>{{ downloadProgress }}</span>
+      </div>
     </template>
   </v-btn>
 </template>
 <script setup lang="ts">
+import type { RemoveListenerCallback } from "@webext-core/messaging";
+
 import { mdiDownload } from "@mdi/js";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { VBtn, VProgressCircular } from "vuetify/components";
 
-import { convertFileSize } from "@/utility/conversion.ts";
-import { sendMessage } from "@/utility/messaging.ts";
+import { convertFileSize, convertToOllamaUrl } from "@/utility/conversion.ts";
+import { onMessage, sendMessage } from "@/utility/messaging.ts";
 
 const props = defineProps<{
   disabled: boolean;
@@ -30,7 +37,12 @@ const props = defineProps<{
 }>();
 
 const fileSize = ref<number | null>(0);
+const downloading = ref<boolean>(false);
 const downloadProgressPercent = ref<number>(0);
+const downloadProgress = computed(
+  () => `${downloadProgressPercent.value.toFixed(1)}%`
+);
+const removeListenerCallBack = ref<RemoveListenerCallback>();
 
 onMounted(async () => {
   fileSize.value = await sendMessage("getModelSize", {
@@ -45,4 +57,42 @@ const downloadText = computed(() => {
     : "";
   return `Modell herunterladen${fileSizeReadable}`;
 });
+
+const emit = defineEmits<{
+  downloadCompleted: [];
+}>();
+const ollamaPullUrl = computed(() =>
+  convertToOllamaUrl(props.repo, props.file)
+);
+async function downloadModel() {
+  downloadProgressPercent.value = 0;
+  downloading.value = true;
+  await sendMessage("downloadModel", ollamaPullUrl.value);
+}
+watch(
+  () => downloading.value,
+  (newDownloading) => {
+    if (downloading.value) {
+      if (removeListenerCallBack.value) {
+        resetListeners();
+      }
+      removeListenerCallBack.value = onMessage(
+        "downloadProgress",
+        (progress) => {
+          downloadProgressPercent.value = progress.data.percentage;
+          if (progress.data.status === "completed") {
+            emit("downloadCompleted");
+            downloading.value = false;
+          }
+        }
+      );
+    } else {
+      resetListeners();
+    }
+  }
+);
+function resetListeners() {
+  removeListenerCallBack.value?.();
+  removeListenerCallBack.value = undefined;
+}
 </script>

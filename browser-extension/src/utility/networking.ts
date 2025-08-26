@@ -1,7 +1,7 @@
 import { browser } from "wxt/browser";
 
 const RULE_ID_REMOVE_ORIGIN = 1;
-const URL_FILTER = /http:\/\/(localhost|127\.0\.0\.1):11434\//;
+const URL_FILTER = /https?:\/\/(localhost|127\.0\.0\.1):11434\//;
 
 export async function removeOrigin() {
   await browser.declarativeNetRequest.updateDynamicRules({
