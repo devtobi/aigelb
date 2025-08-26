@@ -27,7 +27,14 @@ export default defineConfig({
     homepage_url: "https://github.com/devtobi/aigelb",
     default_locale: "de",
     permissions: [],
-    host_permissions: [],
+    host_permissions: [
+      // Local Ollama URLs to connect to Ollama API
+      "http://127.0.0.1:11434/*",
+      "http://localhost:11434/*",
+      // HuggingFace URLs to allow metadata retrieval
+      "https://huggingface.co/*",
+      "https://hf.co/*",
+    ],
   }),
   webExt: {
     startUrls: ["http://localhost:8081"],
