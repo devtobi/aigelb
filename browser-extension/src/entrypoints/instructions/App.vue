@@ -2,165 +2,29 @@
   <v-app>
     <the-app-bar />
 
-    <v-main class="d-flex align-center justify-center">
+    <v-main>
       <v-container>
-        <!-- Header -->
-        <v-card
-          class="text-center mb-8 pa-3"
-          elevation="3"
-        >
-          <the-app-icon
-            class="mx-auto"
-            :size="128"
-          />
-          <v-card-title class="pt-0 text-h2 font-weight-bold"
-            >AIGELB</v-card-title
-          >
-          <v-card-text class="pb-4">
-            <p>
-              {{ i18n.t("instructions.header.subTitle") }}
-            </p>
-          </v-card-text>
-        </v-card>
-
-        <!-- About -->
-        <v-card
-          title="Über AIGELB"
-          :prepend-icon="mdiInformation"
-          class="mb-8 pa-3"
-          elevation="3"
-        >
-          <v-card-text>
-            <p>
-              AIGELB is a browser extension designed to improve accessibility by
-              simplifying German texts into <strong>Easy Language</strong>. This
-              makes web content more understandable for people with different
-              reading abilities.
-            </p>
-          </v-card-text>
-        </v-card>
-
-        <!-- Setup Instructions -->
-        <v-card
-          title="Ersteinrichtung"
-          :prepend-icon="mdiCog"
-          class="mb-8 pa-3"
-          elevation="3"
-        >
-          <v-card-text>
-            <setup-stepper />
-          </v-card-text>
-        </v-card>
-
-        <!-- Additional Notes -->
-        <v-card
-          title="Wichtige Hinweise"
-          :prepend-icon="mdiAlert"
-          color="error"
-          class="mb-8 pa-3"
-          elevation="3"
-        >
-          <v-card-text>
-            <p>
-              AIGELB is currently in an
-              <strong>early development stage</strong>. Some translations may be
-              experimental or incomplete.
-            </p>
-            <p>
-              The project originates from accessibility research in
-              <strong>German Easy Language</strong> and aims to help make the
-              web more inclusive.
-            </p>
-          </v-card-text>
-        </v-card>
-
-        <!-- Links -->
-        <v-expansion-panels class="mb-8">
-          <v-expansion-panel elevation="3">
-            <template #title>
-              <h2 class="text-h6">Weiterführende Links</h2>
-            </template>
-            <template #text>
-              <v-row>
-                <v-col
-                  cols="12"
-                  md="6"
-                >
-                  <card-link
-                    title="AIGELB auf GitHub"
-                    subtitle="Verfolge die Entwicklung von AIGELB"
-                    link="https://github.com/devtobi/aigelb/"
-                    :icon="mdiGithub"
-                  />
-                </v-col>
-                <v-col
-                  cols="12"
-                  md="6"
-                >
-                  <card-link
-                    title="Wissenschaftliche Arbeit zu AIGELB"
-                    subtitle="Erscheint in 2026"
-                    :icon="mdiSchool"
-                  />
-                </v-col>
-              </v-row>
-            </template>
-          </v-expansion-panel>
-        </v-expansion-panels>
-
-        <v-row>
-          <v-col>
-            <v-btn
-              @click="closeWindow"
-              size="large"
-              block
-              color="warning"
-              :prepend-icon="mdiClose"
-            >
-              Anleitung schließen
-              <v-tooltip
-                activator="parent"
-                location="bottom"
-                >Die Anleitung kann jederzeit wieder über das AIGELB-Symbol in
-                der Browserleiste geöffnet werden.</v-tooltip
-              >
-            </v-btn>
-          </v-col>
-        </v-row>
+        <header-card class="mb-8" />
+        <about-card class="mb-8" />
+        <important-notes-card class="mb-8" />
+        <setup-card class="mb-8" />
+        <links-panel class="mb-8" />
+        <close-button @close="closeWindow" />
       </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script setup lang="ts">
-import {
-  mdiAlert,
-  mdiClose,
-  mdiCog,
-  mdiGithub,
-  mdiInformation,
-  mdiSchool,
-} from "@mdi/js";
-import { i18n } from "#i18n";
-import {
-  VApp,
-  VBtn,
-  VCard,
-  VCardText,
-  VCardTitle,
-  VCol,
-  VContainer,
-  VExpansionPanel,
-  VExpansionPanels,
-  VMain,
-  VRow,
-  VTooltip,
-} from "vuetify/components";
+import { VApp, VContainer, VMain } from "vuetify/components";
 
-import CardLink from "@/components/common/CardLink.vue";
 import TheAppBar from "@/components/common/TheAppBar.vue";
-import TheAppIcon from "@/components/common/TheAppIcon.vue";
-import SetupStepper from "@/components/instructions/SetupStepper.vue";
+import AboutCard from "@/components/instructions/AboutCard.vue";
+import CloseButton from "@/components/instructions/CloseButton.vue";
+import HeaderCard from "@/components/instructions/HeaderCard.vue";
+import ImportantNotesCard from "@/components/instructions/ImportantNotesCard.vue";
+import LinksPanel from "@/components/instructions/LinksPanel.vue";
+import SetupCard from "@/components/instructions/SetupCard.vue";
 import { useBrowser } from "@/composables/useBrowser.ts";
 
 const { closeWindow } = useBrowser();
