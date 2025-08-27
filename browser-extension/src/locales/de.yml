@@ -53,3 +53,6 @@ instructions:
     paper:
       title: Wissenschaftliche Arbeit hinter AIGELB
       subTitle: Erscheint in 2026
+  closeButton:
+    text: Anleitung schließen
+    tooltip: Die Anleitung kann jederzeit wieder über das AIGELB-Symbol in der Browserleiste geöffnet werden.

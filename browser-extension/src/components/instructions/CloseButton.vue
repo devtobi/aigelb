@@ -6,18 +6,19 @@
     color="warning"
     :prepend-icon="mdiClose"
   >
-    Anleitung schließen
+    {{ i18n.t("instructions.closeButton.text") }}
     <v-tooltip
       activator="parent"
       location="bottom"
-      >Die Anleitung kann jederzeit wieder über das AIGELB-Symbol in der
-      Browserleiste geöffnet werden.</v-tooltip
     >
+      {{ i18n.t("instructions.closeButton.tooltip") }}
+    </v-tooltip>
   </v-btn>
 </template>
 
 <script setup lang="ts">
 import { mdiClose } from "@mdi/js";
+import { i18n } from "#i18n";
 import { VBtn, VTooltip } from "vuetify/components";
 
 const emit = defineEmits<{
