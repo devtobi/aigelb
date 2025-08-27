@@ -109,29 +109,7 @@
         </v-expansion-panels>
 
         <v-row>
-          <v-col
-            cols="12"
-            md="6"
-          >
-            <v-btn
-              size="large"
-              block
-              :prepend-icon="mdiCog"
-              @click="openOptionsPage"
-            >
-              Optionen öffnen
-              <v-tooltip
-                activator="parent"
-                location="bottom"
-                >Die Optionen können auch über das AIGELB-Symbol in der
-                Browserleiste geöffnet werden.</v-tooltip
-              >
-            </v-btn>
-          </v-col>
-          <v-col
-            cols="12"
-            md="6"
-          >
+          <v-col>
             <v-btn
               @click="closeWindow"
               size="large"
@@ -139,12 +117,12 @@
               color="warning"
               :prepend-icon="mdiClose"
             >
-              Informationsseite schließen
+              Anleitung schließen
               <v-tooltip
                 activator="parent"
                 location="bottom"
-                >Die Informationen können jederzeit wieder über das
-                AIGELB-Symbol in der Browserleiste geöffnet werden.</v-tooltip
+                >Die Anleitung kann jederzeit wieder über das AIGELB-Symbol in
+                der Browserleiste geöffnet werden.</v-tooltip
               >
             </v-btn>
           </v-col>
@@ -185,5 +163,5 @@ import TheAppIcon from "@/components/common/TheAppIcon.vue";
 import SetupStepper from "@/components/instructions/SetupStepper.vue";
 import { useBrowser } from "@/composables/useBrowser.ts";
 
-const { openOptionsPage, closeWindow } = useBrowser();
+const { closeWindow } = useBrowser();
 </script>

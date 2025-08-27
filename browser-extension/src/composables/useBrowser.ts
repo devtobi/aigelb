@@ -1,10 +1,6 @@
 import { browser } from "wxt/browser";
 
 export function useBrowser() {
-  function openOptionsPage() {
-    browser.runtime.openOptionsPage();
-  }
-
   function closeWindow() {
     window.close();
   }
@@ -22,7 +18,6 @@ export function useBrowser() {
   }
 
   return {
-    openOptionsPage,
     closeWindow,
     getUILanguage,
     isPinnedInToolbar,
