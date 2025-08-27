@@ -3,7 +3,8 @@ import { browser } from "wxt/browser";
 const RULE_ID_REMOVE_ORIGIN = 1;
 const URL_FILTER = /https?:\/\/(localhost|127\.0\.0\.1):11434\//;
 
-export async function removeOrigin() {
+export async function removeOriginUsingDeclarativeWebRequest() {
+  if (import.meta.env.FIREFOX) return;
   await browser.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: [RULE_ID_REMOVE_ORIGIN],
     addRules: [

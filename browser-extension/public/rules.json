@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": {
+      "type": "modifyHeaders",
+      "requestHeaders": [{ "header": "Origin", "operation": "remove" }]
+    },
+    "condition": {
+      "regexFilter": "^https?://(?:localhost|127\\.0\\.0\\.1):11434/.*",
+      "resourceTypes": ["xmlhttprequest"]
+    }
+  }
+]

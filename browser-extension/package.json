@@ -6,7 +6,6 @@
   "type": "module",
   "scripts": {
     "dev:chrome": "concurrently --kill-others-on-fail bun:webserver \"wxt -b chrome\"",
-    "dev:firefox": "concurrently --kill-others-on-fail bun:webserver \"wxt -b firefox\"",
     "check": "concurrently --kill-others-on-fail --group bun:format:check bun:lint:check bun:typecheck",
     "fix": "bun run format:fix && bun run lint:fix",
     "format:check": "prettier . --check",

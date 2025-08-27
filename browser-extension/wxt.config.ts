@@ -14,25 +14,20 @@ export default defineConfig({
   srcDir: "src",
   outDir: "dist",
   targetBrowsers: ["chrome", "firefox", "safari"],
-  manifest: {
+  manifest: ({ browser }) => ({
     name: "__MSG_manifestName__",
     short_name: "AIGELB",
     description: "__MSG_manifestDescription__",
     homepage_url: "https://github.com/devtobi/aigelb",
     default_locale: "de",
-    permissions: [
-      "declarativeNetRequest"
-    ],
-    // declarative_net_request: IS_FIREFOX ? { rule_resources: [{ id: 'ruleset_1', enabled: true, path: 'rules.json' }] } : undefined, // TODO
-    host_permissions: [
-      // Local Ollama URLs to connect to Ollama API
-      "http://127.0.0.1:11434/*",
-      "http://localhost:11434/*",
-      // HuggingFace URLs to allow metadata retrieval
-      "https://huggingface.co/*",
-      "https://hf.co/*",
-    ],
-  },
+    permissions: ["declarativeNetRequest"],
+    declarative_net_request: browser === "firefox" ? {
+      rule_resources: [
+        { id: "ruleset_1", enabled: true, path: "rules.json" },
+      ],
+    } : undefined,
+    host_permissions: ['*://*/*']
+  }),
   webExt: {
     startUrls: ["http://localhost:8081"],
   },

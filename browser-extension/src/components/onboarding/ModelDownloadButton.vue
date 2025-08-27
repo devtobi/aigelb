@@ -72,7 +72,7 @@ async function downloadModel() {
 watch(
   () => downloading.value,
   (newDownloading) => {
-    if (downloading.value) {
+    if (newDownloading) {
       if (removeListenerCallBack.value) {
         resetListeners();
       }
