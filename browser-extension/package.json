@@ -1,6 +1,6 @@
 {
   "name": "aigelb-browser-extension",
-  "description": "AI-based browser extension to read the web in German Easy Language (Leichte Sprache) using the power of LLMs",
+  "description": "AI-based browser extension to read the web in German Easy Language (Leichte Sprache) using the power of local AI models",
   "private": true,
   "version": "0.0.0",
   "type": "module",

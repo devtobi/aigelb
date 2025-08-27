@@ -1,5 +1,5 @@
 manifestName: AIGELB (AI German Easy Language Browsing)
-manifestDescription: Browser extension to read the web in German Easy Language (Leichte Sprache) using the power of LLMs
+manifestDescription: Browser extension to read the web in German Easy Language (Leichte Sprache) using the power of local AI models
 common:
   appBar:
     versionPrefix: Version
@@ -11,3 +11,7 @@ instructions:
     description: AIGELB is a browser extension designed to improve accessibility of text content by selectively simplifying German texts into Easy Language. This is achieved by the use of local AI models and thus preserves privacy. The use makes web content more understandable for people with certain disabilities and different reading levels.
     problem: The majority of German-language websites are written in standard language and are therefore inaccessible to many people. This extension is intended to serve as an assistive technology to make these websites more accessible and understandable. It serves as a temporary solution until website operators offer their content in Easy Language.
     background: This extension was developed as part of a master thesis at the 'Munich University of Applied Sciences'. Check the links at the bottom of this page for more information.
+  importantNotesCard:
+    title: Important Notes
+    description: AI-based translation and simplification of text (especially for Easy Language) is a complex and sensitive task. Please note that AI models are not perfect and may make mistakes. Therefore, the extension can not guarantee that the translated or simplified text is semantically correct and respects all rules of Easy Language. Use the extension with caution and validate the results with a human if possible. Especially for sensitive topics such as medical or financial information, the extension should not be used without a human's supervision of the generated content.
+    development: AIGELB is currently in an development stage. Some translations may be experimental or incomplete and the extension may not be fully functional. Additionally, bugs may occur. Please report any issues to the projects GitHub repository. You can find the link to the repository at the bottom of this page.
