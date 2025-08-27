@@ -1,12 +1,15 @@
 <template>
-  <v-stepper-vertical v-model="currentStep">
-    <template #default>
+  <v-stepper-vertical
+    v-model="currentStep"
+    ref="stepper"
+  >
+    <template #default="{ step }">
       <v-stepper-vertical-item
         :title="ollamaStepTitle"
         value="1"
         :complete="isOllamaAvailable"
         elevation="0"
-        :error="isOllamaAvailable === false"
+        :error="ollamaStepInteracted"
       >
         <p class="mb-3">
           Für die lokale Ausführung der KI-Modelle ist die Software Ollama
@@ -30,10 +33,10 @@
 
         <template #next="{ next }">
           <v-btn
-            :color="isOllamaAvailable === false ? 'error' : 'warning'"
-            @click="checkOllamaConnection(next)"
+            :color="ollamaStepInteracted ? 'error' : 'warning'"
+            @click="interact(step, checkOllamaConnection(next))"
           >
-            {{ isOllamaAvailable === false ? "Erneut versuchen" : "Weiter" }}
+            {{ ollamaStepInteracted ? "Erneut versuchen" : "Weiter" }}
           </v-btn>
         </template>
         <template v-slot:prev>
@@ -52,15 +55,15 @@
         value="2"
         elevation="0"
         :complete="isModelAvailable"
-        :error="isModelAvailable === false"
+        :error="modelStepInteracted"
       >
         <p>TODO</p>
         <template #next="{ next }">
           <v-btn
-            :color="isModelAvailable === false ? 'error' : 'warning'"
-            @click="checkModelAvailable(next)"
+            :color="modelStepInteracted ? 'error' : 'warning'"
+            @click="interact(step, checkModelAvailable(next))"
           >
-            {{ isModelAvailable === false ? "Erneut versuchen" : "Weiter" }}
+            {{ modelStepInteracted ? "Erneut versuchen" : "Weiter" }}
           </v-btn>
         </template>
         <template v-slot:prev>
@@ -90,7 +93,7 @@
         <template #next="{ next }">
           <v-btn
             color="warning"
-            @click="next"
+            @click="interact(step, next)"
           />
         </template>
         <template v-slot:prev />
@@ -120,7 +123,14 @@
 
 <script setup lang="ts">
 import { mdiDownload } from "@mdi/js";
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import {
+  computed,
+  onMounted,
+  onUnmounted,
+  ref,
+  useTemplateRef,
+  watch,
+} from "vue";
 import { VAlert, VBtn } from "vuetify/components";
 import {
   VStepperVertical,
@@ -134,6 +144,7 @@ import { LLM_HUGGINGFACE_FILE, LLM_HUGGINGFACE_REPO } from "@/config.ts";
 import { convertToOllamaUrl } from "@/utility/conversion.ts";
 import { sendMessage } from "@/utility/messaging.ts";
 
+// Stepper setup
 onMounted(async () => {
   await updatePinStatus();
   await checkOllamaConnection();
@@ -141,8 +152,6 @@ onMounted(async () => {
   browser.action.onUserSettingsChanged?.addListener(updatePinStatus);
   jumpToFirstUncompletedStep();
 });
-
-const currentStep = ref(1);
 function jumpToFirstUncompletedStep() {
   if (!isOllamaAvailable.value) {
     currentStep.value = 1;
@@ -155,28 +164,41 @@ function jumpToFirstUncompletedStep() {
   }
 }
 
-// Pin check
-const { isPinnedInToolbar } = useBrowser();
-const isPinned = ref<boolean | null>(false);
-async function updatePinStatus() {
-  isPinned.value = await isPinnedInToolbar();
+// Tracking manual interactions
+const stepper = useTemplateRef("stepper");
+const stepCount = computed(() => {
+  const stepperEl = stepper.value?.$el as HTMLElement | undefined;
+  if (!stepperEl) return 0;
+  return stepperEl.querySelectorAll(".v-stepper-vertical-item").length;
+});
+const manualInteractions = ref<boolean[]>([]);
+const ollamaStepInteracted = computed(
+  () => isOllamaAvailable.value === false && manualInteractions.value[0]
+);
+const modelStepInteracted = computed(
+  () => isModelAvailable.value === false && manualInteractions.value[1]
+);
+watch(
+  stepCount,
+  (newStepCount) => {
+    manualInteractions.value = Array(
+      newStepCount > 0 ? newStepCount - 1 : 0
+    ).fill(false);
+  },
+  { once: true }
+);
+async function interact(
+  step: number,
+  interactionFunction: Promise<void> | (() => void)
+) {
+  manualInteractions.value[step - 1] = true;
+  if (interactionFunction instanceof Promise) {
+    await interactionFunction;
+  } else {
+    interactionFunction();
+  }
 }
-onUnmounted(() => {
-  browser.action.onUserSettingsChanged?.removeListener(updatePinStatus);
-});
-watch(isPinned, (newIsPinned) => {
-  if (currentStep.value > 3 && !newIsPinned) {
-    currentStep.value = 3;
-  }
-});
-const pinStepTitle = computed(() => {
-  switch (isPinned.value) {
-    case true:
-      return "Browsererweiterung anheften (angeheftet)";
-    default:
-      return "Browsererweiterung anheften (optional)";
-  }
-});
+const currentStep = ref(1);
 
 // Ollama check
 const isOllamaAvailable = ref<boolean | undefined>(undefined);
@@ -189,14 +211,13 @@ async function checkOllamaConnection(next?: () => void) {
   }
 }
 const ollamaStepTitle = computed(() => {
-  switch (isOllamaAvailable.value) {
-    case true:
-      return "KI-Software installieren (Verbindung erfolgreich)";
-    case false:
-      return "KI-Software installieren (Verbindung fehlgeschlagen)";
-    default:
-      return "KI-Software installieren";
+  let suffix = " ";
+  if (isOllamaAvailable.value === true) {
+    suffix = " (Verbindung erfolgreich)";
+  } else if (ollamaStepInteracted.value === true) {
+    suffix = " (Verbindung fehlgeschlagen)";
   }
+  return `KI-Software installieren${suffix}`;
 });
 
 // Model check
@@ -216,13 +237,36 @@ async function checkModelAvailable(next?: () => void) {
   }
 }
 const modelStepTitle = computed(() => {
-  switch (isModelAvailable.value) {
-    case true:
-      return "KI-Modell herunterladen (Modell gefunden)";
-    case false:
-      return "KI-Modell herunterladen (Modell nicht gefunden)";
-    default:
-      return "KI-Modell herunterladen";
+  let suffix = " ";
+  if (isModelAvailable.value === true) {
+    suffix = " (Modell gefunden)";
+  } else if (modelStepInteracted.value === true) {
+    suffix = " (Modell nicht gefunden)";
   }
+  return `KI-Modell herunterladen${suffix}`;
+});
+
+// Pin check
+const { isPinnedInToolbar } = useBrowser();
+const isPinned = ref<boolean | null>(false);
+async function updatePinStatus() {
+  isPinned.value = await isPinnedInToolbar();
+}
+onUnmounted(() => {
+  browser.action.onUserSettingsChanged?.removeListener(updatePinStatus);
+});
+watch(isPinned, (newIsPinned) => {
+  if (currentStep.value > 3 && !newIsPinned) {
+    currentStep.value = 3;
+  }
+});
+const pinStepTitle = computed(() => {
+  let suffix = "";
+  if (isPinned.value) {
+    suffix = " (angeheftet)";
+  } else {
+    suffix = " (optional)";
+  }
+  return `Browsererweiterung anheften${suffix}`;
 });
 </script>

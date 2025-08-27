@@ -21,12 +21,15 @@ export default defineConfig({
     homepage_url: "https://github.com/devtobi/aigelb",
     default_locale: "de",
     permissions: ["declarativeNetRequest"],
-    declarative_net_request: browser === "firefox" ? {
-      rule_resources: [
-        { id: "ruleset_1", enabled: true, path: "rules.json" },
-      ],
-    } : undefined,
-    host_permissions: ['*://*/*']
+    declarative_net_request:
+      browser === "firefox"
+        ? {
+            rule_resources: [
+              { id: "ruleset_1", enabled: true, path: "rules.json" },
+            ],
+          }
+        : undefined,
+    host_permissions: ["*://*/*"],
   }),
   webExt: {
     startUrls: ["http://localhost:8081"],
