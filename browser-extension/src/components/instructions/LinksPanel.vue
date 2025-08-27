@@ -2,7 +2,7 @@
   <v-expansion-panels>
     <v-expansion-panel elevation="3">
       <template #title>
-        <h2 class="text-h6">Weiterführende Links</h2>
+        <h2 class="text-h6">{{ i18n.t("instructions.linksPanel.title") }}</h2>
       </template>
       <template #text>
         <v-row>
@@ -11,8 +11,8 @@
             md="6"
           >
             <card-link
-              title="AIGELB auf GitHub"
-              subtitle="Verfolge die Entwicklung von AIGELB"
+              :title="i18n.t('instructions.linksPanel.github.title')"
+              :subtitle="i18n.t('instructions.linksPanel.github.subTitle')"
               link="https://github.com/devtobi/aigelb/"
               :icon="mdiGithub"
             />
@@ -22,8 +22,8 @@
             md="6"
           >
             <card-link
-              title="Wissenschaftliche Arbeit zu AIGELB"
-              subtitle="Erscheint in 2026"
+              :title="i18n.t('instructions.linksPanel.paper.title')"
+              :subtitle="i18n.t('instructions.linksPanel.paper.subTitle')"
               :icon="mdiSchool"
             />
           </v-col>
@@ -35,6 +35,7 @@
 
 <script setup lang="ts">
 import { mdiGithub, mdiSchool } from "@mdi/js";
+import { i18n } from "#i18n";
 import {
   VCol,
   VExpansionPanel,

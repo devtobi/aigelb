@@ -15,3 +15,11 @@ instructions:
     title: Wichtige Hinweise
     description: Die KI-basierte Übersetzung und Vereinfachung von Texten (insbesondere für Leichte Sprache) ist eine komplexe und sensible Aufgabe. Bitte beachten Sie, dass KI-Modelle nicht perfekt sind und Fehler machen können. Daher kann die Erweiterung nicht garantieren, dass der übersetzte oder vereinfachte Text inhaltlich korrekt ist und alle Regeln der Leichten Sprache einhält. Verwenden Sie die Erweiterung mit Vorsicht und lassen Sie die Ergebnisse nach Möglichkeit von einem Menschen überprüfen. Insbesondere bei sensiblen Themen wie medizinischen oder finanziellen Informationen sollte die Erweiterung nicht ohne menschliche Validierung der generierten Inhalte verwendet werden.
     development: AIGELB befindet sich derzeit in der Entwicklungsphase. Einige Übersetzungen sind möglicherweise fehlerhaft oder unvollständig, und die Erweiterung ist möglicherweise noch nicht voll funktionsfähig. Außerdem können Fehler auftreten. Bitte melden Sie alle Probleme im GitHub-Repository des Projekts. Den Link zum Repository finden Sie unten auf dieser Seite.
+  linksPanel:
+    title: Weiterführende Links
+    github:
+      title: AIGELB auf GitHub
+      subTitle: Verfolgen Sie die Entwicklung von AIGELB
+    paper:
+      title: Wissenschaftliche Arbeit hinter AIGELB
+      subTitle: Erscheint in 2026
