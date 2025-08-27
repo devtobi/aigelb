@@ -19,7 +19,7 @@ export default defineConfig({
     short_name: "AIGELB",
     description: "__MSG_manifestDescription__",
     homepage_url: "https://github.com/devtobi/aigelb",
-    default_locale: "de",
+    default_locale: "en",
     permissions: ["declarativeNetRequest"],
     declarative_net_request:
       browser === "firefox"

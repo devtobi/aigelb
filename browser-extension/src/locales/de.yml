@@ -4,5 +4,10 @@ common:
   appBar:
     versionPrefix: Version
 instructions:
-  header:
+  headerCard:
     subTitle: AI German Easy Language Browsing (KI-gestütztes Browsen in deutscher Leichter Sprache)
+  aboutCard:
+    title: Über die Erweiterung
+    description: AIGELB ist eine Browser-Erweiterung, welche die Zugänglichkeit von Textinhalten verbessern soll, indem sie deutsche Texte selektiv in Leichte Sprache vereinfacht. Dies wird durch den Einsatz lokaler KI-Modelle erreicht, wodurch die Privatsphäre gewahrt bleibt. Die Nutzung macht Webinhalte für Menschen mit bestimmten Beeinträchtigungen und unterschiedlichen Lesekompetenzen verständlicher.
+    problem: Der Großteil deutschsprachiger Webseiten ist in Standardsprache geschrieben und daher für viele Menschen nicht zugänglich. Diese Erweiterung soll als Assistive Technologie fungieren, um diese Webseiten zugänglicher und verständlicher zu machen. Sie dient gewissermaßen als Übergangslösung, bis die Betreiber von Webseiten ihre Inhalte in Leichter Sprache anbieten.
+    background: Diese Erweiterung wurde im Rahmen einer Masterarbeit an der „Hochschule München“ entwickelt. Weitere Informationen finden Sie unter den Links am Ende dieser Seite.

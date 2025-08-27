@@ -4,5 +4,10 @@ common:
   appBar:
     versionPrefix: Version
 instructions:
-  header:
+  headerCard:
     subTitle: AI German Easy Language Browsing
+  aboutCard:
+    title: About the extension
+    description: AIGELB is a browser extension designed to improve accessibility of text content by selectively simplifying German texts into Easy Language. This is achieved by the use of local AI models and thus preserves privacy. The use makes web content more understandable for people with certain disabilities and different reading levels.
+    problem: The majority of German-language websites are written in standard language and are therefore inaccessible to many people. This extension is intended to serve as an assistive technology to make these websites more accessible and understandable. It serves as a temporary solution until website operators offer their content in Easy Language.
+    background: This extension was developed as part of a master thesis at the 'Munich University of Applied Sciences'. Check the links at the bottom of this page for more information.
