@@ -31,10 +31,12 @@
           werden.
         </v-alert>
 
-        <template #next="{ next }">
+        <template #next>
           <v-btn
             :color="ollamaStepInteracted ? 'error' : 'warning'"
-            @click="interact(step, checkOllamaConnection(next))"
+            @click="
+              interact(step, checkOllamaConnection(jumpToNextUncompletedStep))
+            "
           >
             {{
               ollamaStepInteracted ? "Erneut versuchen" : "Verbindung prüfen"
@@ -60,11 +62,13 @@
         :error="modelStepInteracted"
       >
         <p>TODO</p>
-        <template #next="{ next }">
+        <template #next>
           <v-btn
             v-if="isModelAvailable"
             :color="modelStepInteracted ? 'error' : 'warning'"
-            @click="interact(step, checkModelAvailable(next))"
+            @click="
+              interact(step, checkModelAvailable(jumpToNextUncompletedStep))
+            "
           >
             {{ modelStepInteracted ? "Erneut versuchen" : "Weiter" }}
           </v-btn>
@@ -152,13 +156,16 @@ import { sendMessage } from "@/utility/messaging.ts";
 
 // Stepper setup
 onMounted(async () => {
+  browser.action.onUserSettingsChanged?.addListener(updatePinStatus);
+  await jumpToNextUncompletedStep();
+});
+async function checkStatus() {
   await updatePinStatus();
   await checkOllamaConnection();
   await checkModelAvailable();
-  browser.action.onUserSettingsChanged?.addListener(updatePinStatus);
-  jumpToFirstUncompletedStep();
-});
-function jumpToFirstUncompletedStep() {
+}
+async function jumpToNextUncompletedStep() {
+  await checkStatus();
   if (!isOllamaAvailable.value) {
     currentStep.value = 1;
   } else if (!isModelAvailable.value) {
