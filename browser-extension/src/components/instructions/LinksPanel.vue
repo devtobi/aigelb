@@ -36,12 +36,6 @@
 <script setup lang="ts">
 import { mdiGithub, mdiSchool } from "@mdi/js";
 import { i18n } from "#i18n";
-import {
-  VCol,
-  VExpansionPanel,
-  VExpansionPanels,
-  VRow,
-} from "vuetify/components";
 
 import CardLink from "@/components/common/CardLink.vue";
 </script>

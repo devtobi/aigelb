@@ -16,8 +16,6 @@
 </template>
 
 <script setup lang="ts">
-import { VApp, VContainer, VMain } from "vuetify/components";
-
 import TheAppBar from "@/components/common/TheAppBar.vue";
 import AboutCard from "@/components/instructions/AboutCard.vue";
 import CloseButton from "@/components/instructions/CloseButton.vue";

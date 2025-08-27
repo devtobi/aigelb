@@ -13,7 +13,6 @@
 <script setup lang="ts">
 import { mdiOpenInNew } from "@mdi/js";
 import { computed } from "vue";
-import { VCard } from "vuetify/components";
 
 const props = defineProps<{
   title: string;

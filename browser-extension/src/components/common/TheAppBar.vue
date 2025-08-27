@@ -24,7 +24,6 @@
 <script setup lang="ts">
 import { useTitle } from "@vueuse/core";
 import { i18n } from "#i18n";
-import { VAppBar, VAppBarTitle } from "vuetify/components";
 
 import TheAppIcon from "@/components/common/TheAppIcon.vue";
 import { useManifestData } from "@/composables/useManifestData.ts";

@@ -18,7 +18,6 @@
 
 <script setup lang="ts">
 import { i18n } from "#i18n";
-import { VCard, VCardText, VCardTitle } from "vuetify/components";
 
 import TheAppIcon from "@/components/common/TheAppIcon.vue";
 </script>

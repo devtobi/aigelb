@@ -8,8 +8,6 @@
 </template>
 
 <script setup lang="ts">
-import { VImg } from "vuetify/components";
-
 import logo from "@/assets/icon.png";
 
 const { size = 64 } = defineProps<{

@@ -156,7 +156,6 @@ import {
   useTemplateRef,
   watch,
 } from "vue";
-import { VAlert, VBtn, VCard, VCardText } from "vuetify/components";
 import {
   VStepperVertical,
   VStepperVerticalItem,

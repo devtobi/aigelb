@@ -19,7 +19,6 @@
 <script setup lang="ts">
 import { mdiClose } from "@mdi/js";
 import { i18n } from "#i18n";
-import { VBtn, VTooltip } from "vuetify/components";
 
 const emit = defineEmits<{
   close: [];

@@ -26,7 +26,6 @@ import type { RemoveListenerCallback } from "@webext-core/messaging";
 import { mdiDownload } from "@mdi/js";
 import { i18n } from "#i18n";
 import { computed, onMounted, ref, watch } from "vue";
-import { VBtn, VProgressCircular } from "vuetify/components";
 
 import { convertFileSize, convertToOllamaUrl } from "@/utility/conversion.ts";
 import { onMessage, sendMessage } from "@/utility/messaging.ts";

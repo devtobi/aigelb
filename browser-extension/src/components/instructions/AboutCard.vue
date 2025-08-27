@@ -22,5 +22,4 @@
 <script setup lang="ts">
 import { mdiInformation } from "@mdi/js";
 import { i18n } from "#i18n";
-import { VCard, VCardText } from "vuetify/components";
 </script>

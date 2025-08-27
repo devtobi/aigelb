@@ -56,9 +56,7 @@ export default defineConfig({
   vite: () =>
     ({
       plugins: [
-        vuetify({
-          autoImport: false,
-        }),
+        vuetify(),
         UnpluginFontsPlugin({
           fontsource: {
             families: [
