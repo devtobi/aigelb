@@ -30,11 +30,16 @@ import { VBtn, VProgressCircular } from "vuetify/components";
 import { convertFileSize, convertToOllamaUrl } from "@/utility/conversion.ts";
 import { onMessage, sendMessage } from "@/utility/messaging.ts";
 
-const props = defineProps<{
-  disabled: boolean;
-  repo: string;
-  file: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    disabled?: boolean;
+    repo: string;
+    file: string;
+  }>(),
+  {
+    disabled: false,
+  }
+);
 
 const fileSize = ref<number | null>(0);
 const downloading = ref<boolean>(false);

@@ -36,7 +36,9 @@
             :color="ollamaStepInteracted ? 'error' : 'warning'"
             @click="interact(step, checkOllamaConnection(next))"
           >
-            {{ ollamaStepInteracted ? "Erneut versuchen" : "Weiter" }}
+            {{
+              ollamaStepInteracted ? "Erneut versuchen" : "Verbindung prüfen"
+            }}
           </v-btn>
         </template>
         <template v-slot:prev>
@@ -60,6 +62,7 @@
         <p>TODO</p>
         <template #next="{ next }">
           <v-btn
+            v-if="isModelAvailable"
             :color="modelStepInteracted ? 'error' : 'warning'"
             @click="interact(step, checkModelAvailable(next))"
           >
@@ -68,7 +71,8 @@
         </template>
         <template v-slot:prev>
           <model-download-button
-            :disabled="isModelAvailable === true"
+            v-if="!isModelAvailable"
+            color="warning"
             :repo="LLM_HUGGINGFACE_REPO"
             :file="LLM_HUGGINGFACE_FILE"
             @download-completed="checkModelAvailable"
@@ -94,7 +98,9 @@
           <v-btn
             color="warning"
             @click="interact(step, next)"
-          />
+          >
+            {{ isPinned ? "Weiter" : "Überspringen" }}
+          </v-btn>
         </template>
         <template v-slot:prev />
       </v-stepper-vertical-item>
@@ -217,7 +223,7 @@ const ollamaStepTitle = computed(() => {
   } else if (ollamaStepInteracted.value === true) {
     suffix = " (Verbindung fehlgeschlagen)";
   }
-  return `KI-Software installieren${suffix}`;
+  return `KI-Software installieren und starten${suffix}`;
 });
 
 // Model check
