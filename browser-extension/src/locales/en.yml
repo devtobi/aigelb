@@ -3,6 +3,6 @@ manifestDescription: Browser extension to read the web in German Easy Language (
 common:
   appBar:
     versionPrefix: Version
-onboarding:
+instructions:
   header:
     subTitle: AI German Easy Language Browsing

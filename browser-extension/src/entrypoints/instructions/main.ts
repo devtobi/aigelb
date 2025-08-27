@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 
-import App from "@/entrypoints/onboarding/App.vue";
+import App from "@/entrypoints/instructions/App.vue";
 import { registerVuePlugins } from "@/plugins";
 
 const app = createApp(App);

@@ -7,7 +7,7 @@ export default function registerOnboarding() {
     (details: Browser.runtime.InstalledDetails) => {
       if (details.reason === browser.runtime.OnInstalledReason?.INSTALL) {
         browser.tabs?.create({
-          url: browser.runtime.getURL("/onboarding.html"),
+          url: browser.runtime.getURL("/instructions.html"),
         });
       }
     }

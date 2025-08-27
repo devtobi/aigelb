@@ -138,7 +138,7 @@ import {
 } from "vuetify/labs/VStepperVertical";
 import { browser } from "wxt/browser";
 
-import ModelDownloadButton from "@/components/onboarding/ModelDownloadButton.vue";
+import ModelDownloadButton from "@/components/instructions/ModelDownloadButton.vue";
 import { useBrowser } from "@/composables/useBrowser.ts";
 import { LLM_HUGGINGFACE_FILE, LLM_HUGGINGFACE_REPO } from "@/config.ts";
 import { convertToOllamaUrl } from "@/utility/conversion.ts";

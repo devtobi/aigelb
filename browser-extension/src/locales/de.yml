@@ -3,6 +3,6 @@ manifestDescription: Browsererweiterung zum Lesen des Internets in Leichter Spra
 common:
   appBar:
     versionPrefix: Version
-onboarding:
+instructions:
   header:
     subTitle: AI German Easy Language Browsing (KI-gestütztes Browsen in deutscher Leichter Sprache)

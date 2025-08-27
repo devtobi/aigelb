@@ -18,7 +18,7 @@
           >
           <v-card-text class="pb-4">
             <p>
-              {{ i18n.t("onboarding.header.subTitle") }}
+              {{ i18n.t("instructions.header.subTitle") }}
             </p>
           </v-card-text>
         </v-card>
@@ -182,7 +182,7 @@ import {
 import CardLink from "@/components/common/CardLink.vue";
 import TheAppBar from "@/components/common/TheAppBar.vue";
 import TheAppIcon from "@/components/common/TheAppIcon.vue";
-import SetupStepper from "@/components/onboarding/SetupStepper.vue";
+import SetupStepper from "@/components/instructions/SetupStepper.vue";
 import { useBrowser } from "@/composables/useBrowser.ts";
 
 const { openOptionsPage, closeWindow } = useBrowser();
