@@ -3,6 +3,10 @@ manifestDescription: Browser extension to read the web in German Easy Language (
 common:
   appBar:
     versionPrefix: Version
+  retry: Retry
+  next: Next
+  optional: optional
+  skip: Skip
 instructions:
   headerCard:
     subTitle: AI German Easy Language Browsing
@@ -15,6 +19,32 @@ instructions:
     title: Important Notes
     description: AI-based translation and simplification of text (especially for Easy Language) is a complex and sensitive task. Please note that AI models are not perfect and may make mistakes. Therefore, the extension can not guarantee that the translated or simplified text is semantically correct and respects all rules of Easy Language. Use the extension with caution and validate the results with a human if possible. Especially for sensitive topics such as medical or financial information, the extension should not be used without a human's supervision of the generated content.
     development: AIGELB is currently in an development stage. Some translations may be experimental or incomplete and the extension may not be fully functional. Additionally, bugs may occur. Please report any issues to the projects GitHub repository. You can find the link to the repository at the bottom of this page.
+  setupCard:
+    title: Initial setup
+    ollamaStep:
+      title: Install and launch AI software
+      successSuffix: Connection successful
+      failureSuffix: Connection failed
+      description: The free software 'Ollama' is required to use the local AI functions. This must be downloaded from the manufacturer's website and then launched. The button below redirects you to the manufacturer's website.
+      alert: Ollama must be running (in the background) while using AIGELB for the browser extension to work. Depending on the operating system, Ollama may need to be started manually, e.g. after the system has been booted up. The Ollama window can be closed.
+      nextText: Check connection
+      downloadText: Download Ollama
+    modelStep:
+      title: Download AI model
+      successSuffix: Model found
+      failureSuffix: Model not found
+      description: In addition to AI software, a free AI model is required to handle translation and simplification. AIGELB uses the %s model for this purpose. The button below starts the download.
+      alert: Please ensure that there is sufficient storage space on your computer to download the model.
+    pinStep:
+      title: Pin browser extension
+      successSuffix: pinned
+      description: For easy access to the browser extension's functions, it should be pinned to the browser bar. Instructions on how to do this can be found on the browser manufacturer's help pages.
+      alert: In most browsers, extensions can be pinned using a puzzle piece icon in the browser bar. In addition, some browsers automatically place the extension in the browser bar.
+    doneStep:
+      title: Setup finished
+      description: Congratulations! The browser extension has been successfully set up. Please read the information on how to use its features in the next step.
+  modelDownloadButton:
+    text: Download model
   linksPanel:
     title: Related links
     github:

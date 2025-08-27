@@ -1,6 +1,6 @@
 <template>
   <v-card
-    title="Ersteinrichtung"
+    :title="i18n.t('instructions.setupCard.title')"
     :prepend-icon="mdiCog"
     class="pa-3"
     elevation="3"
@@ -19,23 +19,14 @@
             :error="ollamaStepInteracted"
           >
             <p class="mb-3">
-              Für die lokale Ausführung der KI-Modelle ist die Software Ollama
-              erforderlich.
-            </p>
-
-            <p class="mb-3">
-              Diese muss von der Webseite des Herstellers heruntergeladen und
-              anschließend gestartet werden.
+              {{ i18n.t("instructions.setupCard.ollamaStep.description") }}
             </p>
 
             <v-alert
               color="warning"
-              type="info"
+              type="warning"
             >
-              Ollama muss während der Nutzung von AIGELB im Hintergrund
-              ausgeführt werden, damit die Browsererweiterung funktioniert. Je
-              nach Betriebssystem muss Ollama z.B. nach dem Systemstart manuell
-              gestartet werden.
+              {{ i18n.t("instructions.setupCard.ollamaStep.alert") }}
             </v-alert>
 
             <template #next>
@@ -50,8 +41,8 @@
               >
                 {{
                   ollamaStepInteracted
-                    ? "Erneut versuchen"
-                    : "Verbindung prüfen"
+                    ? i18n.t("common.retry")
+                    : i18n.t("instructions.setupCard.ollamaStep.nextText")
                 }}
               </v-btn>
             </template>
@@ -59,7 +50,7 @@
               <v-btn
                 :prepend-icon="mdiDownload"
                 variant="tonal"
-                text="Ollama herunterladen"
+                :text="i18n.t('instructions.setupCard.ollamaStep.downloadText')"
                 href="https://ollama.com/download"
                 target="_blank"
                 :disabled="false"
@@ -73,7 +64,16 @@
             :complete="isModelAvailable"
             :error="modelStepInteracted"
           >
-            <p>TODO</p>
+            <p class="mb-3">
+              {{ i18n.t("instructions.setupCard.modelStep.description") }}
+            </p>
+
+            <v-alert
+              color="warning"
+              type="warning"
+            >
+              {{ i18n.t("instructions.setupCard.modelStep.alert") }}
+            </v-alert>
             <template #next>
               <v-btn
                 v-if="isModelAvailable"
@@ -82,7 +82,11 @@
                   interact(step, checkModelAvailable(jumpToNextUncompletedStep))
                 "
               >
-                {{ modelStepInteracted ? "Erneut versuchen" : "Weiter" }}
+                {{
+                  modelStepInteracted
+                    ? i18n.t("common.retry")
+                    : i18n.t("common.next")
+                }}
               </v-btn>
             </template>
             <template v-slot:prev>
@@ -102,27 +106,28 @@
             elevation="0"
           >
             <p class="mb-3">
-              Für die einfache Nutzung der Browsererweiterung sollte diese über
-              die Browserleiste fest angeheftet werden.
+              {{ i18n.t("instructions.setupCard.pinStep.description") }}
             </p>
 
-            <p>
-              Eine Anleitung hierzu ist auf den Hilfe-Seiten des Browsers zu
-              finden.
-            </p>
+            <v-alert
+              color="warning"
+              type="info"
+            >
+              {{ i18n.t("instructions.setupCard.pinStep.alert") }}
+            </v-alert>
 
             <template #next="{ next }">
               <v-btn
                 color="warning"
                 @click="interact(step, next)"
               >
-                {{ isPinned ? "Weiter" : "Überspringen" }}
+                {{ isPinned ? i18n.t("common.next") : i18n.t("common.skip") }}
               </v-btn>
             </template>
             <template v-slot:prev />
           </v-stepper-vertical-item>
           <v-stepper-vertical-item
-            title="Einrichtung abgeschlossen"
+            :title="i18n.t('instructions.setupCard.doneStep.title')"
             value="4"
             :complete="
               !!isOllamaAvailable && !!isModelAvailable && currentStep === 4
@@ -131,13 +136,7 @@
             hide-actions
           >
             <p class="mb-3">
-              Herzlichen Glückwunsch! Die Einrichtung der Browserweiterung ist
-              abgeschlossen!
-            </p>
-
-            <p>
-              Bitte lies dir als Nächstes die Anleitung zur Nutzung der
-              Erweiterung durch.
+              {{ i18n.t("instructions.setupCard.doneStep.description") }}
             </p>
           </v-stepper-vertical-item>
         </template>
@@ -148,6 +147,7 @@
 
 <script setup lang="ts">
 import { mdiCog, mdiDownload } from "@mdi/js";
+import { i18n } from "#i18n";
 import {
   computed,
   onMounted,
@@ -241,11 +241,11 @@ async function checkOllamaConnection(next?: () => void) {
 const ollamaStepTitle = computed(() => {
   let suffix = " ";
   if (isOllamaAvailable.value === true) {
-    suffix = " (Verbindung erfolgreich)";
+    suffix = ` (${i18n.t("instructions.setupCard.ollamaStep.successSuffix")})`;
   } else if (ollamaStepInteracted.value === true) {
-    suffix = " (Verbindung fehlgeschlagen)";
+    suffix = ` (${i18n.t("instructions.setupCard.ollamaStep.failureSuffix")})`;
   }
-  return `KI-Software installieren und starten${suffix}`;
+  return `${i18n.t("instructions.setupCard.ollamaStep.title")}${suffix}`;
 });
 
 // Model check
@@ -267,11 +267,11 @@ async function checkModelAvailable(next?: () => void) {
 const modelStepTitle = computed(() => {
   let suffix = " ";
   if (isModelAvailable.value === true) {
-    suffix = " (Modell gefunden)";
+    suffix = ` (${i18n.t("instructions.setupCard.modelStep.successSuffix")})`;
   } else if (modelStepInteracted.value === true) {
-    suffix = " (Modell nicht gefunden)";
+    suffix = ` (${i18n.t("instructions.setupCard.modelStep.failureSuffix")})`;
   }
-  return `KI-Modell herunterladen${suffix}`;
+  return `${i18n.t("instructions.setupCard.modelStep.title")}${suffix}`;
 });
 
 // Pin check
@@ -289,12 +289,12 @@ watch(isPinned, (newIsPinned) => {
   }
 });
 const pinStepTitle = computed(() => {
-  let suffix = "";
+  let suffix;
   if (isPinned.value) {
-    suffix = " (angeheftet)";
+    suffix = ` (${i18n.t("instructions.setupCard.pinStep.successSuffix")})`;
   } else {
-    suffix = " (optional)";
+    suffix = ` (${i18n.t("common.optional")})`;
   }
-  return `Browsererweiterung anheften${suffix}`;
+  return `${i18n.t("instructions.setupCard.pinStep.title")}${suffix}`;
 });
 </script>
