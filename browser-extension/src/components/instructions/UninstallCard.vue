@@ -12,7 +12,7 @@
       </template>
       <template #text>
         <v-card class="elevation-0">
-          <v-card-text>
+          <v-card-text class="pa-0">
             <v-stepper-vertical
               v-model="currentStep"
               ref="stepper"

@@ -48,7 +48,7 @@ instructions:
   modelDownloadButton:
     text: Download model
   linksPanel:
-    title: Related links
+    title: Further information
     github:
       title: AIGELB on GitHub
       subTitle: Follow the development of AIGELB

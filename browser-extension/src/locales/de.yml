@@ -48,7 +48,7 @@ instructions:
   modelDownloadButton:
     text: Modell herunterladen
   linksPanel:
-    title: Weiterführende Links
+    title: Weiterführende Informationen
     github:
       title: AIGELB auf GitHub
       subTitle: Verfolgen Sie die Entwicklung von AIGELB

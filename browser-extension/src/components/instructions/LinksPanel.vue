@@ -2,6 +2,10 @@
   <v-expansion-panels>
     <v-expansion-panel elevation="3">
       <template #title>
+        <v-icon
+          :icon="mdiInformation"
+          class="mr-2"
+        />
         <h2 class="text-h6">{{ i18n.t("instructions.linksPanel.title") }}</h2>
       </template>
       <template #text>
@@ -34,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { mdiGithub, mdiSchool } from "@mdi/js";
+import { mdiGithub, mdiInformation, mdiSchool } from "@mdi/js";
 import { i18n } from "#i18n";
 
 import CardLink from "@/components/common/CardLink.vue";
