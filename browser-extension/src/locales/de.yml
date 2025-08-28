@@ -42,7 +42,7 @@ instructions:
       title: KI-Modell herunterladen
       successSuffix: Modell gefunden
       failureSuffix: Modell nicht gefunden
-      description: Neben einer KI-Software ist zusätzliches ein freies KI-Modell erforderlich, welches die Übersetzung und Vereinfachung übernehmen kann. AIGELB nutzt hierfür das Modell %s. Die Schaltfläche unten startet den Download.
+      description: Neben der KI-Software ist zusätzlich ein freies KI-Modell erforderlich, welches die Übersetzung und Vereinfachung übernehmen kann. AIGELB nutzt hierfür das Modell '%s'. Die Schaltfläche unten startet den Download.
       alert: Bitte stellen Sie sicher, dass genug Speicherplatz auf dem Computer vorhanden ist, um das Modell herunterzuladen.
     pinStep:
       title: Browsererweiterung anheften
