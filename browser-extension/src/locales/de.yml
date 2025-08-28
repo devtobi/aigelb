@@ -1,5 +1,10 @@
 manifestName: AIGELB (KI-gestütztes Browsen in Leichter Sprache)
 manifestDescription: Browsererweiterung zum Lesen des Internets in Leichter Sprache mit Hilfe von lokaler KI-Modelle
+pages:
+  popup:
+    title: AIGELB
+  instructions:
+    title: AIGELB - Anleitung
 common:
   appBar:
     versionPrefix: Version
