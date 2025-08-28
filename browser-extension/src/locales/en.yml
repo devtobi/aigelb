@@ -1,5 +1,10 @@
 manifestName: AIGELB (AI German Easy Language Browsing)
 manifestDescription: Browser extension to read the web in German Easy Language (Leichte Sprache) using the power of local AI models
+pages:
+  popup:
+    title: AIGELB
+  instructions:
+    title: AIGELB - Instructions
 common:
   appBar:
     versionPrefix: Version
