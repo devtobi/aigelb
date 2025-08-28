@@ -7,6 +7,8 @@ common:
   next: Next
   optional: optional
   skip: Skip
+  cancel: Cancel
+  close: Close
 instructions:
   headerCard:
     subTitle: AI German Easy Language Browsing
@@ -20,7 +22,7 @@ instructions:
     description: AI-based translation and simplification of text (especially for Easy Language) is a complex and sensitive task. Please note that AI models are not perfect and may make mistakes. Therefore, the extension can not guarantee that the translated or simplified text is semantically correct and respects all rules of Easy Language. Use the extension with caution and validate the results with a human if possible. Especially for sensitive topics such as medical or financial information, the extension should not be used without a human's supervision of the generated content.
     development: AIGELB is currently in an development stage. Some translations may be experimental or incomplete and the extension may not be fully functional. Additionally, bugs may occur. Please report any issues to the projects GitHub repository. You can find the link to the repository at the bottom of this page.
   setupCard:
-    title: Initial setup
+    title: Setup
     ollamaStep:
       title: Install and launch AI software
       successSuffix: Connection successful
@@ -56,3 +58,6 @@ instructions:
   closeButton:
     text: Close instructions
     tooltip: The instructions can be opened again at any time by clicking on the AIGELB icon in the browser bar.
+  closeDialog:
+    title: Setup not finished
+    description: The setup of AIGELB is not yet complete. Therefore, the extension will not work yet. This page can be reopened at any time via the AIGELB icon in the browser bar and the setup can be continued.

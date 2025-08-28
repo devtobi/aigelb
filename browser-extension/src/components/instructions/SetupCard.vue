@@ -168,6 +168,10 @@ import { LLM_HUGGINGFACE_FILE, LLM_HUGGINGFACE_REPO } from "@/config.ts";
 import { convertToOllamaUrl } from "@/utility/conversion.ts";
 import { sendMessage } from "@/utility/messaging.ts";
 
+const emit = defineEmits<{
+  onboardingCompletedChanged: [value: boolean];
+}>();
+
 // Stepper setup
 onMounted(async () => {
   browser.action.onUserSettingsChanged?.addListener(updatePinStatus);
@@ -272,6 +276,14 @@ const modelStepTitle = computed(() => {
   }
   return `${i18n.t("instructions.setupCard.modelStep.title")}${suffix}`;
 });
+
+watch(
+  [isOllamaAvailable, isModelAvailable],
+  ([ollama, model]) => {
+    emit("onboardingCompletedChanged", !!ollama && !!model);
+  },
+  { immediate: true }
+);
 
 // Pin check
 const { isPinnedInToolbar } = useBrowser();
