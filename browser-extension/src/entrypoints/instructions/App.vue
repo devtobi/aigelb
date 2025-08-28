@@ -80,6 +80,6 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  removeBeforeUnload()
+  removeBeforeUnload();
 });
 </script>
