@@ -35,7 +35,7 @@
     "vuetify": "3.9.6"
   },
   "devDependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "4.6.3",
+    "@ianvs/prettier-plugin-sort-imports": "4.7.0",
     "@mdi/js": "7.4.47",
     "@vue/eslint-config-prettier": "10.2.0",
     "@vue/eslint-config-typescript": "14.6.0",
