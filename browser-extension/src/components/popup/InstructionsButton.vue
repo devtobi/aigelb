@@ -5,12 +5,12 @@
     size="large"
     block
     color="warning"
-    :prepend-icon="mdiHelp"
+    :prepend-icon="mdiOpenInNew"
   />
 </template>
 
 <script setup lang="ts">
-import { mdiHelp } from "@mdi/js";
+import { mdiOpenInNew } from "@mdi/js";
 import { i18n } from "#i18n";
 
 import { openInstructions } from "@/utility/browser.ts";
