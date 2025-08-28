@@ -1,5 +1,5 @@
 <template>
-  <v-expansion-panels>
+  <v-expansion-panels model-value="0">
     <setup-card @onboarding-completed-changed="onBoardingCompletedChanged" />
     <uninstall-card />
     <links-card />
