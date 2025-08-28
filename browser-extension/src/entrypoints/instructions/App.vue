@@ -12,7 +12,10 @@
         <header-card class="mb-8" />
         <about-card class="mb-8" />
         <important-notes-card class="mb-8" />
-        <setup-card class="mb-8" />
+        <setup-card
+          class="mb-8"
+          @onboarding-completed-changed="onOnboardingCompletedChanged"
+        />
         <links-panel class="mb-8" />
         <close-button @close="onClickClose" />
       </v-container>
@@ -38,6 +41,10 @@ const { closeWindow } = useBrowser();
 const showDialog = ref(false);
 
 const isOnboardingCompleted = ref(false);
+
+function onOnboardingCompletedChanged(value: boolean) {
+  isOnboardingCompleted.value = value;
+}
 
 function onClickClose() {
   if (!isOnboardingCompleted.value) {
