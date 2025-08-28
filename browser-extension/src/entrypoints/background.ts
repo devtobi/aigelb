@@ -1,13 +1,13 @@
 import { defineBackground } from "#imports";
 
-import { onMessage } from "@/utility/messaging";
+import registerHuggingFaceCommunication from "@/entrypoints/background/registerHuggingFaceCommunication.ts";
+import registerNetworkingRules from "@/entrypoints/background/registerNetworkingRules.ts";
+import registerOllamaCommunication from "@/entrypoints/background/registerOllamaCommunication.ts";
+import registerOnboarding from "@/entrypoints/background/registerOnboarding.ts";
 
-export default defineBackground({
-  type: "module",
-  main() {
-    onMessage("testEvent", (message) => {
-      console.debug(`BACKGROUND - Received: ${message.data}`);
-      return message.data.length;
-    });
-  },
+export default defineBackground(() => {
+  registerNetworkingRules();
+  registerOllamaCommunication();
+  registerHuggingFaceCommunication();
+  registerOnboarding();
 });

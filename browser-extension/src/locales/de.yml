@@ -1,2 +1,58 @@
-extDescription: Browsererweiterung zum Lesen des Internets in Leichter Sprache mit Hilfe von LLMs
-helloWorld: Hallo Welt!
+manifestName: AIGELB (KI-gestütztes Browsen in Leichter Sprache)
+manifestDescription: Browsererweiterung zum Lesen des Internets in Leichter Sprache mit Hilfe von lokaler KI-Modelle
+common:
+  appBar:
+    versionPrefix: Version
+  retry: Erneut versuchen
+  next: Weiter
+  optional: optional
+  skip: Überspringen
+instructions:
+  headerCard:
+    subTitle: AI German Easy Language Browsing (KI-gestütztes Browsen in deutscher Leichter Sprache)
+  aboutCard:
+    title: Über die Erweiterung
+    description: AIGELB ist eine Browser-Erweiterung, welche die Zugänglichkeit von Textinhalten verbessern soll, indem sie deutsche Texte selektiv in Leichte Sprache vereinfacht. Dies wird durch den Einsatz lokaler KI-Modelle erreicht, wodurch die Privatsphäre gewahrt bleibt. Die Nutzung macht Webinhalte für Menschen mit bestimmten Beeinträchtigungen und unterschiedlichen Lesekompetenzen verständlicher.
+    problem: Der Großteil deutschsprachiger Webseiten ist in Standardsprache geschrieben und daher für viele Menschen nicht zugänglich. Diese Erweiterung soll als Assistive Technologie fungieren, um diese Webseiten zugänglicher und verständlicher zu machen. Sie dient gewissermaßen als Übergangslösung, bis die Betreiber von Webseiten ihre Inhalte in Leichter Sprache anbieten.
+    background: Diese Erweiterung wurde im Rahmen einer Masterarbeit an der „Hochschule München“ entwickelt. Weitere Informationen finden Sie unter den Links am Ende dieser Seite.
+  importantNotesCard:
+    title: Wichtige Hinweise
+    description: Die KI-basierte Übersetzung und Vereinfachung von Texten (insbesondere für Leichte Sprache) ist eine komplexe und sensible Aufgabe. Bitte beachten Sie, dass KI-Modelle nicht perfekt sind und Fehler machen können. Daher kann die Erweiterung nicht garantieren, dass der übersetzte oder vereinfachte Text inhaltlich korrekt ist und alle Regeln der Leichten Sprache einhält. Verwenden Sie die Erweiterung mit Vorsicht und lassen Sie die Ergebnisse nach Möglichkeit von einem Menschen überprüfen. Insbesondere bei sensiblen Themen wie medizinischen oder finanziellen Informationen sollte die Erweiterung nicht ohne menschliche Validierung der generierten Inhalte verwendet werden.
+    development: AIGELB befindet sich derzeit in der Entwicklungsphase. Einige Übersetzungen sind möglicherweise fehlerhaft oder unvollständig, und die Erweiterung ist möglicherweise noch nicht voll funktionsfähig. Außerdem können Fehler auftreten. Bitte melden Sie alle Probleme im GitHub-Repository des Projekts. Den Link zum Repository finden Sie unten auf dieser Seite.
+  setupCard:
+    title: Ersteinrichtung
+    ollamaStep:
+      title: KI-Software installieren und starten
+      successSuffix: Verbindung erfolgreich
+      failureSuffix: Verbindung fehlgeschlagen
+      description: Für die Nutzung der lokalen KI-Funktionen ist die kostenlose Software 'Ollama' erforderlich. Diese muss von der Webseite des Herstellers heruntergeladen und anschließend gestartet werden. Die Schaltfläche unten leitet auf die Webseite des Herstellers weiter.
+      alert: Ollama muss während der Nutzung von AIGELB (im Hintergrund) ausgeführt werden, damit die Browsererweiterung funktioniert. Je nach Betriebssystem muss Ollama z.B. nach dem Systemstart manuell gestartet werden. Das Fenster von Ollama kann geschlossen werden.
+      nextText: Verbindung prüfen
+      downloadText: Ollama herunterladen
+    modelStep:
+      title: KI-Modell herunterladen
+      successSuffix: Modell gefunden
+      failureSuffix: Modell nicht gefunden
+      description: Neben einer KI-Software ist zusätzliches ein freies KI-Modell erforderlich, welches die Übersetzung und Vereinfachung übernehmen kann. AIGELB nutzt hierfür das Modell %s. Die Schaltfläche unten startet den Download.
+      alert: Bitte stellen Sie sicher, dass genug Speicherplatz auf dem Computer vorhanden ist, um das Modell herunterzuladen.
+    pinStep:
+      title: Browsererweiterung anheften
+      successSuffix: angeheftet
+      description: Für den einfachen Zugriff auf die Funktionen der Browsererweiterung sollte diese fest in der Browserleiste angeheftet werden. Eine Anleitung hierzu ist auf den Hilfe-Seiten des Browser-Herstellers zu finden.
+      alert: In den meisten Browsern können die Erweiterungen über ein Puzzleteil-Symbol in der Browserleiste angeheftet werden. Außerdem platzieren einige Browser die Erweiterung automatisch in der Browserleiste.
+    doneStep:
+      title: Einrichtung abgeschlossen
+      description: Herzlichen Glückwunsch! Die Einrichtung der Browserweiterung ist abgeschlossen! Bitte lesen Sie im nächsten Schritt die Informationen zur Nutzung der Funktionen.
+  modelDownloadButton:
+    text: Modell herunterladen
+  linksPanel:
+    title: Weiterführende Links
+    github:
+      title: AIGELB auf GitHub
+      subTitle: Verfolgen Sie die Entwicklung von AIGELB
+    paper:
+      title: Wissenschaftliche Arbeit hinter AIGELB
+      subTitle: Erscheint in 2026
+  closeButton:
+    text: Anleitung schließen
+    tooltip: Die Anleitung kann jederzeit wieder über das AIGELB-Symbol in der Browserleiste geöffnet werden.

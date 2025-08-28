@@ -14,20 +14,22 @@ export default defineConfig({
   srcDir: "src",
   outDir: "dist",
   targetBrowsers: ["chrome", "firefox", "safari"],
-  manifest: ({ manifestVersion }) => ({
-    author:
-      manifestVersion === 3
-        ? {
-            email: "devtobi - Tobias Stadler",
-          }
-        : "devtobi - Tobias Stadler",
-    name: "AIGELB - AI German Easy Language Browsing",
+  manifest: ({ browser }) => ({
+    name: "__MSG_manifestName__",
     short_name: "AIGELB",
-    description: "__MSG_extDescription__",
+    description: "__MSG_manifestDescription__",
     homepage_url: "https://github.com/devtobi/aigelb",
-    default_locale: "de",
-    permissions: [],
-    host_permissions: [],
+    default_locale: "en",
+    permissions: ["declarativeNetRequest"],
+    declarative_net_request:
+      browser === "firefox"
+        ? {
+            rule_resources: [
+              { id: "ruleset_1", enabled: true, path: "rules.json" },
+            ],
+          }
+        : undefined,
+    host_permissions: ["*://*/*"],
   }),
   webExt: {
     startUrls: ["http://localhost:8081"],
@@ -54,9 +56,7 @@ export default defineConfig({
   vite: () =>
     ({
       plugins: [
-        vuetify({
-          autoImport: false,
-        }),
+        vuetify(),
         UnpluginFontsPlugin({
           fontsource: {
             families: [
