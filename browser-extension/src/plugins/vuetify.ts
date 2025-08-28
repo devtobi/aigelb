@@ -8,8 +8,8 @@ import "@/styles/override.css";
 
 import { de, en } from "vuetify/locale";
 
-import { mapLangToVuetify } from "@/utility/i18n.ts";
 import { getUILanguage } from "@/utility/browser.ts";
+import { mapLangToVuetify } from "@/utility/i18n.ts";
 
 const uiLanguage = mapLangToVuetify(getUILanguage());
 

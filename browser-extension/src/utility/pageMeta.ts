@@ -1,4 +1,5 @@
 import { i18n } from "#i18n";
+
 import { getUILanguage } from "@/utility/browser.ts";
 
 export function setDocumentTitleByKey(key: string) {
