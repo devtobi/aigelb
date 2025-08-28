@@ -65,11 +65,14 @@ instructions:
     title: Deinstallation
     modelStep:
       title: KI‑Modell löschen
+      successSuffix: Modell entfernt
+      failureSuffix: Modell noch vorhanden
       description: Wenn Sie lokale KI nicht mehr benötigen, sollten Sie das heruntergeladene Modell entfernen, um Speicherplatz freizugeben.
       alert: Beim Entfernen wird nur die lokale Kopie gelöscht. Sie können das Modell jederzeit über die Einrichtung erneut herunterladen.
-      deleteText: Modell löschen
     ollamaStep:
-      title: Ollama beenden und deinstallieren
+      title: KI-Software beenden und deinstallieren
+      successSuffix: KI-Software gestoppt/deinstalliert
+      failureSuffix: KI-Software läuft noch
       description: Um die KI‑Software vollständig zu entfernen, beenden Sie Ollama und deinstallieren Sie Ollama über die üblichen Funktion des Betriebssystems. Eine Anleitung finden Sie auf den Hilfe-Seiten des Betriebssystem-Herstellers.
       alert: Stellen Sie sicher, dass Ollama nicht nur gestoppt sondern auch deinstalliert ist. AIGELB kann dieser Unterschied nicht erkennen.
       uninstallText: Prüfen, ob Ollama gestoppt/deinstalliert wurde
@@ -77,3 +80,5 @@ instructions:
       title: Browser‑Erweiterung entfernen
       description: Öffnen Sie die Erweiterungsverwaltung Ihres Browsers und entfernen Sie AIGELB, um die Deinstallation abzuschließen.
       alert: Browser-Erweiterungen können in der Regel über das Puzzleteil-Symbol in der Browserleiste entfernt werden.
+  modelDeleteButton:
+    text: Modell löschen
