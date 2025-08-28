@@ -42,7 +42,7 @@
                     v-if="isModelAvailable === true"
                     :repo="LLM_HUGGINGFACE_REPO"
                     :file="LLM_HUGGINGFACE_FILE"
-                    @delete-completed="checkModelAvailable"
+                    @delete-completed="runModelCheckForUninstall"
                   />
                   <v-btn
                     v-else
@@ -50,7 +50,7 @@
                     @click="
                       interact(
                         step,
-                        checkModelAvailable(jumpToNextUncompletedStep)
+                        runModelCheckForUninstall(jumpToNextUncompletedStep)
                       )
                     "
                   >
@@ -90,7 +90,7 @@
                     @click="
                       interact(
                         step,
-                        checkOllamaNotAvailable(jumpToNextUncompletedStep)
+                        runOllamaNotAvailable(jumpToNextUncompletedStep)
                       )
                     "
                   >
@@ -145,23 +145,24 @@
 <script setup lang="ts">
 import { mdiTrashCanOutline } from "@mdi/js";
 import { i18n } from "#i18n";
-import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
+import { computed, onMounted, ref, useTemplateRef } from "vue";
 import {
   VStepperVertical,
   VStepperVerticalItem,
 } from "vuetify/labs/VStepperVertical";
 
 import ModelDeleteButton from "@/components/instructions/ModelDeleteButton.vue";
+import { useModelAvailability } from "@/composables/useModelAvailability.ts";
+import { useOllama } from "@/composables/useOllama.ts";
+import { useStepperInteractions } from "@/composables/useStepperInteractions.ts";
 import { LLM_HUGGINGFACE_FILE, LLM_HUGGINGFACE_REPO } from "@/config.ts";
-import { convertToOllamaUrl } from "@/utility/conversion.ts";
-import { sendMessage } from "@/utility/messaging.ts";
 
 onMounted(async () => {
   await jumpToNextUncompletedStep();
 });
 async function checkStatus() {
   await checkModelAvailable();
-  await checkOllamaNotAvailable();
+  await checkOllamaConnection();
 }
 async function jumpToNextUncompletedStep() {
   await checkStatus();
@@ -176,53 +177,20 @@ async function jumpToNextUncompletedStep() {
 
 // Stepper state
 const stepper = useTemplateRef("stepper");
-const stepCount = computed(() => {
-  const stepperEl = stepper.value?.$el as HTMLElement | undefined;
-  if (!stepperEl) return 0;
-  return stepperEl.querySelectorAll(".v-stepper-vertical-item").length;
-});
-const manualInteractions = ref<boolean[]>([]);
+const { manualInteractions, interact } = useStepperInteractions(stepper);
 const modelStepInteracted = computed(
   () => isModelAvailable.value === true && manualInteractions.value[0]
 );
 const ollamaStepInteracted = computed(
   () => isOllamaAvailable.value === true && manualInteractions.value[1]
 );
-watch(
-  stepCount,
-  (newStepCount) => {
-    manualInteractions.value = Array(
-      newStepCount > 0 ? newStepCount - 1 : 0
-    ).fill(false);
-  },
-  { once: true }
-);
-async function interact(
-  step: number,
-  interactionFunction: Promise<void> | (() => void)
-) {
-  manualInteractions.value[step - 1] = true;
-  if (interactionFunction instanceof Promise) {
-    await interactionFunction;
-  } else {
-    interactionFunction();
-  }
-}
 const currentStep = ref(1);
 
 // Model deletion check
-const isModelAvailable = ref<boolean | undefined>(undefined);
-const ollamaPullUrl = computed(() =>
-  convertToOllamaUrl(LLM_HUGGINGFACE_REPO, LLM_HUGGINGFACE_FILE)
-);
-async function checkModelAvailable(next?: () => void) {
-  isModelAvailable.value = await sendMessage(
-    "checkIsModelAvailable",
-    ollamaPullUrl.value
-  );
-  if (isModelAvailable.value === false && next) {
-    next();
-  }
+const { isModelAvailable, checkModelAvailable } = useModelAvailability();
+async function runModelCheckForUninstall(next?: () => void) {
+  const ok = await checkModelAvailable();
+  if (!ok && next) next();
 }
 const modelStepTitle = computed(() => {
   let suffix = " ";
@@ -235,12 +203,10 @@ const modelStepTitle = computed(() => {
 });
 
 // Ollama uninstall check
-const isOllamaAvailable = ref<boolean | undefined>(undefined);
-async function checkOllamaNotAvailable(next?: () => void) {
-  isOllamaAvailable.value = await sendMessage("checkOllamaConnection");
-  if (isOllamaAvailable.value === false && next) {
-    next();
-  }
+const { isOllamaAvailable, checkOllamaConnection } = useOllama();
+async function runOllamaNotAvailable(next?: () => void) {
+  const ok = await checkOllamaConnection();
+  if (!ok && next) next();
 }
 const ollamaStepTitle = computed(() => {
   let suffix = " ";

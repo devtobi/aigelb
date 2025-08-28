@@ -39,10 +39,7 @@
                   <v-btn
                     :color="ollamaStepInteracted ? 'error' : 'warning'"
                     @click="
-                      interact(
-                        step,
-                        checkOllamaConnection(jumpToNextUncompletedStep)
-                      )
+                      interact(step, runOllamaCheck(jumpToNextUncompletedStep))
                     "
                   >
                     {{
@@ -87,10 +84,7 @@
                     v-if="isModelAvailable"
                     :color="modelStepInteracted ? 'error' : 'warning'"
                     @click="
-                      interact(
-                        step,
-                        checkModelAvailable(jumpToNextUncompletedStep)
-                      )
+                      interact(step, runModelCheck(jumpToNextUncompletedStep))
                     "
                   >
                     {{
@@ -106,7 +100,7 @@
                     color="warning"
                     :repo="LLM_HUGGINGFACE_REPO"
                     :file="LLM_HUGGINGFACE_FILE"
-                    @download-completed="checkModelAvailable"
+                    @download-completed="runModelCheck"
                   />
                 </template>
               </v-stepper-vertical-item>
@@ -179,9 +173,10 @@ import { browser } from "wxt/browser";
 
 import ModelDownloadButton from "@/components/instructions/ModelDownloadButton.vue";
 import { useBrowser } from "@/composables/useBrowser.ts";
+import { useModelAvailability } from "@/composables/useModelAvailability.ts";
+import { useOllama } from "@/composables/useOllama.ts";
+import { useStepperInteractions } from "@/composables/useStepperInteractions.ts";
 import { LLM_HUGGINGFACE_FILE, LLM_HUGGINGFACE_REPO } from "@/config.ts";
-import { convertToOllamaUrl } from "@/utility/conversion.ts";
-import { sendMessage } from "@/utility/messaging.ts";
 
 const emit = defineEmits<{
   onboardingCompletedChanged: [value: boolean];
@@ -212,49 +207,20 @@ async function jumpToNextUncompletedStep() {
 
 // Tracking manual interactions
 const stepper = useTemplateRef("stepper");
-const stepCount = computed(() => {
-  const stepperEl = stepper.value?.$el as HTMLElement | undefined;
-  if (!stepperEl) return 0;
-  return stepperEl.querySelectorAll(".v-stepper-vertical-item").length;
-});
-const manualInteractions = ref<boolean[]>([]);
+const { manualInteractions, interact } = useStepperInteractions(stepper);
 const ollamaStepInteracted = computed(
   () => isOllamaAvailable.value === false && manualInteractions.value[0]
 );
 const modelStepInteracted = computed(
   () => isModelAvailable.value === false && manualInteractions.value[1]
 );
-watch(
-  stepCount,
-  (newStepCount) => {
-    manualInteractions.value = Array(
-      newStepCount > 0 ? newStepCount - 1 : 0
-    ).fill(false);
-  },
-  { once: true }
-);
-async function interact(
-  step: number,
-  interactionFunction: Promise<void> | (() => void)
-) {
-  manualInteractions.value[step - 1] = true;
-  if (interactionFunction instanceof Promise) {
-    await interactionFunction;
-  } else {
-    interactionFunction();
-  }
-}
 const currentStep = ref(1);
 
 // Ollama check
-const isOllamaAvailable = ref<boolean | undefined>(undefined);
-async function checkOllamaConnection(next?: () => void) {
-  isOllamaAvailable.value = await sendMessage("checkOllamaConnection");
-  if (isOllamaAvailable.value) {
-    if (next) {
-      next();
-    }
-  }
+const { isOllamaAvailable, checkOllamaConnection } = useOllama();
+async function runOllamaCheck(next?: () => void) {
+  const ok = await checkOllamaConnection();
+  if (ok && next) next();
 }
 const ollamaStepTitle = computed(() => {
   let suffix = " ";
@@ -267,20 +233,10 @@ const ollamaStepTitle = computed(() => {
 });
 
 // Model check
-const isModelAvailable = ref<boolean | undefined>(undefined);
-const ollamaPullUrl = computed(() =>
-  convertToOllamaUrl(LLM_HUGGINGFACE_REPO, LLM_HUGGINGFACE_FILE)
-);
-async function checkModelAvailable(next?: () => void) {
-  isModelAvailable.value = await sendMessage(
-    "checkIsModelAvailable",
-    ollamaPullUrl.value
-  );
-  if (isModelAvailable.value) {
-    if (next) {
-      next();
-    }
-  }
+const { isModelAvailable, checkModelAvailable } = useModelAvailability();
+async function runModelCheck(next?: () => void) {
+  const ok = await checkModelAvailable();
+  if (ok && next) next();
 }
 const modelStepTitle = computed(() => {
   let suffix = " ";
