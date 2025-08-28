@@ -280,7 +280,7 @@ const modelStepTitle = computed(() => {
 watch(
   [isOllamaAvailable, isModelAvailable],
   ([ollama, model]) => {
-    emit("onboarding-completed-changed", !!ollama && !!model);
+    emit("onboardingCompletedChanged", !!ollama && !!model);
   },
   { immediate: true }
 );
