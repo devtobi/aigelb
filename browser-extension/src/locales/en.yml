@@ -61,3 +61,19 @@ instructions:
   closeDialog:
     title: Setup not finished
     description: The setup of AIGELB is not yet complete. Therefore, the extension will not work yet. This page can be reopened at any time via the AIGELB icon in the browser bar and the setup can be continued.
+  uninstallCard:
+    title: Uninstall
+    modelStep:
+      title: Remove AI model
+      description: If you no longer require local AI, you should remove the downloaded model to free up storage space.
+      alert: Deleting the model only removes the local copy. You can download it again at any time in the setup.
+      deleteText: Delete model
+    ollamaStep:
+      title: Stop and uninstall Ollama
+      description: To remove the AI software, close Ollama and uninstall Ollama using the standard operating system function. Instructions can be found on the operating system manufacturer's help pages.
+      alert: Ensure that Ollama is not only stopped but also uninstalled. AIGELB cannot recognise this difference.
+      uninstallText: Check Ollama stopped/uninstalled
+    extensionStep:
+      title: Remove the browser extension
+      description: Open your browser's extension manager and remove AIGELB to complete the uninstallation.
+      alert: Browser extensions can usually be removed via the puzzle piece icon in the browser bar.
