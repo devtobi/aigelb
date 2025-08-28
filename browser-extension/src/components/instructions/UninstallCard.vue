@@ -1,151 +1,145 @@
 <template>
-  <v-expansion-panels>
-    <v-expansion-panel elevation="3">
-      <template #title>
-        <v-icon
-          :icon="mdiTrashCanOutline"
-          class="mr-2"
-        />
-        <h2 class="text-h6">
-          {{ i18n.t("instructions.uninstallCard.title") }}
-        </h2>
-      </template>
-      <template #text>
-        <v-card class="elevation-0">
-          <v-card-text class="pa-0">
-            <v-stepper-vertical
-              v-model="currentStep"
-              ref="stepper"
-            >
-              <template #default="{ step }">
-                <v-stepper-vertical-item
-                  :title="modelStepTitle"
-                  value="1"
-                  :complete="isModelAvailable === false"
-                  elevation="0"
-                  :error="modelStepInteracted"
+  <v-expansion-panel elevation="3">
+    <template #title>
+      <v-icon
+        :icon="mdiTrashCanOutline"
+        class="mr-2"
+      />
+      <h2 class="text-h6">
+        {{ i18n.t("instructions.uninstallCard.title") }}
+      </h2>
+    </template>
+    <template #text>
+      <v-card class="elevation-0">
+        <v-card-text class="pa-0">
+          <v-stepper-vertical
+            v-model="currentStep"
+            ref="stepper"
+          >
+            <template #default="{ step }">
+              <v-stepper-vertical-item
+                :title="modelStepTitle"
+                value="1"
+                :complete="isModelAvailable === false"
+                elevation="0"
+                :error="modelStepInteracted"
+              >
+                <p class="mb-3">
+                  {{
+                    i18n.t("instructions.uninstallCard.modelStep.description")
+                  }}
+                </p>
+
+                <v-alert
+                  color="warning"
+                  type="info"
                 >
-                  <p class="mb-3">
-                    {{
-                      i18n.t("instructions.uninstallCard.modelStep.description")
-                    }}
-                  </p>
+                  {{ i18n.t("instructions.uninstallCard.modelStep.alert") }}
+                </v-alert>
 
-                  <v-alert
-                    color="warning"
-                    type="info"
-                  >
-                    {{ i18n.t("instructions.uninstallCard.modelStep.alert") }}
-                  </v-alert>
-
-                  <template #next>
-                    <model-delete-button
-                      v-if="isModelAvailable === true"
-                      :repo="LLM_HUGGINGFACE_REPO"
-                      :file="LLM_HUGGINGFACE_FILE"
-                      @delete-completed="checkModelAvailable"
-                    />
-                    <v-btn
-                      v-else
-                      :color="modelStepInteracted ? 'error' : 'warning'"
-                      @click="
-                        interact(
-                          step,
-                          checkModelAvailable(jumpToNextUncompletedStep)
-                        )
-                      "
-                    >
-                      {{ i18n.t("common.next") }}
-                    </v-btn>
-                  </template>
-                  <template #prev />
-                </v-stepper-vertical-item>
-
-                <v-stepper-vertical-item
-                  :title="ollamaStepTitle"
-                  value="2"
-                  :complete="isOllamaAvailable === false"
-                  :error="ollamaStepInteracted && isOllamaAvailable === true"
-                  elevation="0"
-                >
-                  <p class="mb-3">
-                    {{
-                      i18n.t(
-                        "instructions.uninstallCard.ollamaStep.description"
+                <template #next>
+                  <model-delete-button
+                    v-if="isModelAvailable === true"
+                    :repo="LLM_HUGGINGFACE_REPO"
+                    :file="LLM_HUGGINGFACE_FILE"
+                    @delete-completed="checkModelAvailable"
+                  />
+                  <v-btn
+                    v-else
+                    :color="modelStepInteracted ? 'error' : 'warning'"
+                    @click="
+                      interact(
+                        step,
+                        checkModelAvailable(jumpToNextUncompletedStep)
                       )
-                    }}
-                  </p>
-
-                  <v-alert
-                    color="warning"
-                    type="warning"
+                    "
                   >
-                    {{ i18n.t("instructions.uninstallCard.ollamaStep.alert") }}
-                  </v-alert>
+                    {{ i18n.t("common.next") }}
+                  </v-btn>
+                </template>
+                <template #prev />
+              </v-stepper-vertical-item>
 
-                  <template #next>
-                    <v-btn
-                      :color="
-                        ollamaStepInteracted && isOllamaAvailable
-                          ? 'error'
-                          : 'warning'
-                      "
-                      @click="
-                        interact(
-                          step,
-                          checkOllamaNotAvailable(jumpToNextUncompletedStep)
-                        )
-                      "
-                    >
-                      {{
-                        ollamaStepInteracted
-                          ? i18n.t("common.retry")
-                          : i18n.t(
-                              "instructions.uninstallCard.ollamaStep.uninstallText"
-                            )
-                      }}
-                    </v-btn>
-                  </template>
-                  <template #prev />
-                </v-stepper-vertical-item>
+              <v-stepper-vertical-item
+                :title="ollamaStepTitle"
+                value="2"
+                :complete="isOllamaAvailable === false"
+                :error="ollamaStepInteracted && isOllamaAvailable === true"
+                elevation="0"
+              >
+                <p class="mb-3">
+                  {{
+                    i18n.t("instructions.uninstallCard.ollamaStep.description")
+                  }}
+                </p>
 
-                <v-stepper-vertical-item
-                  :title="
-                    i18n.t('instructions.uninstallCard.extensionStep.title')
-                  "
-                  value="3"
-                  :complete="
-                    currentStep === 3 &&
-                    isOllamaAvailable === false &&
-                    isModelAvailable === false
-                  "
-                  elevation="0"
-                  hide-actions
+                <v-alert
+                  color="warning"
+                  type="warning"
                 >
-                  <p class="mb-3">
-                    {{
-                      i18n.t(
-                        "instructions.uninstallCard.extensionStep.description"
-                      )
-                    }}
-                  </p>
+                  {{ i18n.t("instructions.uninstallCard.ollamaStep.alert") }}
+                </v-alert>
 
-                  <v-alert
-                    color="warning"
-                    type="info"
+                <template #next>
+                  <v-btn
+                    :color="
+                      ollamaStepInteracted && isOllamaAvailable
+                        ? 'error'
+                        : 'warning'
+                    "
+                    @click="
+                      interact(
+                        step,
+                        checkOllamaNotAvailable(jumpToNextUncompletedStep)
+                      )
+                    "
                   >
                     {{
-                      i18n.t("instructions.uninstallCard.extensionStep.alert")
+                      ollamaStepInteracted
+                        ? i18n.t("common.retry")
+                        : i18n.t(
+                            "instructions.uninstallCard.ollamaStep.uninstallText"
+                          )
                     }}
-                  </v-alert>
-                </v-stepper-vertical-item>
-              </template>
-            </v-stepper-vertical>
-          </v-card-text>
-        </v-card>
-      </template>
-    </v-expansion-panel>
-  </v-expansion-panels>
+                  </v-btn>
+                </template>
+                <template #prev />
+              </v-stepper-vertical-item>
+
+              <v-stepper-vertical-item
+                :title="
+                  i18n.t('instructions.uninstallCard.extensionStep.title')
+                "
+                value="3"
+                :complete="
+                  currentStep === 3 &&
+                  isOllamaAvailable === false &&
+                  isModelAvailable === false
+                "
+                elevation="0"
+                hide-actions
+              >
+                <p class="mb-3">
+                  {{
+                    i18n.t(
+                      "instructions.uninstallCard.extensionStep.description"
+                    )
+                  }}
+                </p>
+
+                <v-alert
+                  color="warning"
+                  type="info"
+                >
+                  {{ i18n.t("instructions.uninstallCard.extensionStep.alert") }}
+                </v-alert>
+              </v-stepper-vertical-item>
+            </template>
+          </v-stepper-vertical>
+        </v-card-text>
+      </v-card>
+    </template>
+  </v-expansion-panel>
 </template>
 
 <script setup lang="ts">
