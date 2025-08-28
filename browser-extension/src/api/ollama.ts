@@ -38,3 +38,15 @@ export async function downloadModel(ollamaPullUrl: string) {
     return null;
   }
 }
+
+export async function deleteModel(ollamaPullUrl: string) {
+  try {
+    await ollama.delete({ model: ollamaPullUrl });
+    return true;
+  } catch (error: unknown) {
+    console.debug(
+      `Deleting model ${ollamaPullUrl} failed: ${error instanceof Error ? error.message : String(error)}`
+    );
+    return false;
+  }
+}

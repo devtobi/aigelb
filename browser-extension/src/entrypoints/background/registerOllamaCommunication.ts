@@ -3,7 +3,12 @@ import type {
   DownloadStatus,
 } from "@/types/DownloadProgress.ts";
 
-import { downloadModel, isAvailable, isModelAvailable } from "@/api/ollama.ts";
+import {
+  deleteModel,
+  downloadModel,
+  isAvailable,
+  isModelAvailable,
+} from "@/api/ollama.ts";
 import { onMessage, sendMessage } from "@/utility/messaging.ts";
 
 export default function registerOllamaCommunication() {
@@ -48,6 +53,16 @@ export default function registerOllamaCommunication() {
         percentage: 0,
         status: "error",
       });
+    }
+  });
+  onMessage("deleteModel", async (message) => {
+    try {
+      return await deleteModel(message.data);
+    } catch (error: unknown) {
+      console.debug(
+        `Deleting model failed: ${error instanceof Error ? error.message : String(error)}`
+      );
+      return false;
     }
   });
 }

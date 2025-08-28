@@ -1,148 +1,157 @@
 <template>
-  <v-card
-    :title="i18n.t('instructions.setupCard.title')"
-    :prepend-icon="mdiCog"
-    class="pa-3"
-    elevation="3"
-  >
-    <v-card-text>
-      <v-stepper-vertical
-        v-model="currentStep"
-        ref="stepper"
-      >
-        <template #default="{ step }">
-          <v-stepper-vertical-item
-            :title="ollamaStepTitle"
-            value="1"
-            :complete="isOllamaAvailable"
-            elevation="0"
-            :error="ollamaStepInteracted"
+  <v-expansion-panel elevation="3">
+    <template #title>
+      <v-icon
+        :icon="mdiCog"
+        class="mr-2"
+      />
+      <h2 class="text-h6">
+        {{ cardTitle }}
+      </h2>
+    </template>
+    <template #text>
+      <v-card class="elevation-0">
+        <v-card-text class="pa-0">
+          <v-stepper-vertical
+            v-model="currentStep"
+            ref="stepper"
           >
-            <p class="mb-3">
-              {{ i18n.t("instructions.setupCard.ollamaStep.description") }}
-            </p>
+            <template #default="{ step }">
+              <v-stepper-vertical-item
+                :title="ollamaStepTitle"
+                value="1"
+                :complete="isOllamaAvailable"
+                elevation="0"
+                :error="ollamaStepInteracted"
+              >
+                <p class="mb-3">
+                  {{ i18n.t("instructions.setupCard.ollamaStep.description") }}
+                </p>
 
-            <v-alert
-              color="warning"
-              type="warning"
-            >
-              {{ i18n.t("instructions.setupCard.ollamaStep.alert") }}
-            </v-alert>
+                <v-alert
+                  color="warning"
+                  type="warning"
+                >
+                  {{ i18n.t("instructions.setupCard.ollamaStep.alert") }}
+                </v-alert>
 
-            <template #next>
-              <v-btn
-                :color="ollamaStepInteracted ? 'error' : 'warning'"
-                @click="
-                  interact(
-                    step,
-                    checkOllamaConnection(jumpToNextUncompletedStep)
-                  )
+                <template #next>
+                  <v-btn
+                    :color="ollamaStepInteracted ? 'error' : 'warning'"
+                    @click="
+                      interact(step, runOllamaCheck(jumpToNextUncompletedStep))
+                    "
+                  >
+                    {{
+                      ollamaStepInteracted
+                        ? i18n.t("common.retry")
+                        : i18n.t("instructions.setupCard.ollamaStep.nextText")
+                    }}
+                  </v-btn>
+                </template>
+                <template v-slot:prev>
+                  <v-btn
+                    :prepend-icon="mdiDownload"
+                    variant="tonal"
+                    :text="
+                      i18n.t('instructions.setupCard.ollamaStep.downloadText')
+                    "
+                    href="https://ollama.com/download"
+                    target="_blank"
+                    :disabled="false"
+                  />
+                </template>
+              </v-stepper-vertical-item>
+              <v-stepper-vertical-item
+                :title="modelStepTitle"
+                value="2"
+                elevation="0"
+                :complete="isModelAvailable"
+                :error="modelStepInteracted"
+              >
+                <p class="mb-3">
+                  {{ i18n.t("instructions.setupCard.modelStep.description") }}
+                </p>
+
+                <v-alert
+                  color="warning"
+                  type="warning"
+                >
+                  {{ i18n.t("instructions.setupCard.modelStep.alert") }}
+                </v-alert>
+                <template #next>
+                  <v-btn
+                    v-if="isModelAvailable"
+                    :color="modelStepInteracted ? 'error' : 'warning'"
+                    @click="
+                      interact(step, runModelCheck(jumpToNextUncompletedStep))
+                    "
+                  >
+                    {{
+                      modelStepInteracted
+                        ? i18n.t("common.retry")
+                        : i18n.t("common.next")
+                    }}
+                  </v-btn>
+                </template>
+                <template v-slot:prev>
+                  <model-download-button
+                    v-if="!isModelAvailable"
+                    color="warning"
+                    :repo="LLM_HUGGINGFACE_REPO"
+                    :file="LLM_HUGGINGFACE_FILE"
+                    @download-completed="runModelCheck"
+                  />
+                </template>
+              </v-stepper-vertical-item>
+              <v-stepper-vertical-item
+                :title="pinStepTitle"
+                value="3"
+                :complete="!!isPinned"
+                elevation="0"
+              >
+                <p class="mb-3">
+                  {{ i18n.t("instructions.setupCard.pinStep.description") }}
+                </p>
+
+                <v-alert
+                  color="warning"
+                  type="info"
+                >
+                  {{ i18n.t("instructions.setupCard.pinStep.alert") }}
+                </v-alert>
+
+                <template #next="{ next }">
+                  <v-btn
+                    color="warning"
+                    @click="interact(step, next)"
+                  >
+                    {{
+                      isPinned ? i18n.t("common.next") : i18n.t("common.skip")
+                    }}
+                  </v-btn>
+                </template>
+                <template v-slot:prev />
+              </v-stepper-vertical-item>
+              <v-stepper-vertical-item
+                :title="i18n.t('instructions.setupCard.doneStep.title')"
+                value="4"
+                :complete="
+                  !!isOllamaAvailable && !!isModelAvailable && currentStep === 4
                 "
+                elevation="0"
+                hide-actions
               >
-                {{
-                  ollamaStepInteracted
-                    ? i18n.t("common.retry")
-                    : i18n.t("instructions.setupCard.ollamaStep.nextText")
-                }}
-              </v-btn>
+                <p class="mb-3">
+                  {{ i18n.t("instructions.setupCard.doneStep.description") }}
+                </p>
+              </v-stepper-vertical-item>
             </template>
-            <template v-slot:prev>
-              <v-btn
-                :prepend-icon="mdiDownload"
-                variant="tonal"
-                :text="i18n.t('instructions.setupCard.ollamaStep.downloadText')"
-                href="https://ollama.com/download"
-                target="_blank"
-                :disabled="false"
-              />
-            </template>
-          </v-stepper-vertical-item>
-          <v-stepper-vertical-item
-            :title="modelStepTitle"
-            value="2"
-            elevation="0"
-            :complete="isModelAvailable"
-            :error="modelStepInteracted"
-          >
-            <p class="mb-3">
-              {{ i18n.t("instructions.setupCard.modelStep.description") }}
-            </p>
-
-            <v-alert
-              color="warning"
-              type="warning"
-            >
-              {{ i18n.t("instructions.setupCard.modelStep.alert") }}
-            </v-alert>
-            <template #next>
-              <v-btn
-                v-if="isModelAvailable"
-                :color="modelStepInteracted ? 'error' : 'warning'"
-                @click="
-                  interact(step, checkModelAvailable(jumpToNextUncompletedStep))
-                "
-              >
-                {{
-                  modelStepInteracted
-                    ? i18n.t("common.retry")
-                    : i18n.t("common.next")
-                }}
-              </v-btn>
-            </template>
-            <template v-slot:prev>
-              <model-download-button
-                v-if="!isModelAvailable"
-                color="warning"
-                :repo="LLM_HUGGINGFACE_REPO"
-                :file="LLM_HUGGINGFACE_FILE"
-                @download-completed="checkModelAvailable"
-              />
-            </template>
-          </v-stepper-vertical-item>
-          <v-stepper-vertical-item
-            :title="pinStepTitle"
-            value="3"
-            :complete="!!isPinned"
-            elevation="0"
-          >
-            <p class="mb-3">
-              {{ i18n.t("instructions.setupCard.pinStep.description") }}
-            </p>
-
-            <v-alert
-              color="warning"
-              type="info"
-            >
-              {{ i18n.t("instructions.setupCard.pinStep.alert") }}
-            </v-alert>
-
-            <template #next="{ next }">
-              <v-btn
-                color="warning"
-                @click="interact(step, next)"
-              >
-                {{ isPinned ? i18n.t("common.next") : i18n.t("common.skip") }}
-              </v-btn>
-            </template>
-            <template v-slot:prev />
-          </v-stepper-vertical-item>
-          <v-stepper-vertical-item
-            :title="i18n.t('instructions.setupCard.doneStep.title')"
-            value="4"
-            :complete="
-              !!isOllamaAvailable && !!isModelAvailable && currentStep === 4
-            "
-            elevation="0"
-            hide-actions
-          >
-            <p class="mb-3">
-              {{ i18n.t("instructions.setupCard.doneStep.description") }}
-            </p>
-          </v-stepper-vertical-item>
-        </template>
-      </v-stepper-vertical>
-    </v-card-text>
-  </v-card>
+          </v-stepper-vertical>
+        </v-card-text>
+      </v-card>
+    </template>
+  </v-expansion-panel>
 </template>
 
 <script setup lang="ts">
@@ -164,9 +173,10 @@ import { browser } from "wxt/browser";
 
 import ModelDownloadButton from "@/components/instructions/ModelDownloadButton.vue";
 import { useBrowser } from "@/composables/useBrowser.ts";
+import { useModelAvailability } from "@/composables/useModelAvailability.ts";
+import { useOllama } from "@/composables/useOllama.ts";
+import { useStepperInteractions } from "@/composables/useStepperInteractions.ts";
 import { LLM_HUGGINGFACE_FILE, LLM_HUGGINGFACE_REPO } from "@/config.ts";
-import { convertToOllamaUrl } from "@/utility/conversion.ts";
-import { sendMessage } from "@/utility/messaging.ts";
 
 const emit = defineEmits<{
   onboardingCompletedChanged: [value: boolean];
@@ -197,49 +207,20 @@ async function jumpToNextUncompletedStep() {
 
 // Tracking manual interactions
 const stepper = useTemplateRef("stepper");
-const stepCount = computed(() => {
-  const stepperEl = stepper.value?.$el as HTMLElement | undefined;
-  if (!stepperEl) return 0;
-  return stepperEl.querySelectorAll(".v-stepper-vertical-item").length;
-});
-const manualInteractions = ref<boolean[]>([]);
+const { manualInteractions, interact } = useStepperInteractions(stepper);
 const ollamaStepInteracted = computed(
   () => isOllamaAvailable.value === false && manualInteractions.value[0]
 );
 const modelStepInteracted = computed(
   () => isModelAvailable.value === false && manualInteractions.value[1]
 );
-watch(
-  stepCount,
-  (newStepCount) => {
-    manualInteractions.value = Array(
-      newStepCount > 0 ? newStepCount - 1 : 0
-    ).fill(false);
-  },
-  { once: true }
-);
-async function interact(
-  step: number,
-  interactionFunction: Promise<void> | (() => void)
-) {
-  manualInteractions.value[step - 1] = true;
-  if (interactionFunction instanceof Promise) {
-    await interactionFunction;
-  } else {
-    interactionFunction();
-  }
-}
 const currentStep = ref(1);
 
 // Ollama check
-const isOllamaAvailable = ref<boolean | undefined>(undefined);
-async function checkOllamaConnection(next?: () => void) {
-  isOllamaAvailable.value = await sendMessage("checkOllamaConnection");
-  if (isOllamaAvailable.value) {
-    if (next) {
-      next();
-    }
-  }
+const { isOllamaAvailable, checkOllamaConnection } = useOllama();
+async function runOllamaCheck(next?: () => void) {
+  const ok = await checkOllamaConnection();
+  if (ok && next) next();
 }
 const ollamaStepTitle = computed(() => {
   let suffix = " ";
@@ -252,20 +233,10 @@ const ollamaStepTitle = computed(() => {
 });
 
 // Model check
-const isModelAvailable = ref<boolean | undefined>(undefined);
-const ollamaPullUrl = computed(() =>
-  convertToOllamaUrl(LLM_HUGGINGFACE_REPO, LLM_HUGGINGFACE_FILE)
-);
-async function checkModelAvailable(next?: () => void) {
-  isModelAvailable.value = await sendMessage(
-    "checkIsModelAvailable",
-    ollamaPullUrl.value
-  );
-  if (isModelAvailable.value) {
-    if (next) {
-      next();
-    }
-  }
+const { isModelAvailable, checkModelAvailable } = useModelAvailability();
+async function runModelCheck(next?: () => void) {
+  const ok = await checkModelAvailable();
+  if (ok && next) next();
 }
 const modelStepTitle = computed(() => {
   let suffix = " ";
@@ -277,13 +248,25 @@ const modelStepTitle = computed(() => {
   return `${i18n.t("instructions.setupCard.modelStep.title")}${suffix}`;
 });
 
+const setupCompleted = computed(
+  () => !!isOllamaAvailable.value && !!isModelAvailable.value
+);
 watch(
-  [isOllamaAvailable, isModelAvailable],
-  ([ollama, model]) => {
-    emit("onboardingCompletedChanged", !!ollama && !!model);
+  setupCompleted,
+  (newSetupCompleted) => {
+    emit("onboardingCompletedChanged", newSetupCompleted);
   },
   { immediate: true }
 );
+const cardTitle = computed(() => {
+  let suffix;
+  if (setupCompleted.value) {
+    suffix = ` (${i18n.t("instructions.setupCard.successSuffix")})`;
+  } else {
+    suffix = ` (${i18n.t("instructions.setupCard.failureSuffix")})`;
+  }
+  return `${i18n.t("instructions.setupCard.title")}${suffix}`;
+});
 
 // Pin check
 const { isPinnedInToolbar } = useBrowser();

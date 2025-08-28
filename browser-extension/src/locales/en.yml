@@ -23,6 +23,8 @@ instructions:
     development: AIGELB is currently in an development stage. Some translations may be experimental or incomplete and the extension may not be fully functional. Additionally, bugs may occur. Please report any issues to the projects GitHub repository. You can find the link to the repository at the bottom of this page.
   setupCard:
     title: Setup
+    successSuffix: completed
+    failureSuffix: not yet completed
     ollamaStep:
       title: Install and launch AI software
       successSuffix: Connection successful
@@ -48,7 +50,7 @@ instructions:
   modelDownloadButton:
     text: Download model
   linksPanel:
-    title: Related links
+    title: Further information
     github:
       title: AIGELB on GitHub
       subTitle: Follow the development of AIGELB
@@ -61,3 +63,24 @@ instructions:
   closeDialog:
     title: Setup not finished
     description: The setup of AIGELB is not yet complete. Therefore, the extension will not work yet. This page can be reopened at any time via the AIGELB icon in the browser bar and the setup can be continued.
+  uninstallCard:
+    title: Uninstall
+    modelStep:
+      title: Remove AI model
+      successSuffix: Model removed
+      failureSuffix: Model still found
+      description: If you no longer require local AI, you should remove the downloaded model to free up storage space.
+      alert: Deleting the model only removes the local copy. You can download it again at any time in the setup.
+    ollamaStep:
+      title: Stop and uninstall Ollama
+      successSuffix: AI software stopped/uninstalled
+      failureSuffix: AI software still running
+      description: To remove the AI software, close Ollama and uninstall Ollama using the standard operating system function. Instructions can be found on the operating system manufacturer's help pages.
+      alert: Ensure that Ollama is not only stopped but also uninstalled. AIGELB cannot recognise this difference.
+      uninstallText: Check Ollama stopped/uninstalled
+    extensionStep:
+      title: Remove the browser extension
+      description: Open your browser's extension manager and remove AIGELB to complete the uninstallation.
+      alert: Browser extensions can usually be removed via the puzzle piece icon in the browser bar.
+  modelDeleteButton:
+    text: Delete model

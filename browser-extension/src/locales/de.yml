@@ -23,6 +23,8 @@ instructions:
     development: AIGELB befindet sich derzeit in der Entwicklungsphase. Einige Übersetzungen sind möglicherweise fehlerhaft oder unvollständig, und die Erweiterung ist möglicherweise noch nicht voll funktionsfähig. Außerdem können Fehler auftreten. Bitte melden Sie alle Probleme im GitHub-Repository des Projekts. Den Link zum Repository finden Sie unten auf dieser Seite.
   setupCard:
     title: Einrichtung
+    successSuffix: abgeschlossen
+    failureSuffix: noch nicht abgeschlossen
     ollamaStep:
       title: KI-Software installieren und starten
       successSuffix: Verbindung erfolgreich
@@ -48,7 +50,7 @@ instructions:
   modelDownloadButton:
     text: Modell herunterladen
   linksPanel:
-    title: Weiterführende Links
+    title: Weiterführende Informationen
     github:
       title: AIGELB auf GitHub
       subTitle: Verfolgen Sie die Entwicklung von AIGELB
@@ -61,3 +63,24 @@ instructions:
   closeDialog:
     title: Einrichtung nicht abgeschlossen
     description: Die Einrichtung von AIGELB ist noch nicht abgeschlossen. Daher wird die Erweiterung noch nicht funktionieren. Diese Seite kann jederzeit über das AIGELB-Symbol in der Browserleiste wieder geöffnet und die Einrichtung fortgesetzt werden.
+  uninstallCard:
+    title: Deinstallation
+    modelStep:
+      title: KI‑Modell löschen
+      successSuffix: Modell entfernt
+      failureSuffix: Modell noch vorhanden
+      description: Wenn Sie die lokale KI nicht mehr benötigen, sollten Sie das heruntergeladene Modell entfernen, um Speicherplatz freizugeben.
+      alert: Beim Entfernen wird nur die lokale Kopie gelöscht. Sie können das Modell jederzeit über die Einrichtung erneut herunterladen.
+    ollamaStep:
+      title: KI-Software beenden und deinstallieren
+      successSuffix: KI-Software gestoppt/deinstalliert
+      failureSuffix: KI-Software läuft noch
+      description: Um die KI‑Software vollständig zu entfernen, beenden Sie Ollama und deinstallieren Sie Ollama über die übliche Funktion des Betriebssystems. Eine Anleitung finden Sie auf den Hilfe-Seiten des Betriebssystem-Herstellers.
+      alert: Stellen Sie sicher, dass Ollama nicht nur gestoppt sondern auch deinstalliert ist. AIGELB kann diesen Unterschied nicht erkennen.
+      uninstallText: Prüfen, ob Ollama gestoppt/deinstalliert wurde
+    extensionStep:
+      title: Browser‑Erweiterung entfernen
+      description: Öffnen Sie die Erweiterungsverwaltung Ihres Browsers und entfernen Sie AIGELB, um die Deinstallation abzuschließen.
+      alert: Browser-Erweiterungen können in der Regel über das Puzzleteil-Symbol in der Browserleiste entfernt werden.
+  modelDeleteButton:
+    text: Modell löschen
