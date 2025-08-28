@@ -1,6 +1,5 @@
 import { i18n } from "#i18n";
-import { Browser } from "@wxt-dev/browser";
-import getUILanguage = Browser.i18n.getUILanguage;
+import { getUILanguage } from "@/utility/browser.ts";
 
 export function setDocumentTitleByKey(key: string) {
   // @ts-expect-error-next-line - i18n.t does not expose union type

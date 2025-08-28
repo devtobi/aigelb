@@ -9,8 +9,7 @@ import "@/styles/override.css";
 import { de, en } from "vuetify/locale";
 
 import { mapLangToVuetify } from "@/utility/i18n.ts";
-import { Browser } from "@wxt-dev/browser";
-import getUILanguage = Browser.i18n.getUILanguage;
+import { getUILanguage } from "@/utility/browser.ts";
 
 const uiLanguage = mapLangToVuetify(getUILanguage());
 
