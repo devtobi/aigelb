@@ -244,9 +244,9 @@ async function checkOllamaNotAvailable(next?: () => void) {
 }
 const ollamaStepTitle = computed(() => {
   let suffix = " ";
-  if (isModelAvailable.value === false) {
+  if (isOllamaAvailable.value === false) {
     suffix = ` (${i18n.t("instructions.uninstallCard.ollamaStep.successSuffix")})`;
-  } else if (modelStepInteracted.value === true) {
+  } else if (ollamaStepInteracted.value === true) {
     suffix = ` (${i18n.t("instructions.uninstallCard.ollamaStep.failureSuffix")})`;
   }
   return `${i18n.t("instructions.uninstallCard.ollamaStep.title")}${suffix}`;
