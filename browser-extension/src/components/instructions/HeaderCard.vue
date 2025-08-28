@@ -7,7 +7,7 @@
       class="mx-auto"
       :size="128"
     />
-    <v-card-title class="pt-0 text-h2 font-weight-bold">AIGELB</v-card-title>
+    <v-card-title class="pt-0 text-h4 font-weight-bold">AIGELB</v-card-title>
     <v-card-text class="pb-4">
       <p>
         {{ i18n.t("instructions.headerCard.subTitle") }}
