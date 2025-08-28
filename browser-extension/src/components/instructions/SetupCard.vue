@@ -70,7 +70,11 @@
                 :error="modelStepInteracted"
               >
                 <p class="mb-3">
-                  {{ i18n.t("instructions.setupCard.modelStep.description") }}
+                  {{
+                    i18n
+                      .t("instructions.setupCard.modelStep.description")
+                      .replace("%s", LLM_HUGGINGFACE_REPO)
+                  }}
                 </p>
 
                 <v-alert

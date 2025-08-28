@@ -42,7 +42,7 @@ instructions:
       title: Download AI model
       successSuffix: Model found
       failureSuffix: Model not found
-      description: In addition to AI software, a free AI model is required to handle translation and simplification. AIGELB uses the %s model for this purpose. The button below starts the download.
+      description: In addition to AI software, a free AI model is required to handle translation and simplification. AIGELB uses the model '%s' for this purpose. The button below starts the download.
       alert: Please ensure that there is sufficient storage space on your computer to download the model.
     pinStep:
       title: Pin browser extension
