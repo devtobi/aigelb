@@ -4,10 +4,10 @@ import type {
 } from "@/types/DownloadProgress.ts";
 
 import {
+  deleteModel,
   downloadModel,
   isAvailable,
   isModelAvailable,
-  deleteModel,
 } from "@/api/ollama.ts";
 import { onMessage, sendMessage } from "@/utility/messaging.ts";
 

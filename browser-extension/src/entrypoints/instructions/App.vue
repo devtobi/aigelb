@@ -16,6 +16,7 @@
           class="mb-8"
           @onboarding-completed-changed="onOnboardingCompletedChanged"
         />
+        <uninstall-card class="mb-8" />
         <links-panel class="mb-8" />
         <close-button @close="onClickClose" />
       </v-container>
@@ -34,6 +35,7 @@ import HeaderCard from "@/components/instructions/HeaderCard.vue";
 import ImportantNotesCard from "@/components/instructions/ImportantNotesCard.vue";
 import LinksPanel from "@/components/instructions/LinksPanel.vue";
 import SetupCard from "@/components/instructions/SetupCard.vue";
+import UninstallCard from "@/components/instructions/UninstallCard.vue";
 import { useBrowser } from "@/composables/useBrowser.ts";
 
 const { closeWindow } = useBrowser();
