@@ -3,8 +3,11 @@
     <the-app-bar />
 
     <v-main>
-      <v-container class="fill-height ">
-        <v-row align="end" class="mx-1 fill-height">
+      <v-container class="fill-height">
+        <v-row
+          align="end"
+          class="mx-1 fill-height"
+        >
           <instructions-button />
         </v-row>
       </v-container>
