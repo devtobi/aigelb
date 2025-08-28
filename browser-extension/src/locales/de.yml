@@ -89,3 +89,6 @@ instructions:
       alert: Browser-Erweiterungen können in der Regel über das Puzzleteil-Symbol in der Browserleiste entfernt werden.
   modelDeleteButton:
     text: Modell löschen
+popup:
+  instructionsButton:
+    text: Anleitung öffnen

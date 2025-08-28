@@ -89,3 +89,6 @@ instructions:
       alert: Browser extensions can usually be removed via the puzzle piece icon in the browser bar.
   modelDeleteButton:
     text: Delete model
+popup:
+  instructionsButton:
+    text: Open instructions

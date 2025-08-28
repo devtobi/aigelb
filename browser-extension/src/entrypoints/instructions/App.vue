@@ -32,9 +32,7 @@ import CloseDialog from "@/components/instructions/CloseDialog.vue";
 import ExpansionPanels from "@/components/instructions/ExpansionPanels.vue";
 import HeaderCard from "@/components/instructions/HeaderCard.vue";
 import ImportantNotesCard from "@/components/instructions/ImportantNotesCard.vue";
-import { useBrowser } from "@/composables/useBrowser.ts";
-
-const { closeWindow } = useBrowser();
+import { closeWindow } from "@/utility/browser.ts";
 
 const showDialog = ref(false);
 

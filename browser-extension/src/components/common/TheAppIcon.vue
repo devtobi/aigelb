@@ -1,9 +1,10 @@
 <template>
   <v-img
     :width="size"
-    aspect-ratio="1/1"
+    :height="size"
     cover
     :src="logo"
+    :transition="false"
   />
 </template>
 

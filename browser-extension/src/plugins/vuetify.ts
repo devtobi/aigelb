@@ -8,10 +8,9 @@ import "@/styles/override.css";
 
 import { de, en } from "vuetify/locale";
 
-import { useBrowser } from "@/composables/useBrowser.ts";
+import { getUILanguage } from "@/utility/browser.ts";
 import { mapLangToVuetify } from "@/utility/i18n.ts";
 
-const { getUILanguage } = useBrowser();
 const uiLanguage = mapLangToVuetify(getUILanguage());
 
 export default createVuetify({
