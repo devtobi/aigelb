@@ -23,6 +23,8 @@ instructions:
     development: AIGELB is currently in an development stage. Some translations may be experimental or incomplete and the extension may not be fully functional. Additionally, bugs may occur. Please report any issues to the projects GitHub repository. You can find the link to the repository at the bottom of this page.
   setupCard:
     title: Setup
+    successSuffix: completed
+    failureSuffix: not yet completed
     ollamaStep:
       title: Install and launch AI software
       successSuffix: Connection successful

@@ -23,6 +23,8 @@ instructions:
     development: AIGELB befindet sich derzeit in der Entwicklungsphase. Einige Übersetzungen sind möglicherweise fehlerhaft oder unvollständig, und die Erweiterung ist möglicherweise noch nicht voll funktionsfähig. Außerdem können Fehler auftreten. Bitte melden Sie alle Probleme im GitHub-Repository des Projekts. Den Link zum Repository finden Sie unten auf dieser Seite.
   setupCard:
     title: Einrichtung
+    successSuffix: abgeschlossen
+    failureSuffix: noch nicht abgeschlossen
     ollamaStep:
       title: KI-Software installieren und starten
       successSuffix: Verbindung erfolgreich

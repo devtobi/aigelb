@@ -6,7 +6,7 @@
         class="mr-2"
       />
       <h2 class="text-h6">
-        {{ i18n.t("instructions.setupCard.title") }}
+        {{ cardTitle }}
       </h2>
     </template>
     <template #text>
@@ -292,13 +292,25 @@ const modelStepTitle = computed(() => {
   return `${i18n.t("instructions.setupCard.modelStep.title")}${suffix}`;
 });
 
+const setupCompleted = computed(
+  () => !!isOllamaAvailable.value && !!isModelAvailable.value
+);
 watch(
-  [isOllamaAvailable, isModelAvailable],
-  ([ollama, model]) => {
-    emit("onboardingCompletedChanged", !!ollama && !!model);
+  setupCompleted,
+  (newSetupCompleted) => {
+    emit("onboardingCompletedChanged", newSetupCompleted);
   },
   { immediate: true }
 );
+const cardTitle = computed(() => {
+  let suffix;
+  if (setupCompleted.value) {
+    suffix = ` (${i18n.t("instructions.setupCard.successSuffix")})`;
+  } else {
+    suffix = ` (${i18n.t("instructions.setupCard.failureSuffix")})`;
+  }
+  return `${i18n.t("instructions.setupCard.title")}${suffix}`;
+});
 
 // Pin check
 const { isPinnedInToolbar } = useBrowser();
