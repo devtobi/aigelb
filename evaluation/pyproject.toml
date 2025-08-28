@@ -20,13 +20,13 @@ dependencies = [
     "pathvalidate (==3.3.1)",
     "tqdm (==4.67.1)",
     "bert-score(==0.3.13)",
-    "pandas(==2.3.1)",
+    "pandas(==2.3.2)",
 ]
 
 [dependency-groups]
 dev = [
-    "pyrefly (==0.29.0)",
-    "ruff (==0.12.9)",
+    "pyrefly (==0.29.2)",
+    "ruff (==0.12.10)",
 ]
 
 [tool.uv]
