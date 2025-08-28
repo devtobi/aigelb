@@ -1,6 +1,6 @@
 import { i18n } from "#i18n";
-
-import { useBrowser } from "@/composables/useBrowser.ts";
+import { Browser } from "@wxt-dev/browser";
+import getUILanguage = Browser.i18n.getUILanguage;
 
 export function setDocumentTitleByKey(key: string) {
   // @ts-expect-error-next-line - i18n.t does not expose union type
@@ -11,6 +11,5 @@ export function setDocumentTitleByKey(key: string) {
 }
 
 export function applyLocaleToHtmlLang() {
-  const { getUILanguage } = useBrowser();
   document.documentElement.lang = getUILanguage?.() ?? "en";
 }
