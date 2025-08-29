@@ -24,6 +24,7 @@ instructions:
     background: This extension was developed as part of a master thesis at the 'Munich University of Applied Sciences'. Check the links at the bottom of this page for more information.
   importantNotesCard:
     title: Important Notes
+    language: AIGELB detected your browser is not set to German. Even though AIGELB itself is available in several languages, only texts in German can be simplified into Easy Language. Using AIGELB for other languages may lead to unexpected results.
     description: AI-based translation and simplification of text (especially for Easy Language) is a complex and sensitive task. Please note that AI models are not perfect and may make mistakes. Therefore, the extension can not guarantee that the translated or simplified text is semantically correct and respects all rules of Easy Language. Use the extension with caution and validate the results with a human if possible. Especially for sensitive topics such as medical or financial information, the extension should not be used without a human's supervision of the generated content.
     development: AIGELB is currently in an development stage. Some translations may be experimental or incomplete and the extension may not be fully functional. Additionally, bugs may occur. Please report any issues to the projects GitHub repository. You can find the link to the repository at the bottom of this page.
   setupCard:
