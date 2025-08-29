@@ -1,8 +1,10 @@
-import { defineContentScript } from "#imports";
 import type { ContentScriptContext } from "wxt/utils/content-script-context";
+
+import { defineContentScript } from "#imports";
 import { createApp } from "vue";
-import App from "@/entrypoints/content/App.vue";
 import { createShadowRootUi } from "wxt/utils/content-script-ui/shadow-root";
+
+import App from "@/entrypoints/content/App.vue";
 import { registerVuePlugins } from "@/plugins";
 
 export default defineContentScript({
@@ -10,10 +12,10 @@ export default defineContentScript({
   cssInjectionMode: "ui",
   async main(context: ContentScriptContext) {
     const ui = await createShadowRootUi(context, {
-      name: 'aigelb-ui',
+      name: "aigelb-ui",
       isolateEvents: true,
-      position: 'inline',
-      anchor: 'body',
+      position: "overlay",
+      anchor: "body",
       onMount: (container) => {
         const app = createApp(App);
         registerVuePlugins(app);
@@ -25,9 +27,11 @@ export default defineContentScript({
       },
     });
 
-    context.onInvalidated(() => {
-      console.debug("Content script got invalidated.");
-    });
+    const notifyInvalidated = () => {
+      ui.remove();
+    };
+    context.onInvalidated(notifyInvalidated);
+
     ui.mount();
-  }
+  },
 });
