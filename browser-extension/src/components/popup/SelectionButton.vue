@@ -11,7 +11,7 @@
       @click="startSelection"
       size="large"
       block
-      color="warning"
+      :color="isDisabled ? 'grey' : 'warning'"
       :prepend-icon="mdiCursorDefault"
       :disabled="isDisabled"
     >
