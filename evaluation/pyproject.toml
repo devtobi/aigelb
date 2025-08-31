@@ -15,7 +15,7 @@ dependencies = [
     "huggingface_hub (==0.34.4)",
     "llama-cpp-python (==0.3.16)",
     "evaluate (==0.4.5)",
-    "textstat (==0.7.8)",
+    "textstat (==0.7.10)",
     "lexicalrichness (==0.5.1)",
     "pathvalidate (==3.3.1)",
     "tqdm (==4.67.1)",
