@@ -27,7 +27,12 @@ import { computed, onMounted } from "vue";
 
 import { useModelAvailability } from "@/composables/useModelAvailability.ts";
 import { useOllama } from "@/composables/useOllama.ts";
-import { closeWindow, getActiveTabId } from "@/utility/browser.ts";
+import {
+  clearErrorBadge,
+  closeWindow,
+  getActiveTabId,
+  setErrorBadge,
+} from "@/utility/browser.ts";
 import { sendMessage } from "@/utility/messaging.ts";
 
 const { isOllamaAvailable, checkOllamaConnection } = useOllama();
@@ -39,6 +44,11 @@ onMounted(async () => {
 
 async function checkCondition() {
   await Promise.all([checkOllamaConnection(), checkModelAvailable()]);
+  if (isDisabled.value) {
+    await setErrorBadge();
+  } else {
+    await clearErrorBadge();
+  }
 }
 
 const isDisabled = computed(
