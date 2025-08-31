@@ -21,15 +21,15 @@
         v-show="rect.visible"
         :elevation="4"
         rounded="lg"
-        class="pointer-events-none position-absolute"
+        class="pointer-events-none position-fixed"
         :style="{
           left: rect.x + 'px',
           top: rect.y + 'px',
           width: rect.w + 'px',
           height: rect.h + 'px',
-          border: '2px solid var(--v-theme-primary)',
-          background:
-            'color-mix(in srgb, var(--v-theme-primary) 8%, transparent)',
+          zIndex: 2147483647,
+          border: '2px solid #ff4081',
+          background: 'rgba(255, 64, 129, 0.08)',
           boxShadow: '0 0 0 1px rgba(0,0,0,.08) inset',
         }"
       />
@@ -82,27 +82,39 @@ const rect = reactive({ x: 0, y: 0, w: 0, h: 0, visible: false });
 // Ref to the overlay UI root (teleported content wrapper)
 const overlayUi = useTemplateRef<HTMLElement>("overlayUi");
 
-// Hit-testing that ignores our own overlay by hiding it briefly
-function elementFromPointIgnoreOverlay(x: number, y: number): Element | null {
+// Robust hit-testing: use elementsFromPoint and filter out our overlay + shadow host.
+function getShadowHost(): HTMLElement | null {
   const ui = overlayUi.value;
   if (!ui) return null;
-  const prev = ui.style.visibility;
-  ui.style.visibility = "hidden";
-  const el = document.elementFromPoint(x, y);
-  ui.style.visibility = prev || "";
-  return el;
+  const root = ui.getRootNode();
+  return root instanceof ShadowRoot ? (root.host as HTMLElement) : null;
+}
+
+function elementAtClientPoint(x: number, y: number): Element | null {
+  const host = getShadowHost();
+  const list = document.elementsFromPoint(x, y);
+  for (const el of list) {
+    if (!(el instanceof Element)) continue;
+    if (host && el === host) continue;
+    if (el === document.documentElement || el === document.body) continue;
+    // Skip any element inside our overlay UI (defensive; should be excluded via pointer-events)
+    const ui = overlayUi.value;
+    if (ui && el instanceof Node && ui.contains(el)) continue;
+    return el;
+  }
+  return null;
 }
 
 function onMove(e: MouseEvent) {
   if (!enabled.value) return;
-  const t = elementFromPointIgnoreOverlay(e.clientX, e.clientY);
+  const t = elementAtClientPoint(e.clientX, e.clientY);
   if (!t || t === document.documentElement || t === document.body) {
     rect.visible = false;
     return;
   }
   const r = (t as Element).getBoundingClientRect();
-  rect.x = Math.round(r.left + window.scrollX);
-  rect.y = Math.round(r.top + window.scrollY);
+  rect.x = Math.round(r.left);
+  rect.y = Math.round(r.top);
   rect.w = Math.round(r.width);
   rect.h = Math.round(r.height);
   rect.visible = true;
@@ -126,7 +138,7 @@ function onClick(e: MouseEvent) {
 
   e.preventDefault();
   e.stopPropagation();
-  const t = elementFromPointIgnoreOverlay(e.clientX, e.clientY);
+  const t = elementAtClientPoint(e.clientX, e.clientY);
   if (!t) return;
   console.debug("outerHTML:", (t as HTMLElement).outerHTML);
   // TODO
@@ -157,6 +169,7 @@ onBeforeUnmount(() => {
   position: fixed;
   inset: 0;
   display: block;
+  pointer-events: none;
 }
 .pointer-events-none {
   pointer-events: none;
