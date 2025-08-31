@@ -16,6 +16,22 @@ export async function isPinnedInToolbar() {
   return !!userSettings.isOnToolbar;
 }
 
+export async function setErrorBadge() {
+  browser.action.setBadgeBackgroundColor({ color: "red" });
+  browser.action.setBadgeTextColor({ color: "white" });
+  browser.action.setBadgeText({ text: "!" });
+}
+
+export async function clearErrorBadge() {
+  browser.action.setBadgeText({ text: "" });
+}
+
+export async function getActiveTabId() {
+  const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+  if (!tab?.id) return null;
+  return tab.id;
+}
+
 export function openInstructions() {
   browser.tabs?.create({
     url: browser.runtime.getURL("/instructions.html"),

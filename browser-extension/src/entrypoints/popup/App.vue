@@ -8,6 +8,8 @@
           align="end"
           class="mx-1 fill-height"
         >
+          <selection-button class="mb-3" />
+          <v-divider />
           <instructions-button />
         </v-row>
       </v-container>
@@ -18,6 +20,7 @@
 <script setup lang="ts">
 import TheAppBar from "@/components/common/TheAppBar.vue";
 import InstructionsButton from "@/components/popup/InstructionsButton.vue";
+import SelectionButton from "@/components/popup/SelectionButton.vue";
 </script>
 
 <style>
