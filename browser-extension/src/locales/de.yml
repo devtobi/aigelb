@@ -93,3 +93,8 @@ instructions:
 popup:
   instructionsButton:
     text: Anleitung öffnen
+  selectionButton:
+    text: Inhalt auswählen
+    tooltip:
+      ollamaUnavailable: Verbindung zu Ollama konnte nicht aufgebaut werden. Ist Ollama gestartet?
+      modelUnavailable: Das erforderliche Modell wurde nicht gefunden. Bitte laden Sie es über die Anleitungsseite herunter.

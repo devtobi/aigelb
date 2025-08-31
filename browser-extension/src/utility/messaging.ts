@@ -9,6 +9,7 @@ interface ProtocolMap {
   deleteModel(ollamaPullUrl: string): boolean;
   downloadProgress(downloadProgress: DownloadProgress): void;
   getModelSize(data: { repo: string; file: string }): number | null;
+  startSelection(): void;
 }
 
 export const { sendMessage, onMessage } =
