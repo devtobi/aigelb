@@ -17,7 +17,6 @@ export default defineContentScript({
       position: "overlay",
       anchor: "body",
       onMount: (container) => {
-        // Ensure the shadow-root container spans the full viewport
         const s = (container as HTMLElement).style;
         s.position = "fixed";
         s.inset = "0";
