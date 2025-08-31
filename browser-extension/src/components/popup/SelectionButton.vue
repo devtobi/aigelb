@@ -27,7 +27,7 @@ import { computed, onMounted } from "vue";
 
 import { useModelAvailability } from "@/composables/useModelAvailability.ts";
 import { useOllama } from "@/composables/useOllama.ts";
-import { getActiveTabId } from "@/utility/browser.ts";
+import { closeWindow, getActiveTabId } from "@/utility/browser.ts";
 import { sendMessage } from "@/utility/messaging.ts";
 
 const { isOllamaAvailable, checkOllamaConnection } = useOllama();
@@ -61,6 +61,7 @@ async function startSelection() {
     const tabId = await getActiveTabId();
     if (tabId) {
       await sendMessage("startSelection", undefined, { tabId });
+      closeWindow();
     }
   }
 }
