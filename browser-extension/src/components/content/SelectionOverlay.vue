@@ -18,18 +18,12 @@
       />
       <v-sheet
         v-show="rect.visible"
-        :elevation="4"
-        rounded="lg"
-        class="pointer-events-none position-fixed"
+        class="pointer-events-none position-fixed rect-overlay"
         :style="{
           left: rect.x + 'px',
           top: rect.y + 'px',
           width: rect.w + 'px',
-          height: rect.h + 'px',
-          zIndex: 2147483647,
-          border: '2px solid #ff4081',
-          background: 'rgba(255, 64, 129, 0.08)',
-          boxShadow: '0 0 0 1px rgba(0,0,0,.08) inset',
+          height: rect.h + 'px'
         }"
       />
 
@@ -38,16 +32,10 @@
         color="orange"
         type="info"
         variant="elevated"
-        rounded="lg"
-        class="pa-3 position-fixed"
-        :style="{
-          left: '16px',
-          right: '16px',
-          bottom: '16px',
-          zIndex: 2147483647,
-        }"
+        class="pa-3 position-fixed description-alert"
         prominent
-        border="start"
+        closable
+        :close-icon="mdiEyeOff"
         :title="i18n.t('content.selectionOverlay.title')"
         :text="i18n.t('content.selectionOverlay.description')"
       >
@@ -55,6 +43,7 @@
           <v-btn
             variant="text"
             @click="enabled = false"
+            size="small"
             :text="i18n.t('common.cancel')"
           />
         </template>
@@ -66,6 +55,7 @@
 <script setup lang="ts">
 import { i18n } from "#i18n";
 import { onBeforeUnmount, onMounted, reactive, useTemplateRef } from "vue";
+import { mdiEyeOff } from "@mdi/js";
 
 const enabled = defineModel<boolean>();
 
@@ -87,7 +77,6 @@ function elementAtClientPoint(x: number, y: number): Element | null {
     if (!(el instanceof Element)) continue;
     if (host && el === host) continue;
     if (el === document.documentElement || el === document.body) continue;
-    // Skip any element inside our overlay UI (defensive; should be excluded via pointer-events)
     const ui = overlayUi.value;
     if (ui && el instanceof Node && ui.contains(el)) continue;
     return el;
@@ -168,5 +157,16 @@ onBeforeUnmount(() => {
 }
 .pointer-events-none {
   pointer-events: none;
+}
+.description-alert {
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 2147483647;
+}
+.rect-overlay {
+  background: rgba(255, 64, 129, 0.08);
+  border: 2px solid orange;
+  z-index: 2147483647;
 }
 </style>
