@@ -23,7 +23,7 @@
           left: rect.x + 'px',
           top: rect.y + 'px',
           width: rect.w + 'px',
-          height: rect.h + 'px'
+          height: rect.h + 'px',
         }"
       />
 
@@ -53,9 +53,16 @@
 </template>
 
 <script setup lang="ts">
-import { i18n } from "#i18n";
-import { onBeforeUnmount, onMounted, reactive, useTemplateRef } from "vue";
 import { mdiEyeOff } from "@mdi/js";
+import { i18n } from "#i18n";
+import {
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+  useTemplateRef,
+  watch,
+} from "vue";
 
 const enabled = defineModel<boolean>();
 
@@ -120,6 +127,7 @@ function onClick(e: MouseEvent) {
   if (!t) return;
   console.debug("outerHTML:", (t as HTMLElement).outerHTML);
   // TODO
+  enabled.value = false;
 }
 
 function onKeyDown(e: KeyboardEvent) {
@@ -127,15 +135,33 @@ function onKeyDown(e: KeyboardEvent) {
   enabled.value = false;
 }
 
-onMounted(() => {
+onBeforeUnmount(() => {
+  removeListeners();
+});
+
+let listenersAttached = ref(false);
+function addListeners() {
+  if (listenersAttached.value) return;
   window.addEventListener("mousemove", onMove, true);
   window.addEventListener("click", onClick, true);
-  window.addEventListener("keydown", onKeyDown, true)
-});
-onBeforeUnmount(() => {
+  window.addEventListener("keydown", onKeyDown, true);
+  listenersAttached.value = true;
+}
+function removeListeners() {
+  if (!listenersAttached) return;
   window.removeEventListener("mousemove", onMove, true);
   window.removeEventListener("click", onClick, true);
-  window.removeEventListener("keydown", onKeyDown, true)
+  window.removeEventListener("keydown", onKeyDown, true);
+  listenersAttached.value = false;
+}
+
+onMounted(() => {
+  if (enabled.value) addListeners();
+});
+
+watch(enabled, (isEnabled) => {
+  if (isEnabled) addListeners();
+  else removeListeners();
 });
 </script>
 
