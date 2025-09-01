@@ -133,13 +133,20 @@ function onClick(e: MouseEvent) {
   // TODO
 }
 
+function onKeyDown(e: KeyboardEvent) {
+  if (e.key !== "Escape") return;
+  enabled.value = false;
+}
+
 onMounted(() => {
   window.addEventListener("mousemove", onMove, true);
   window.addEventListener("click", onClick, true);
+  window.addEventListener("keydown", onKeyDown, true)
 });
 onBeforeUnmount(() => {
   window.removeEventListener("mousemove", onMove, true);
   window.removeEventListener("click", onClick, true);
+  window.removeEventListener("keydown", onKeyDown, true)
 });
 </script>
 
