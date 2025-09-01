@@ -24,7 +24,6 @@
           top: rect.y + 'px',
           width: rect.w + 'px',
           height: rect.h + 'px',
-
         }"
       />
 
@@ -191,9 +190,10 @@ watch(enabled, (isEnabled) => {
   bottom: 16px;
   z-index: 2147483647;
 }
-.rect-overlay {
-  background: rgba(255, 64, 129, 0.08);
-  border: 2px solid orange;
-  z-index: 2147483647;
+.rect-overlay.v-sheet {
+  background: rgba(255, 64, 129, 0.08) !important;
+  border: 2px solid orange !important;
+  box-sizing: border-box;
+  z-index: 2147483647 !important;
 }
 </style>
