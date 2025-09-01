@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="bg-transparent">
     <selection-overlay v-model="enabled" />
   </v-app>
 </template>
@@ -28,16 +28,3 @@ onBeforeUnmount(() => {
   }
 });
 </script>
-
-<style>
-.v-application {
-  background: transparent !important;
-  pointer-events: none; /* let page interactions pass through by default */
-  width: 100%;
-  height: 100%;
-}
-html,
-body {
-  margin: 0;
-}
-</style>
