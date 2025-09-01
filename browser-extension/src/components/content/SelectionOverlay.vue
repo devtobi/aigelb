@@ -5,20 +5,15 @@
     :scrim="false"
     :absolute="false"
     contained
-    :z-index="2147483647"
     content-class="selection-overlay-content"
   >
     <div
       ref="overlayUi"
       class="overlay-ui-root"
     >
-      <div
-        class="selection-overlay pointer-events-none"
-        aria-hidden="true"
-      />
       <v-sheet
         v-show="rect.visible"
-        class="pointer-events-none position-fixed rect-overlay"
+        class="rect-overlay pointer-events-none position-fixed"
         :style="{
           left: rect.x + 'px',
           top: rect.y + 'px',
@@ -169,31 +164,20 @@ watch(enabled, (isEnabled) => {
 .overlay-ui-root {
   pointer-events: auto;
 }
-.selection-overlay {
-  position: fixed;
-  inset: 0;
-  cursor: crosshair;
-  background: transparent;
-}
 .selection-overlay-content {
   position: fixed;
   inset: 0;
   display: block;
   pointer-events: none;
 }
-.pointer-events-none {
-  pointer-events: none;
-}
 .description-alert {
   left: 16px;
   right: 16px;
   bottom: 16px;
-  z-index: 2147483647;
 }
 .rect-overlay.v-sheet {
   background: rgba(255, 64, 129, 0.08) !important;
   border: 2px solid orange !important;
   box-sizing: border-box;
-  z-index: 2147483647 !important;
 }
 </style>
