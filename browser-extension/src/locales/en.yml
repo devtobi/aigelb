@@ -98,3 +98,7 @@ popup:
     tooltip:
       ollamaUnavailable: Unable to connect to Ollama. Is Ollama running?
       modelUnavailable: Required model not found. Please download from the instructions page.
+content:
+  selectionOverlay:
+    title: Select content
+    description: Move the mouse pointer over an element to select it. Click on the selected element to start the translation into easy language. You can cancel the selection by pressing the Escape key (Esc) or clicking on the adjacent button.

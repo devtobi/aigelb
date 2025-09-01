@@ -16,7 +16,6 @@
         class="selection-overlay pointer-events-none"
         aria-hidden="true"
       />
-      {{ rect.x }}, {{ rect.y }}, {{ rect.w }}, {{ rect.h }}, {{ rect.visible }}
       <v-sheet
         v-show="rect.visible"
         :elevation="4"
@@ -34,7 +33,6 @@
         }"
       />
 
-      <!-- 4) Bottom instruction alert while selection mode is active -->
       <v-alert
         v-if="enabled"
         color="orange"
@@ -50,15 +48,15 @@
         }"
         prominent
         border="start"
-        title="Selection mode"
-        text="Hover to highlight any element. Click to log it. Press Esc to exit."
+        :title="i18n.t('content.selectionOverlay.title')"
+        :text="i18n.t('content.selectionOverlay.description')"
       >
         <template #append>
           <v-btn
             variant="text"
             @click="enabled = false"
-            >Cancel</v-btn
-          >
+            :text="i18n.t('common.cancel')"
+          />
         </template>
       </v-alert>
     </div>
@@ -66,23 +64,15 @@
 </template>
 
 <script setup lang="ts">
-import {
-  defineModel,
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  useTemplateRef,
-} from "vue";
+import { i18n } from "#i18n";
+import { onBeforeUnmount, onMounted, reactive, useTemplateRef } from "vue";
 
 const enabled = defineModel<boolean>();
 
-// Reactive state for the hover rectangle and label
 const rect = reactive({ x: 0, y: 0, w: 0, h: 0, visible: false });
 
-// Ref to the overlay UI root (teleported content wrapper)
 const overlayUi = useTemplateRef<HTMLElement>("overlayUi");
 
-// Robust hit-testing: use elementsFromPoint and filter out our overlay + shadow host.
 function getShadowHost(): HTMLElement | null {
   const ui = overlayUi.value;
   if (!ui) return null;
@@ -122,7 +112,6 @@ function onMove(e: MouseEvent) {
 
 function onClick(e: MouseEvent) {
   if (!enabled.value) return;
-  // If the click originated inside our overlay UI, do not intercept it.
   const uiRoot = overlayUi.value;
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -164,7 +153,6 @@ onBeforeUnmount(() => {
   cursor: crosshair;
   background: transparent;
 }
-/* Ensure VOverlay's content wrapper fills the viewport inside the shadow root */
 .selection-overlay-content {
   position: fixed;
   inset: 0;
