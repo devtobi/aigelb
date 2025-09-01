@@ -17,18 +17,6 @@ export default defineContentScript({
       position: "overlay",
       anchor: "body",
       onMount: (container) => {
-        const s = (container as HTMLElement).style;
-        s.position = "fixed";
-        s.inset = "0";
-        s.top = "0";
-        s.left = "0";
-        s.right = "0";
-        s.bottom = "0";
-        s.width = "100vw";
-        s.height = "100vh";
-        s.display = "block";
-        s.zIndex = String(2147483647);
-
         const app = createApp(App);
         registerVuePlugins(app);
         app.mount(container);
