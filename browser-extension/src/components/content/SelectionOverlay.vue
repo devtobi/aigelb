@@ -24,6 +24,7 @@
           top: rect.y + 'px',
           width: rect.w + 'px',
           height: rect.h + 'px',
+
         }"
       />
 
@@ -139,7 +140,7 @@ onBeforeUnmount(() => {
   removeListeners();
 });
 
-let listenersAttached = ref(false);
+const listenersAttached = ref(false);
 function addListeners() {
   if (listenersAttached.value) return;
   window.addEventListener("mousemove", onMove, true);
@@ -148,7 +149,7 @@ function addListeners() {
   listenersAttached.value = true;
 }
 function removeListeners() {
-  if (!listenersAttached) return;
+  if (!listenersAttached.value) return;
   window.removeEventListener("mousemove", onMove, true);
   window.removeEventListener("click", onClick, true);
   window.removeEventListener("keydown", onKeyDown, true);
