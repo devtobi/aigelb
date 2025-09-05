@@ -1,6 +1,9 @@
 <template>
   <v-app class="bg-transparent position-fixed w-100 h-100 bg-transparent">
-    <selection-overlay v-model="enabled" />
+    <selection-overlay
+      v-model="selectionEnabled"
+      @element-selected="onElementSelected"
+    />
   </v-app>
 </template>
 
@@ -14,11 +17,12 @@ import { onMessage } from "@/utility/messaging.ts";
 
 const removeSelectionListener = ref<RemoveListenerCallback>();
 
-const enabled = ref<boolean>(false);
+const selectionEnabled = ref<boolean>(false);
+const selectedElement = ref<HTMLElement>();
 
 onMounted(() => {
   removeSelectionListener.value = onMessage("startSelection", () => {
-    enabled.value = true;
+    selectionEnabled.value = true;
   });
 });
 
@@ -27,6 +31,11 @@ onBeforeUnmount(() => {
     removeSelectionListener.value();
   }
 });
+
+function onElementSelected(element: HTMLElement) {
+  selectionEnabled.value = false;
+  selectedElement.value = element;
+}
 </script>
 
 <style>
