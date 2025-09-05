@@ -1,5 +1,6 @@
 <template>
   <v-app class="bg-transparent position-fixed w-100 h-100 bg-transparent">
+    <translation-overlay :element="selectedElement" />
     <selection-overlay
       v-model="selectionEnabled"
       @element-selected="onElementSelected"
@@ -13,12 +14,13 @@ import type { RemoveListenerCallback } from "@webext-core/messaging";
 import { onBeforeUnmount, onMounted, ref } from "vue";
 
 import SelectionOverlay from "@/components/content/SelectionOverlay.vue";
+import TranslationOverlay from "@/components/content/TranslationOverlay.vue";
 import { onMessage } from "@/utility/messaging.ts";
 
 const removeSelectionListener = ref<RemoveListenerCallback>();
 
 const selectionEnabled = ref<boolean>(false);
-const selectedElement = ref<HTMLElement>();
+const selectedElement = ref<HTMLElement | null>(null);
 
 onMounted(() => {
   removeSelectionListener.value = onMessage("startSelection", () => {
