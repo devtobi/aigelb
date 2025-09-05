@@ -1,5 +1,5 @@
 <template>
-  <v-app class="bg-transparent">
+  <v-app class="bg-transparent position-fixed w-100 h-100 bg-transparent">
     <selection-overlay v-model="enabled" />
   </v-app>
 </template>
