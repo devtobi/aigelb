@@ -22,6 +22,7 @@ function stream(
   supportsStreaming: boolean,
   prompt: string,
   systemPrompt: string,
+  abortSignal?: AbortSignal,
   onFinish?: () => void,
   onAbort?: () => void,
   onError?: () => void
@@ -44,6 +45,7 @@ function stream(
       } as UserModelMessage,
     ],
     maxRetries: 0,
+    abortSignal,
     onFinish,
     onAbort,
     onError,
@@ -55,6 +57,7 @@ function stream(
 export async function streamResponse(
   text: string,
   onPartialGeneration: (part: string) => void,
+  abortSignal?: AbortSignal,
   onFinish?: () => void,
   onAbort?: () => void,
   onError?: () => void
@@ -67,12 +70,19 @@ export async function streamResponse(
     LLM_SUPPORT_STREAMING,
     userPrompt,
     SYSTEM_PROMPT,
+    abortSignal,
     onFinish,
     onAbort,
     onError
   );
 
-  for await (const textPart of textStream) {
-    onPartialGeneration(textPart);
+  try {
+    for await (const textPart of textStream) {
+      onPartialGeneration(textPart);
+    }
+  } catch (error) {
+    if (!abortSignal?.aborted) {
+      throw error;
+    }
   }
 }
