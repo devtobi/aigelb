@@ -16,6 +16,7 @@ interface ProtocolMap {
   // Inference lifecycle and status
   checkIsInferenceRunning(): boolean;
   startInference(text: string): void;
+  abortInference(): void;
 }
 
 export const { sendMessage, onMessage } =

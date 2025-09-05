@@ -54,10 +54,12 @@ async function checkCondition() {
 }
 
 const inferenceRunning = ref<boolean>(false);
-const isDisabledByAvailability = computed(() =>
-  isOllamaAvailable.value !== true || isModelAvailable.value !== true
+const isDisabledByAvailability = computed(
+  () => isOllamaAvailable.value !== true || isModelAvailable.value !== true
 );
-const isDisabled = computed(() => inferenceRunning.value || isDisabledByAvailability.value);
+const isDisabled = computed(
+  () => inferenceRunning.value || isDisabledByAvailability.value
+);
 
 const disabledTooltip = computed(() => {
   if (isOllamaAvailable.value === false) {

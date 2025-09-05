@@ -1,14 +1,15 @@
 import { streamResponse } from "@/api/ai.ts";
 import { onMessage } from "@/utility/messaging.ts";
 
+let currentAbortController: AbortController | null = null;
+let inferenceRunning = true;
+
+function setInferenceRunning(isRunning: boolean) {
+  if (inferenceRunning === isRunning) return;
+  inferenceRunning = isRunning;
+}
+
 export default function registerInference() {
-  let inferenceRunning = true;
-
-  function setInferenceRunning(isRunning: boolean) {
-    if (inferenceRunning === isRunning) return;
-    inferenceRunning = isRunning;
-  }
-
   onMessage("checkIsInferenceRunning", async () => {
     return inferenceRunning;
   });
@@ -16,7 +17,7 @@ export default function registerInference() {
   onMessage("startInference", async (message) => {
     if (inferenceRunning) return;
     const text = message.data;
-    const abortController = new AbortController();
+    currentAbortController = new AbortController();
     setInferenceRunning(true);
     try {
       await streamResponse(
@@ -24,7 +25,7 @@ export default function registerInference() {
         () => {
           // In the future, partial results can be forwarded to the content script.
         },
-        abortController.signal,
+        currentAbortController.signal,
         () => setInferenceRunning(false),
         () => setInferenceRunning(false),
         () => setInferenceRunning(false)
@@ -33,6 +34,13 @@ export default function registerInference() {
       setInferenceRunning(false);
     } finally {
       setInferenceRunning(false);
+      currentAbortController = null;
+    }
+  });
+
+  onMessage("abortInference", async () => {
+    if (currentAbortController && !currentAbortController.signal.aborted) {
+      currentAbortController.abort();
     }
   });
 }
