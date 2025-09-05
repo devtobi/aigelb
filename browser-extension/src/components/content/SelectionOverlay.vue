@@ -61,9 +61,10 @@ import {
 
 import {
   elementAtClientPoint,
-  elementContainsText,
-  isInsideElement,
+  elementContainsText, getXPathForElement,
+  isInsideElement, replaceElementByXPath,
 } from "@/utility/dom.ts";
+import type { SelectionData } from "@/types/SelectionData.ts";
 
 const enabled = defineModel<boolean>();
 
@@ -101,8 +102,16 @@ function onClick(e: MouseEvent) {
 
   e.preventDefault();
   e.stopPropagation();
-  console.debug("outerHTML:", (t as HTMLElement).outerHTML);
-  // TODO
+
+  const selectionData: SelectionData = {
+    content: (t as HTMLElement).innerHTML,
+    xPath: getXPathForElement(t)
+  }
+  console.debug("selectionData:", selectionData);
+  // TODO START ASYNCHRONOUS TRANSLATION EVENT
+  // DUMMY TESTING TO REPLACE DOM CONTENT
+  replaceElementByXPath(selectionData.xPath, document.createTextNode("Übersetzen ist aktuell noch nicht möglich!"))
+
   enabled.value = false;
 }
 
