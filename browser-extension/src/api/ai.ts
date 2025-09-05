@@ -76,9 +76,11 @@ export async function streamResponse(
     onError
   );
 
+  let response = "";
   try {
     for await (const textPart of textStream) {
-      onPartialGeneration(textPart);
+      response += textPart;
+      onPartialGeneration(response);
     }
   } catch (error) {
     if (!abortSignal?.aborted) {
