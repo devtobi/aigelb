@@ -48,6 +48,8 @@
 </template>
 
 <script setup lang="ts">
+import type { SelectionData } from "@/types/SelectionData.ts";
+
 import { mdiEyeOff } from "@mdi/js";
 import { i18n } from "#i18n";
 import {
@@ -61,10 +63,11 @@ import {
 
 import {
   elementAtClientPoint,
-  elementContainsText, getXPathForElement,
-  isInsideElement, replaceElementByXPath,
+  elementContainsText,
+  getXPathForElement,
+  isInsideElement,
+  replaceElementByXPath,
 } from "@/utility/dom.ts";
-import type { SelectionData } from "@/types/SelectionData.ts";
 
 const enabled = defineModel<boolean>();
 
@@ -105,12 +108,15 @@ function onClick(e: MouseEvent) {
 
   const selectionData: SelectionData = {
     content: (t as HTMLElement).innerHTML,
-    xPath: getXPathForElement(t)
-  }
+    xPath: getXPathForElement(t),
+  };
   console.debug("selectionData:", selectionData);
   // TODO START ASYNCHRONOUS TRANSLATION EVENT
   // DUMMY TESTING TO REPLACE DOM CONTENT
-  replaceElementByXPath(selectionData.xPath, document.createTextNode("Übersetzen ist aktuell noch nicht möglich!"))
+  replaceElementByXPath(
+    selectionData.xPath,
+    document.createTextNode("Übersetzen ist aktuell noch nicht möglich!")
+  );
 
   enabled.value = false;
 }

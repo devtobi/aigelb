@@ -64,7 +64,7 @@ function getElementByXPath(xPath: string) {
 export function replaceElementByXPath(xPath: string, newElement: Node) {
   const oldEl = getElementByXPath(xPath);
   if (!oldEl || !oldEl.parentNode) {
-    console.warn("Element not found or has no parent:", xPath);
+    console.debug("Element not found or has no parent:", xPath);
     return;
   }
   oldEl.parentNode.replaceChild(newElement, oldEl);
