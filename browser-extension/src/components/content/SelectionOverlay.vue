@@ -50,7 +50,6 @@
 <script setup lang="ts">
 import { mdiEyeOff } from "@mdi/js";
 import { i18n } from "#i18n";
-import { load } from "cheerio";
 import {
   onBeforeUnmount,
   onMounted,
@@ -60,54 +59,25 @@ import {
   watch,
 } from "vue";
 
+import {
+  elementAtClientPoint,
+  elementContainsText,
+  isInsideElement,
+} from "@/utility/dom.ts";
+
 const enabled = defineModel<boolean>();
 
 const rect = reactive({ x: 0, y: 0, w: 0, h: 0, visible: false });
 
 const overlayUi = useTemplateRef<HTMLElement>("overlayUi");
 
-function getShadowHost(): HTMLElement | null {
-  const ui = overlayUi.value;
-  if (!ui) return null;
-  const root = ui.getRootNode();
-  return root instanceof ShadowRoot ? (root.host as HTMLElement) : null;
-}
-
-function elementAtClientPoint(x: number, y: number): Element | null {
-  const host = getShadowHost();
-  const list = document.elementsFromPoint(x, y);
-  for (const el of list) {
-    if (!(el instanceof Element)) continue;
-    if (host && el === host) continue;
-    if (el === document.documentElement || el === document.body) continue;
-    const ui = overlayUi.value;
-    if (ui && el instanceof Node && ui.contains(el)) continue;
-    return el;
-  }
-  return null;
-}
-
-function elementContainsText(el: Element): boolean {
-  try {
-    const html = (el as HTMLElement).outerHTML ?? "";
-    const $ = load(html);
-    $("script, style, noscript, template").remove();
-    const text = $.root().text();
-    return text.trim().length > 0;
-  } catch {
-    // Fallback: minimal DOM-based check
-    const t = (el as HTMLElement).innerText ?? "";
-    return t.trim().length > 0;
-  }
-}
-
 function onMove(e: MouseEvent) {
   if (!enabled.value) return;
-  if (isInsideOverlay(e)) {
+  if (isInsideElement(e, overlayUi.value)) {
     rect.visible = false;
     return;
   }
-  const t = elementAtClientPoint(e.clientX, e.clientY);
+  const t = elementAtClientPoint(overlayUi.value, e.clientX, e.clientY);
   if (!t || t === document.documentElement || t === document.body) {
     rect.visible = false;
     return;
@@ -125,8 +95,8 @@ function onMove(e: MouseEvent) {
 }
 
 function onClick(e: MouseEvent) {
-  if (!enabled.value || isInsideOverlay(e)) return;
-  const t = elementAtClientPoint(e.clientX, e.clientY);
+  if (!enabled.value || isInsideElement(e, overlayUi.value)) return;
+  const t = elementAtClientPoint(overlayUi.value, e.clientX, e.clientY);
   if (!t || !elementContainsText(t)) return;
 
   e.preventDefault();
@@ -134,17 +104,6 @@ function onClick(e: MouseEvent) {
   console.debug("outerHTML:", (t as HTMLElement).outerHTML);
   // TODO
   enabled.value = false;
-}
-
-function isInsideOverlay(e: MouseEvent) {
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  const uiRoot = overlayUi.value;
-  return uiRoot
-    ? (typeof (e as any).composedPath === "function" &&
-        (e as any).composedPath().includes(uiRoot)) ||
-        (e.target instanceof Node && uiRoot.contains(e.target))
-    : false;
-  /* eslint-enable @typescript-eslint/no-explicit-any */
 }
 
 function onKeyDown(e: KeyboardEvent) {
