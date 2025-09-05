@@ -14,6 +14,7 @@
       :color="isDisabled ? 'grey' : 'warning'"
       :prepend-icon="mdiCursorDefault"
       :disabled="isDisabled"
+      :loading="inferenceRunning"
     >
       {{ i18n.t("popup.selectionButton.text") }}
     </v-btn>
@@ -23,7 +24,7 @@
 <script setup lang="ts">
 import { mdiCursorDefault } from "@mdi/js";
 import { i18n } from "#i18n";
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 import { useModelAvailability } from "@/composables/useModelAvailability.ts";
 import { useOllama } from "@/composables/useOllama.ts";
@@ -40,20 +41,23 @@ const { isModelAvailable, checkModelAvailable } = useModelAvailability();
 
 onMounted(async () => {
   await checkCondition();
+  inferenceRunning.value = await sendMessage("checkIsInferenceRunning");
 });
 
 async function checkCondition() {
   await Promise.all([checkOllamaConnection(), checkModelAvailable()]);
-  if (isDisabled.value) {
+  if (isDisabledByAvailability.value) {
     await setErrorBadge();
   } else {
     await clearErrorBadge();
   }
 }
 
-const isDisabled = computed(
-  () => isOllamaAvailable.value !== true || isModelAvailable.value !== true
+const inferenceRunning = ref<boolean>(false);
+const isDisabledByAvailability = computed(() =>
+  isOllamaAvailable.value !== true || isModelAvailable.value !== true
 );
+const isDisabled = computed(() => inferenceRunning.value || isDisabledByAvailability.value);
 
 const disabledTooltip = computed(() => {
   if (isOllamaAvailable.value === false) {
@@ -61,6 +65,9 @@ const disabledTooltip = computed(() => {
   }
   if (isModelAvailable.value === false) {
     return i18n.t("popup.selectionButton.tooltip.modelUnavailable");
+  }
+  if (inferenceRunning.value === true) {
+    return i18n.t("popup.selectionButton.tooltip.inferenceRunning");
   }
   return null;
 });
