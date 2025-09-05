@@ -42,5 +42,7 @@ export default function registerInference() {
     if (currentAbortController && !currentAbortController.signal.aborted) {
       currentAbortController.abort();
     }
+    setInferenceRunning(false);
+    currentAbortController = null;
   });
 }

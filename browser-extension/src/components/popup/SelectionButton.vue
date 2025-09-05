@@ -8,21 +8,23 @@
       {{ disabledTooltip }}
     </v-tooltip>
     <v-btn
-      @click="startSelection"
+      @click="() => (!inferenceRunning ? startSelection() : abortInference())"
       size="large"
       block
       :color="isDisabled ? 'grey' : 'warning'"
-      :prepend-icon="mdiCursorDefault"
+      :prepend-icon="!inferenceRunning ? mdiCursorDefault : mdiClose"
+      :text="
+        !inferenceRunning
+          ? i18n.t('popup.selectionButton.startText')
+          : i18n.t('popup.selectionButton.stopText')
+      "
       :disabled="isDisabled"
-      :loading="inferenceRunning"
-    >
-      {{ i18n.t("popup.selectionButton.text") }}
-    </v-btn>
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { mdiCursorDefault } from "@mdi/js";
+import { mdiClose, mdiCursorDefault } from "@mdi/js";
 import { i18n } from "#i18n";
 import { computed, onMounted, ref } from "vue";
 
@@ -46,7 +48,7 @@ onMounted(async () => {
 
 async function checkCondition() {
   await Promise.all([checkOllamaConnection(), checkModelAvailable()]);
-  if (isDisabledByAvailability.value) {
+  if (isDisabled.value) {
     await setErrorBadge();
   } else {
     await clearErrorBadge();
@@ -54,11 +56,8 @@ async function checkCondition() {
 }
 
 const inferenceRunning = ref<boolean>(false);
-const isDisabledByAvailability = computed(
-  () => isOllamaAvailable.value !== true || isModelAvailable.value !== true
-);
 const isDisabled = computed(
-  () => inferenceRunning.value || isDisabledByAvailability.value
+  () => isOllamaAvailable.value !== true || isModelAvailable.value !== true
 );
 
 const disabledTooltip = computed(() => {
@@ -67,9 +66,6 @@ const disabledTooltip = computed(() => {
   }
   if (isModelAvailable.value === false) {
     return i18n.t("popup.selectionButton.tooltip.modelUnavailable");
-  }
-  if (inferenceRunning.value === true) {
-    return i18n.t("popup.selectionButton.tooltip.inferenceRunning");
   }
   return null;
 });
@@ -82,6 +78,13 @@ async function startSelection() {
       await sendMessage("startSelection", undefined, { tabId });
       closeWindow();
     }
+  }
+}
+
+async function abortInference() {
+  if (inferenceRunning.value) {
+    await sendMessage("abortInference");
+    closeWindow();
   }
 }
 </script>
