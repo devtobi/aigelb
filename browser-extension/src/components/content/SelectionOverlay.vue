@@ -88,6 +88,10 @@ function elementAtClientPoint(x: number, y: number): Element | null {
 
 function onMove(e: MouseEvent) {
   if (!enabled.value) return;
+  if (isInsideOverlay(e)) {
+    rect.visible = false;
+    return;
+  }
   const t = elementAtClientPoint(e.clientX, e.clientY);
   if (!t || t === document.documentElement || t === document.body) {
     rect.visible = false;
@@ -103,18 +107,7 @@ function onMove(e: MouseEvent) {
 
 function onClick(e: MouseEvent) {
   if (!enabled.value) return;
-  const uiRoot = overlayUi.value;
-
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  const insideOverlay = uiRoot
-    ? (typeof (e as any).composedPath === "function" &&
-        (e as any).composedPath().includes(uiRoot)) ||
-      (e.target instanceof Node && uiRoot.contains(e.target))
-    : false;
-  /* eslint-enable @typescript-eslint/no-explicit-any */
-  if (insideOverlay) {
-    return;
-  }
+  if (isInsideOverlay(e)) return;
 
   e.preventDefault();
   e.stopPropagation();
@@ -123,6 +116,17 @@ function onClick(e: MouseEvent) {
   console.debug("outerHTML:", (t as HTMLElement).outerHTML);
   // TODO
   enabled.value = false;
+}
+
+function isInsideOverlay(e: MouseEvent) {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  const uiRoot = overlayUi.value;
+  return uiRoot
+    ? (typeof (e as any).composedPath === "function" &&
+        (e as any).composedPath().includes(uiRoot)) ||
+        (e.target instanceof Node && uiRoot.contains(e.target))
+    : false;
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 }
 
 function onKeyDown(e: KeyboardEvent) {
