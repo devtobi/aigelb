@@ -98,6 +98,7 @@ popup:
     tooltip:
       ollamaUnavailable: Unable to connect to Ollama. Is Ollama running?
       modelUnavailable: Required model not found. Please download from the instructions page.
+      inferenceRunning: An translation is currently running. Please wait until it finishes.
 content:
   selectionOverlay:
     title: Select content

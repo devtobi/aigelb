@@ -98,6 +98,7 @@ popup:
     tooltip:
       ollamaUnavailable: Verbindung zu Ollama konnte nicht aufgebaut werden. Ist Ollama gestartet?
       modelUnavailable: Das erforderliche Modell wurde nicht gefunden. Bitte laden Sie es über die Anleitungsseite herunter.
+      inferenceRunning: Eine Übersetzung läuft bereits. Bitte warten Sie, bis sie abgeschlossen ist.
 content:
   selectionOverlay:
     title: Inhalt auswählen
