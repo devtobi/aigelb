@@ -103,3 +103,6 @@ content:
   selectionOverlay:
     title: Inhalt auswählen
     description: Bewegen Sie den Mauszeiger über ein Element, um es zu markieren. Klicken Sie das markierte Element an um die Übersetzung in Leichte Sprache zu starten. Mit der Escape-Taste (Esc) oder der nebenstehenden Schaltfläche kann die Auswahl abgebrochen werden.
+  translationOverlay:
+    title: Übersetzung läuft
+    description: Es läuft derzeit eine Übersetzung. Bitte warten Sie, bis sie abgeschlossen ist. Das ausgewählte Element ist währenddessen markiert.
