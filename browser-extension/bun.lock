@@ -23,7 +23,7 @@
         "@vue/tsconfig": "0.8.1",
         "@wxt-dev/auto-icons": "1.1.0",
         "@wxt-dev/i18n": "0.2.4",
-        "@wxt-dev/module-vue": "1.0.2",
+        "@wxt-dev/module-vue": "1.0.3",
         "concurrently": "9.2.1",
         "eslint": "9.34.0",
         "eslint-plugin-vue": "10.4.0",
@@ -371,7 +371,7 @@
 
     "@wxt-dev/i18n": ["@wxt-dev/i18n@0.2.4", "", { "dependencies": { "@wxt-dev/browser": "^0.0.318", "chokidar": "^4.0.3", "confbox": "^0.1.8 || ^0.2.2", "fast-glob": "^3.3.3" }, "peerDependencies": { "wxt": ">=0.19.7" }, "optionalPeers": ["wxt"] }, "sha512-qYWCRlMcRY/fCcwYpPcZV55NHFlri8K+eJqS/0bhHnDClWkiYHyYnIzI0tMeNdXCCo8oyKQr+qhrVM/LKNRymw=="],
 
-    "@wxt-dev/module-vue": ["@wxt-dev/module-vue@1.0.2", "", { "dependencies": { "@vitejs/plugin-vue": "^5.2.0" }, "peerDependencies": { "wxt": ">=0.19.16" } }, "sha512-eRRpPgrakgQSfzR8AnmT3+Dd/ltgghOzgfy1MrHl0zZ2Pc2rcuwcoeFt9rrpjH3KuvZfYD2JIAg3gY9OlTPkmQ=="],
+    "@wxt-dev/module-vue": ["@wxt-dev/module-vue@1.0.3", "", { "dependencies": { "@vitejs/plugin-vue": "^5.2.3 || ^6.0.0" }, "peerDependencies": { "wxt": ">=0.19.16" } }, "sha512-xUNygcj4w0b1MzQGOQIp5V2ZwFE4y+5AwKPi/IPKyo2aNeFVJTfItIxzWI5vTj7031WCLzHgQrrBRS5C63D5iw=="],
 
     "@wxt-dev/storage": ["@wxt-dev/storage@1.1.1", "", { "dependencies": { "async-mutex": "^0.5.0", "dequal": "^2.0.3" } }, "sha512-H1vYWeoWz03INV4r+sLYDFil88b3rgMMfgGp/EXy3bLbveJeiMiFs/G0bsBN2Ra87Iqlf2oVYRb/ABQpAugbew=="],
 
