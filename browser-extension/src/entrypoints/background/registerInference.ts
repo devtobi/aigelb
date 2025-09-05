@@ -1,48 +1,104 @@
+import type { InferenceProgress } from "@/types/InferenceProgress.ts";
+
+import { browser } from "wxt/browser";
+
 import { streamResponse } from "@/api/ai.ts";
-import { onMessage } from "@/utility/messaging.ts";
+import { onMessage, sendMessage } from "@/utility/messaging.ts";
 
 let currentAbortController: AbortController | null = null;
-let inferenceRunning = true;
+let inferenceRunning = false;
+let trackedTabId: number | null = null;
 
-function setInferenceRunning(isRunning: boolean) {
-  if (inferenceRunning === isRunning) return;
-  inferenceRunning = isRunning;
+function abortCurrentInference() {
+  if (currentAbortController && !currentAbortController.signal.aborted) {
+    currentAbortController.abort();
+  }
+  inferenceRunning = false;
+  currentAbortController = null;
+  trackedTabId = null;
 }
 
 export default function registerInference() {
+  browser.tabs.onRemoved.addListener((tabId) => {
+    if (tabId !== null && tabId === trackedTabId) {
+      abortCurrentInference();
+    }
+  });
+
   onMessage("checkIsInferenceRunning", async () => {
     return inferenceRunning;
   });
 
   onMessage("startInference", async (message) => {
     if (inferenceRunning) return;
-    const text = message.data;
+    trackedTabId = message.data.tabId;
     currentAbortController = new AbortController();
-    setInferenceRunning(true);
+    inferenceRunning = true;
     try {
       await streamResponse(
-        text,
-        () => {
-          // In the future, partial results can be forwarded to the content script.
+        message.data.text,
+        async (generatedText) => {
+          if (trackedTabId === null) return;
+          await sendMessage(
+            "inferenceProgress",
+            {
+              text: generatedText,
+              status: "generating",
+            } as InferenceProgress,
+            { tabId: trackedTabId }
+          );
         },
         currentAbortController.signal,
-        () => setInferenceRunning(false),
-        () => setInferenceRunning(false),
-        () => setInferenceRunning(false)
+        async () => {
+          if (trackedTabId === null) return;
+          await sendMessage(
+            "inferenceProgress",
+            {
+              text: "",
+              status: "completed",
+            } as InferenceProgress,
+            { tabId: trackedTabId }
+          );
+        },
+        async () => {
+          if (trackedTabId === null) return;
+          await sendMessage(
+            "inferenceProgress",
+            {
+              text: "",
+              status: "completed",
+            } as InferenceProgress,
+            { tabId: trackedTabId }
+          );
+        },
+        async () => {
+          if (trackedTabId === null) return;
+          await sendMessage(
+            "inferenceProgress",
+            {
+              text: "",
+              status: "error",
+            } as InferenceProgress,
+            { tabId: trackedTabId }
+          );
+        }
       );
     } catch {
-      setInferenceRunning(false);
+      if (trackedTabId === null) return;
+      await sendMessage(
+        "inferenceProgress",
+        {
+          text: "",
+          status: "error",
+        } as InferenceProgress,
+        { tabId: trackedTabId }
+      );
     } finally {
-      setInferenceRunning(false);
-      currentAbortController = null;
+      abortCurrentInference();
     }
   });
 
   onMessage("abortInference", async () => {
-    if (currentAbortController && !currentAbortController.signal.aborted) {
-      currentAbortController.abort();
-    }
-    setInferenceRunning(false);
-    currentAbortController = null;
+    abortCurrentInference();
   });
 }
