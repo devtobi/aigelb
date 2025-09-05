@@ -2,7 +2,7 @@
   "name": "aigelb-browser-extension",
   "description": "AI-based browser extension to read the web in German Easy Language (Leichte Sprache) using the power of local AI models",
   "private": true,
-  "version": "0.4.0",
+  "version": "0.5.0",
   "type": "module",
   "scripts": {
     "dev:chrome": "concurrently --kill-others-on-fail bun:webserver \"wxt -b chrome\"",
@@ -29,7 +29,9 @@
     "@huggingface/hub": "2.5.3",
     "@vueuse/core": "13.9.0",
     "@webext-core/messaging": "2.3.0",
+    "cheerio": "1.1.2",
     "filesize": "11.0.2",
+    "get-xpath": "3.3.0",
     "ollama": "0.5.17",
     "vue": "3.5.20",
     "vuetify": "3.9.6"

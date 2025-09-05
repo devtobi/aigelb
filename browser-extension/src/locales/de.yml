@@ -98,3 +98,7 @@ popup:
     tooltip:
       ollamaUnavailable: Verbindung zu Ollama konnte nicht aufgebaut werden. Ist Ollama gestartet?
       modelUnavailable: Das erforderliche Modell wurde nicht gefunden. Bitte laden Sie es über die Anleitungsseite herunter.
+content:
+  selectionOverlay:
+    title: Inhalt auswählen
+    description: Bewegen Sie den Mauszeiger über ein Element, um es zu markieren. Klicken Sie das markierte Element an um die Übersetzung in Leichte Sprache zu starten. Mit der Escape-Taste (Esc) oder der nebenstehenden Schaltfläche kann die Auswahl abgebrochen werden.
