@@ -21,6 +21,7 @@
   </v-btn>
 </template>
 <script setup lang="ts">
+import type { ModelData } from "@/types/ModelData.ts";
 import type { RemoveListenerCallback } from "@webext-core/messaging";
 
 import { mdiDownload } from "@mdi/js";
@@ -50,10 +51,11 @@ const downloadProgress = computed(
 const removeListenerCallBack = ref<RemoveListenerCallback>();
 
 onMounted(async () => {
-  fileSize.value = await sendMessage("getModelSize", {
+  const modelData: ModelData = {
     repo: props.repo,
     file: props.file,
-  });
+  };
+  fileSize.value = await sendMessage("getModelSize", modelData);
 });
 
 const downloadText = computed(() => {
