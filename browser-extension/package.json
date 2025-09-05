@@ -26,8 +26,8 @@
   },
   "dependencies": {
     "@fontsource/roboto": "5.2.6",
-    "@huggingface/hub": "2.5.2",
-    "@vueuse/core": "13.8.0",
+    "@huggingface/hub": "2.5.3",
+    "@vueuse/core": "13.9.0",
     "@webext-core/messaging": "2.3.0",
     "cheerio": "1.1.2",
     "filesize": "11.0.2",
