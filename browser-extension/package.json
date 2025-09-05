@@ -29,6 +29,7 @@
     "@huggingface/hub": "2.5.2",
     "@vueuse/core": "13.8.0",
     "@webext-core/messaging": "2.3.0",
+    "cheerio": "1.1.2",
     "filesize": "11.0.2",
     "ollama": "0.5.17",
     "vue": "3.5.20",

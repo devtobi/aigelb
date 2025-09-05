@@ -50,6 +50,7 @@
 <script setup lang="ts">
 import { mdiEyeOff } from "@mdi/js";
 import { i18n } from "#i18n";
+import { load } from "cheerio";
 import {
   onBeforeUnmount,
   onMounted,
@@ -86,6 +87,20 @@ function elementAtClientPoint(x: number, y: number): Element | null {
   return null;
 }
 
+function elementContainsText(el: Element): boolean {
+  try {
+    const html = (el as HTMLElement).outerHTML ?? "";
+    const $ = load(html);
+    $("script, style, noscript, template").remove();
+    const text = $.root().text();
+    return text.trim().length > 0;
+  } catch {
+    // Fallback: minimal DOM-based check
+    const t = (el as HTMLElement).innerText ?? "";
+    return t.trim().length > 0;
+  }
+}
+
 function onMove(e: MouseEvent) {
   if (!enabled.value) return;
   if (isInsideOverlay(e)) {
@@ -94,6 +109,10 @@ function onMove(e: MouseEvent) {
   }
   const t = elementAtClientPoint(e.clientX, e.clientY);
   if (!t || t === document.documentElement || t === document.body) {
+    rect.visible = false;
+    return;
+  }
+  if (!elementContainsText(t)) {
     rect.visible = false;
     return;
   }
@@ -106,13 +125,12 @@ function onMove(e: MouseEvent) {
 }
 
 function onClick(e: MouseEvent) {
-  if (!enabled.value) return;
-  if (isInsideOverlay(e)) return;
+  if (!enabled.value || isInsideOverlay(e)) return;
+  const t = elementAtClientPoint(e.clientX, e.clientY);
+  if (!t || !elementContainsText(t)) return;
 
   e.preventDefault();
   e.stopPropagation();
-  const t = elementAtClientPoint(e.clientX, e.clientY);
-  if (!t) return;
   console.debug("outerHTML:", (t as HTMLElement).outerHTML);
   // TODO
   enabled.value = false;
