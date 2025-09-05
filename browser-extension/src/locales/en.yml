@@ -94,7 +94,8 @@ popup:
   instructionsButton:
     text: Open instructions
   selectionButton:
-    text: Select content
+    startText: Select content
+    stopText: Cancel translation
     tooltip:
       ollamaUnavailable: Unable to connect to Ollama. Is Ollama running?
       modelUnavailable: Required model not found. Please download from the instructions page.
