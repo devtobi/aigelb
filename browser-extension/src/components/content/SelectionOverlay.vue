@@ -13,7 +13,8 @@
     >
       <v-sheet
         v-show="rect.visible"
-        class="rect-overlay pointer-events-none position-fixed"
+        class="rect-overlay pointer-events-none position-fixed border border-warning border-md"
+        color="rgba(var(--v-theme-warning), 0.1)"
         :style="{
           left: rect.x + 'px',
           top: rect.y + 'px',
@@ -24,7 +25,7 @@
 
       <v-alert
         v-if="enabled"
-        color="orange"
+        color="warning"
         type="info"
         variant="elevated"
         class="pa-3 position-fixed description-alert"
@@ -158,10 +159,5 @@ watch(enabled, (isEnabled) => {
   left: 16px;
   right: 16px;
   bottom: 16px;
-}
-.rect-overlay.v-sheet {
-  background: rgba(255, 64, 129, 0.08) !important;
-  border: 2px solid orange !important;
-  box-sizing: border-box;
 }
 </style>

@@ -13,7 +13,8 @@
     >
       <v-skeleton-loader
         v-show="rect.visible"
-        class="rect-overlay pointer-events-none position-fixed"
+        class="rect-overlay pointer-events-none position-fixed border border-warning border-md"
+        color="rgba(var(--v-theme-warning), 0.3)"
         :width="rect.w"
         :height="rect.h"
         :style="{
@@ -24,7 +25,7 @@
 
       <v-alert
         v-if="isEnabled"
-        color="orange"
+        color="warning"
         type="info"
         :icon="mdiChatProcessing"
         variant="elevated"
@@ -130,10 +131,5 @@ watch(
   left: 16px;
   right: 16px;
   bottom: 16px;
-}
-.rect-overlay.v-skeleton-loader {
-  background: rgba(255, 64, 129, 0.08) !important;
-  border: 2px solid orange !important;
-  box-sizing: border-box;
 }
 </style>
