@@ -6,6 +6,7 @@ import { createShadowRootUi } from "wxt/utils/content-script-ui/shadow-root";
 
 import App from "@/entrypoints/content/App.vue";
 import { registerVuePlugins } from "@/plugins";
+import { syncCSSStyleSheets } from "@/utility/css.ts";
 
 export default defineContentScript({
   matches: ["*://*/*"],
@@ -20,6 +21,24 @@ export default defineContentScript({
         const app = createApp(App);
         registerVuePlugins(app);
         app.mount(container);
+
+        const root = container.getRootNode();
+        if (root instanceof ShadowRoot) {
+          const STYLE_ID = "vuetify-theme-stylesheet";
+
+          const themeSheet = new CSSStyleSheet();
+
+          void syncCSSStyleSheets(STYLE_ID, themeSheet, root);
+
+          const headObserver = new MutationObserver(() => {
+            void syncCSSStyleSheets(STYLE_ID, themeSheet, root);
+          });
+          headObserver.observe(document.head, {
+            childList: true,
+            subtree: true,
+            characterData: true,
+          });
+        }
         return app;
       },
       onRemove: (app) => {
