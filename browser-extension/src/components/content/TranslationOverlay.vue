@@ -11,14 +11,14 @@
       ref="overlayUi"
       class="overlay-ui-root"
     >
-      <v-sheet
+      <v-skeleton-loader
         v-show="rect.visible"
         class="rect-overlay pointer-events-none position-fixed"
+        :width="rect.w"
+        :height="rect.h"
         :style="{
           left: rect.x + 'px',
-          top: rect.y + 'px',
-          width: rect.w + 'px',
-          height: rect.h + 'px',
+          top: rect.y + 'px'
         }"
       />
 
@@ -131,7 +131,7 @@ watch(
   right: 16px;
   bottom: 16px;
 }
-.rect-overlay.v-sheet {
+.rect-overlay.v-skeleton-loader {
   background: rgba(255, 64, 129, 0.08) !important;
   border: 2px solid orange !important;
   box-sizing: border-box;
