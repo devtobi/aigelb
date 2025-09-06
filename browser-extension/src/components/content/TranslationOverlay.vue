@@ -19,7 +19,7 @@
         :height="rect.h"
         :style="{
           left: rect.x + 'px',
-          top: rect.y + 'px'
+          top: rect.y + 'px',
         }"
       />
 
