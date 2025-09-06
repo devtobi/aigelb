@@ -25,8 +25,8 @@ import SelectionButton from "@/components/popup/SelectionButton.vue";
 
 <style>
 body {
-  min-width: 320px;
-  max-width: 480px;
+  min-width: 360px;
+  max-width: 520px;
   height: 400px;
 }
 </style>

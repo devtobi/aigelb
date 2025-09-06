@@ -8,22 +8,25 @@
       {{ disabledTooltip }}
     </v-tooltip>
     <v-btn
-      @click="startSelection"
+      @click="() => (!inferenceRunning ? startSelection() : abortInference())"
       size="large"
       block
       :color="isDisabled ? 'grey' : 'warning'"
-      :prepend-icon="mdiCursorDefault"
+      :prepend-icon="!inferenceRunning ? mdiCursorDefault : mdiClose"
+      :text="
+        !inferenceRunning
+          ? i18n.t('popup.selectionButton.startText')
+          : i18n.t('popup.selectionButton.stopText')
+      "
       :disabled="isDisabled"
-    >
-      {{ i18n.t("popup.selectionButton.text") }}
-    </v-btn>
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { mdiCursorDefault } from "@mdi/js";
+import { mdiClose, mdiCursorDefault } from "@mdi/js";
 import { i18n } from "#i18n";
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 import { useModelAvailability } from "@/composables/useModelAvailability.ts";
 import { useOllama } from "@/composables/useOllama.ts";
@@ -40,6 +43,7 @@ const { isModelAvailable, checkModelAvailable } = useModelAvailability();
 
 onMounted(async () => {
   await checkCondition();
+  inferenceRunning.value = await sendMessage("checkIsInferenceRunning");
 });
 
 async function checkCondition() {
@@ -51,6 +55,7 @@ async function checkCondition() {
   }
 }
 
+const inferenceRunning = ref<boolean>(false);
 const isDisabled = computed(
   () => isOllamaAvailable.value !== true || isModelAvailable.value !== true
 );
@@ -73,6 +78,13 @@ async function startSelection() {
       await sendMessage("startSelection", undefined, { tabId });
       closeWindow();
     }
+  }
+}
+
+async function abortInference() {
+  if (inferenceRunning.value) {
+    await sendMessage("abortInference");
+    closeWindow();
   }
 }
 </script>

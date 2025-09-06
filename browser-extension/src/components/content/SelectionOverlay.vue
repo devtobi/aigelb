@@ -13,7 +13,8 @@
     >
       <v-sheet
         v-show="rect.visible"
-        class="rect-overlay pointer-events-none position-fixed"
+        class="rect-overlay pointer-events-none position-fixed border border-warning border-md"
+        color="rgba(var(--v-theme-warning), 0.1)"
         :style="{
           left: rect.x + 'px',
           top: rect.y + 'px',
@@ -24,7 +25,7 @@
 
       <v-alert
         v-if="enabled"
-        color="orange"
+        color="warning"
         type="info"
         variant="elevated"
         class="pa-3 position-fixed description-alert"
@@ -48,8 +49,6 @@
 </template>
 
 <script setup lang="ts">
-import type { SelectionData } from "@/types/SelectionData.ts";
-
 import { mdiEyeOff } from "@mdi/js";
 import { i18n } from "#i18n";
 import {
@@ -64,9 +63,7 @@ import {
 import {
   elementAtClientPoint,
   elementContainsText,
-  getXPathForElement,
   isInsideElement,
-  replaceElementByXPath,
 } from "@/utility/dom.ts";
 
 const enabled = defineModel<boolean>();
@@ -106,20 +103,12 @@ function onClick(e: MouseEvent) {
   e.preventDefault();
   e.stopPropagation();
 
-  const selectionData: SelectionData = {
-    content: (t as HTMLElement).innerHTML,
-    xPath: getXPathForElement(t),
-  };
-  console.debug("selectionData:", selectionData);
-  // TODO START ASYNCHRONOUS TRANSLATION EVENT
-  // DUMMY TESTING TO REPLACE DOM CONTENT
-  replaceElementByXPath(
-    selectionData.xPath,
-    document.createTextNode("Übersetzen ist aktuell noch nicht möglich!")
-  );
-
-  enabled.value = false;
+  emit("elementSelected", t as HTMLElement);
 }
+
+const emit = defineEmits<{
+  elementSelected: [element: HTMLElement];
+}>();
 
 function onKeyDown(e: KeyboardEvent) {
   if (e.key !== "Escape") return;
@@ -170,10 +159,5 @@ watch(enabled, (isEnabled) => {
   left: 16px;
   right: 16px;
   bottom: 16px;
-}
-.rect-overlay.v-sheet {
-  background: rgba(255, 64, 129, 0.08) !important;
-  border: 2px solid orange !important;
-  box-sizing: border-box;
 }
 </style>
