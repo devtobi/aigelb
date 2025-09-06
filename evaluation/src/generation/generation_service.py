@@ -59,10 +59,11 @@ class GenerationService:
       count = FileService.count_csv_lines(predictions_filepath)
       if count == sources_count:
         return
-      for i in tqdm(range(count, sources_count), desc="-> Running inference cycles", initial=count + 1, total=sources_count):
-        u_prompt = user_prompt.replace(cls._get_user_prompt_template_string(), sources[i])
-        result = cls._run_chat_completion(llm, model.name, system_prompt, u_prompt)
-        cls._write_prediction(model, result, timestamp)
+      with tqdm(range(count, sources_count), desc="-> Running inference cycles", initial=count + 1, total=sources_count) as pbar:
+        for i in pbar:
+          u_prompt = user_prompt.replace(cls._get_user_prompt_template_string(), sources[i])
+          result = cls._run_chat_completion(llm, model.name, system_prompt, u_prompt)
+          cls._write_prediction(model, result, timestamp)
     else:
       with tqdm(sources, desc="-> Running inference cycles", leave=False) as pbar:
         for source in pbar:

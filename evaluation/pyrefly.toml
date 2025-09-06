@@ -1,2 +1,5 @@
 project-includes = ["**/*"]
 project-excludes = ["**/*venv/**/*"]
+
+[errors]
+bad-context-manager = false
