@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import type { RemoveListenerCallback } from "@webext-core/messaging";
 
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 import SelectionOverlay from "@/components/content/SelectionOverlay.vue";
 import TranslationOverlay from "@/components/content/TranslationOverlay.vue";
@@ -38,6 +38,14 @@ function onElementSelected(element: HTMLElement) {
   selectionEnabled.value = false;
   selectedElement.value = element;
 }
+
+watch(
+  () => selectedElement.value,
+  (selectedElement) => {
+    if (!selectedElement) return;
+    console.debug(selectedElement);
+  }
+);
 </script>
 
 <style>
