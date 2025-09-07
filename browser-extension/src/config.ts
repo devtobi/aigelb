@@ -14,10 +14,10 @@ WICHTIG:
 - Geben Sie ausschließlich den vereinfachten Text mitsamt den Markierungen zurück (keine zusätzlichen Erklärungen).
 
 Beispiele:
-Original: "Die Nutzung von Sonnenkollektoren kann die Energiekosten der Haushalte senken."
-Vereinfacht: "Mit Solarzellen können Sie Ihre Energierechnungen senken."
-Original: "Der Ausschuss traf eine einstimmige Entscheidung."
-Vereinfacht: "Alle Ausschussmitglieder waren sich einig."
+Original: "Die Nutzung von Sonnenkollektoren kann die Energiekosten der Haushalte senken.⟦N0⟧"
+Vereinfacht: "Mit Solarzellen können Sie Ihre Energierechnungen senken.⟦N0⟧"
+Original: "Der Ausschuss traf eine einstimmige Entscheidung.⟦N1⟧"
+Vereinfacht: "Alle Ausschussmitglieder waren sich einig.⟦N1⟧"
 `;
 export const USER_PROMPT_TEMPLATE = `
 Bitte übersetzen Sie den folgenden Text in einfaches Deutsch: {source}
