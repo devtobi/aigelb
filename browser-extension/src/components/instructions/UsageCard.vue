@@ -26,9 +26,13 @@
                 <v-alert
                   color="warning"
                   type="info"
+                  class="mb-3"
                 >
                   {{ i18n.t("instructions.usageCard.openStep.alert") }}
                 </v-alert>
+
+                <p>{{ i18n.t("common.example") }}:</p>
+                <v-img src="@/assets/de/AIGELB_openStep.png" />
                 <template #prev />
               </v-stepper-vertical-item>
               <v-stepper-vertical-item
@@ -113,4 +117,11 @@ import {
   VStepperVertical,
   VStepperVerticalItem,
 } from "vuetify/labs/VStepperVertical";
+import { getUILanguage } from "@/utility/browser.ts";
+
+const uiLanguage = getUILanguage();
+
+function getImageUrl(filePath: string) {
+  return `${filePath}_${uiLanguage}.png`;
+}
 </script>
