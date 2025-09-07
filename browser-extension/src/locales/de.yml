@@ -69,6 +69,28 @@ instructions:
   closeDialog:
     title: Einrichtung nicht abgeschlossen
     description: Die Einrichtung von AIGELB ist noch nicht abgeschlossen. Daher wird die Erweiterung noch nicht funktionieren. Diese Seite kann jederzeit über das AIGELB-Symbol in der Browserleiste wieder geöffnet und die Einrichtung fortgesetzt werden.
+  usageCard:
+    title: Nutzung
+    openStep:
+      title: AIGELB öffnen
+      description: Um AIGELB zu öffnen, klicken Sie auf das AIGELB-Symbol in der Browserleiste.
+      alert: Je nach verwendentem Browser kann es kleine Unterschiede im Aussehen der Browserleiste und im Aufruf der Erweiterung geben.
+    startSelectStep:
+      title: Auswahl starten
+      description: Zur Nutzung von AIGELB kann die Auswahl des Inhalts über die Schaltfläche "Inhalt auswählen" gestartet werden.
+      alert: Wenn die Schaltfläche deaktiviert ist, ist entweder Ollama nicht gestartet oder die Ersteinrichtung noch nicht abgeschlossen.
+    selectStep:
+      title: Inhalt auswählen
+      description: Fahren Sie mit der Maus über den zu übersetzenden Inhalt. Der aktuell ausgewählte Inhalt wird farblich hervorgehoben.
+      alert: Sie können die Auswahl über die "Abbrechen"-Schaltfläche im Infofenster unten auf der Website abbrechen. Alternativ kann auch die "ESC"-Taste verwendet werden. Über das "Auge"-Symbol kann das Infofenster geschlossen werden, um darunterliegende Inhalte leichter auszuwählen.
+    waitStep:
+      title: Übersetzung abwarten
+      description: Während die Übersetzung durchgeführt wird, wird der Inhalt farblich hervorgehoben und eine entsprechende Information im Infofenster angezeigt.
+      alert: Über die "Abbrechen"-Schaltfläche kann die laufende Übersetzung abgebrochen werden.
+    resetStep:
+      title: Originalinhalt wiederherstellen
+      description: Um den ursprünglichen Inhalt der Website wiedeherzustellen, muss die Webseite lediglich neu geladen werden.
+      alert: Das Neuladen kann in der Regel über das "Aktualisieren"-Symbol innerhalb der Browserleiste oder über die Tastenkombination "STRG+R" (Windows) bzw. "CMD+R" (Mac) erfolgen.
   uninstallCard:
     title: Deinstallation
     modelStep:
