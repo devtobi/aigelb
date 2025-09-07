@@ -6,16 +6,16 @@ import { streamResponse } from "@/api/ai.ts";
 import { onMessage, sendMessage } from "@/utility/messaging.ts";
 
 let currentAbortController: AbortController | null = null;
-let inferenceRunning = false;
 let trackedTabId: number | null = null;
+let trackedGenerationId: string | null = null;
 
 function abortCurrentInference() {
   if (currentAbortController && !currentAbortController.signal.aborted) {
     currentAbortController.abort();
   }
-  inferenceRunning = false;
-  currentAbortController = null;
+  trackedGenerationId = null;
   trackedTabId = null;
+  currentAbortController = null;
 }
 
 export default function registerInference() {
@@ -26,14 +26,14 @@ export default function registerInference() {
   });
 
   onMessage("checkIsInferenceRunning", async () => {
-    return inferenceRunning;
+    return !!trackedGenerationId;
   });
 
   onMessage("startInference", async (message) => {
-    if (inferenceRunning) return;
-    trackedTabId = message.data.tabId;
+    trackedTabId = message.sender.tab?.id as number;
+    if (!trackedTabId || trackedGenerationId) return;
     currentAbortController = new AbortController();
-    inferenceRunning = true;
+    trackedGenerationId = message.data.generationId;
     try {
       await streamResponse(
         message.data.text,
@@ -42,8 +42,9 @@ export default function registerInference() {
           await sendMessage(
             "inferenceProgress",
             {
-              text: generatedText,
+              generationId: trackedGenerationId,
               status: "generating",
+              text: generatedText,
             } as InferenceProgress,
             { tabId: trackedTabId }
           );
@@ -54,8 +55,9 @@ export default function registerInference() {
           await sendMessage(
             "inferenceProgress",
             {
-              text: "",
+              generationId: trackedGenerationId,
               status: "completed",
+              text: "",
             } as InferenceProgress,
             { tabId: trackedTabId }
           );
@@ -65,8 +67,9 @@ export default function registerInference() {
           await sendMessage(
             "inferenceProgress",
             {
-              text: "",
+              generationId: trackedGenerationId,
               status: "completed",
+              text: "",
             } as InferenceProgress,
             { tabId: trackedTabId }
           );
@@ -76,8 +79,9 @@ export default function registerInference() {
           await sendMessage(
             "inferenceProgress",
             {
-              text: "",
+              generationId: trackedGenerationId,
               status: "error",
+              text: "",
             } as InferenceProgress,
             { tabId: trackedTabId }
           );
@@ -88,6 +92,7 @@ export default function registerInference() {
       await sendMessage(
         "inferenceProgress",
         {
+          generationId: trackedGenerationId,
           text: "",
           status: "error",
         } as InferenceProgress,
@@ -98,7 +103,7 @@ export default function registerInference() {
     }
   });
 
-  onMessage("abortInference", async () => {
+  onMessage("abortInference", () => {
     abortCurrentInference();
   });
 }
