@@ -16,9 +16,7 @@ import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 import SelectionOverlay from "@/components/content/SelectionOverlay.vue";
 import TranslationOverlay from "@/components/content/TranslationOverlay.vue";
 import {
-  LINEARIZATION_REGEX,
-  LINEARIZATION_PREFIX,
-  LINEARIZATION_SUFFIX,
+  LINEARIZATION_FLEX_REGEX,
   linearizeTextNodesForInference,
   stripAllMarkers,
 } from "@/utility/conversion.ts";
@@ -33,7 +31,11 @@ const selectedElement = ref<HTMLElement | null>(null);
 
 const generationId = ref<string>("");
 
-type Run = { nodes: Text[]; i: number; pending: string };
+interface Run {
+  nodes: Text[];
+  i: number;
+  pending: string;
+}
 const currentRun = ref<Run | null>(null);
 
 onMounted(() => {
@@ -45,87 +47,14 @@ onMounted(() => {
     if (!selectedElement.value || gid !== generationId.value) return;
 
     if (status === "completed" || status === "error") {
-      // On completion, flush any remaining buffer safely and strip markers
-      if (currentRun.value && currentRun.value.pending) {
-        // Process any final complete markers
-        while (true) {
-          LINEARIZATION_REGEX.lastIndex = 0;
-          const m = LINEARIZATION_REGEX.exec(currentRun.value.pending);
-          if (!m) break;
-
-          const before = currentRun.value.pending.slice(0, m.index);
-          const markerIdx = Number(m[1]);
-          const target = currentRun.value.nodes[markerIdx];
-          if (target && before) target.nodeValue = (target.nodeValue ?? "") + before;
-          currentRun.value.pending = currentRun.value.pending.slice(m.index + m[0].length);
-          currentRun.value.i = markerIdx + 1;
-        }
-        // Append any leftovers (with markers stripped) to current node
-        if (currentRun.value.pending) {
-          const node = currentRun.value.nodes[currentRun.value.i];
-          const chunk = stripAllMarkers(currentRun.value.pending);
-          if (node) node.nodeValue = (node.nodeValue ?? "") + chunk;
-          currentRun.value.pending = "";
-        }
-      }
-
-      currentRun.value = null;
-      generationId.value = "";
-      selectedElement.value = null;
+      finalizeRun();
       return;
     }
 
-    // Streamed delta handling
     if (!currentRun.value) return;
     currentRun.value.pending += text;
-
-    // Process all complete segments in the buffer using explicit marker indices
-    while (true) {
-      LINEARIZATION_REGEX.lastIndex = 0;
-      const m = LINEARIZATION_REGEX.exec(currentRun.value.pending);
-      if (!m) break; // no full segment boundary in buffer yet
-
-      const before = currentRun.value.pending.slice(0, m.index);
-      const markerIdx = Number(m[1]);
-
-      const target = currentRun.value.nodes[markerIdx];
-      if (target && before) {
-        target.nodeValue = (target.nodeValue ?? "") + before;
-      }
-
-      // Drop processed content + marker from buffer and set current index to the next node
-      currentRun.value.pending = currentRun.value.pending.slice(m.index + m[0].length);
-      currentRun.value.i = markerIdx + 1;
-
-      if (currentRun.value.i >= currentRun.value.nodes.length) {
-        // We've reached/passed the last node; discard any trailing buffer until more arrives
-        currentRun.value.pending = "";
-        break;
-      }
-    }
-
-    // Safely stream whatever remains towards the current target index.
-    // Keep any possible partial marker at the end of the buffer to avoid breaking markers across chunks.
-    if (currentRun.value.pending) {
-      // Find the last possible start of a marker (be tolerant: look for the opening bracket only)
-      const lastOpenPos = currentRun.value.pending.lastIndexOf("⟦");
-      let safeLen = currentRun.value.pending.length;
-      if (lastOpenPos !== -1) {
-        // If there is no closing suffix after the last opening, keep the trailing part (potential partial marker) in the buffer
-        const hasClosing = currentRun.value.pending.indexOf("⟧", lastOpenPos) !== -1;
-        if (!hasClosing) {
-          safeLen = lastOpenPos;
-        }
-      }
-
-      if (safeLen > 0) {
-        const node = currentRun.value.nodes[currentRun.value.i];
-        // Remove any internal complete markers that might have slipped through
-        const chunk = stripAllMarkers(currentRun.value.pending.slice(0, safeLen));
-        if (node && chunk) node.nodeValue = (node.nodeValue ?? "") + chunk;
-        currentRun.value.pending = currentRun.value.pending.slice(safeLen);
-      }
-    }
+    processCompleteMarkers();
+    flushSafeTail();
   });
 });
 
@@ -165,6 +94,75 @@ watch(
     });
   }
 );
+
+function resetState() {
+  currentRun.value = null;
+  generationId.value = "";
+  selectedElement.value = null;
+}
+
+function appendToNodeByIndex(idx: number, text: string) {
+  if (!text) return;
+  const node = currentRun.value?.nodes[idx];
+  if (node) node.nodeValue = (node.nodeValue ?? "") + text;
+}
+
+function appendToCurrentNode(text: string) {
+  if (!currentRun.value) return;
+  appendToNodeByIndex(currentRun.value.i, text);
+}
+
+function processCompleteMarkers() {
+  if (!currentRun.value) return;
+  while (true) {
+    // check if marker found in generated content
+    LINEARIZATION_FLEX_REGEX.lastIndex = 0;
+    const m = LINEARIZATION_FLEX_REGEX.exec(currentRun.value.pending);
+    if (!m) break;
+
+    // update DOM content of specific text node
+    const before = currentRun.value.pending.slice(0, m.index);
+    const markerIdx = Number(m[1]);
+    if (before) appendToNodeByIndex(markerIdx, before);
+
+    // remove from pending content and go to next node (if available)
+    currentRun.value.pending = currentRun.value.pending.slice(
+      m.index + m[0].length
+    );
+    currentRun.value.i = markerIdx + 1;
+    if (currentRun.value.i >= currentRun.value.nodes.length) {
+      currentRun.value.pending = "";
+      break;
+    }
+  }
+}
+
+function flushSafeTail() {
+  if (!currentRun.value?.pending) return;
+  const buf = currentRun.value.pending;
+  const lastOpen = buf.lastIndexOf("⟦");
+  const safeLen =
+    lastOpen !== -1 && buf.indexOf("⟧", lastOpen) === -1
+      ? lastOpen
+      : buf.length;
+  if (safeLen <= 0) return;
+
+  const chunk = stripAllMarkers(buf.slice(0, safeLen));
+  appendToCurrentNode(chunk);
+  currentRun.value.pending = buf.slice(safeLen);
+}
+
+function finalizeRun() {
+  if (currentRun.value?.pending) {
+    processCompleteMarkers();
+    if (currentRun.value.pending) {
+      const leftover = stripAllMarkers(currentRun.value.pending);
+      appendToCurrentNode(leftover);
+      currentRun.value.pending = "";
+    }
+  }
+  resetState();
+}
 </script>
 
 <style>

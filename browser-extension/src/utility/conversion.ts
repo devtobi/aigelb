@@ -7,8 +7,11 @@ export const LINEARIZATION_REGEX = new RegExp(
   "g"
 );
 
+// Tolerant variant for parsing model output (allows minor whitespace/case)
+export const LINEARIZATION_FLEX_REGEX = /⟦\s*[Nn]\s*(\d+)\s*⟧/g;
+
 export function stripAllMarkers(text: string): string {
-  return text.replace(LINEARIZATION_REGEX, "");
+  return text.replace(LINEARIZATION_FLEX_REGEX, "");
 }
 
 export function convertFileSize(sizeInBytes: number) {
