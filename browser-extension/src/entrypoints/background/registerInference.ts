@@ -9,13 +9,16 @@ let currentAbortController: AbortController | null = null;
 let trackedTabId: number | null = null;
 let trackedGenerationId: string | null = null;
 
+function resetInference() {
+  trackedGenerationId = null;
+  trackedTabId = null;
+  currentAbortController = null;
+}
+
 function abortCurrentInference() {
   if (currentAbortController && !currentAbortController.signal.aborted) {
     currentAbortController.abort();
   }
-  trackedGenerationId = null;
-  trackedTabId = null;
-  currentAbortController = null;
 }
 
 export default function registerInference() {
@@ -99,10 +102,9 @@ export default function registerInference() {
         { tabId: trackedTabId }
       );
     } finally {
-      abortCurrentInference();
+      resetInference();
     }
   });
-
   onMessage("abortInference", () => {
     abortCurrentInference();
   });
