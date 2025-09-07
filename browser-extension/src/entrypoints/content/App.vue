@@ -35,6 +35,7 @@ interface Run {
   nodes: Text[];
   i: number;
   pending: string;
+  startedReplacing: boolean;
 }
 const currentRun = ref<Run | null>(null);
 
@@ -52,6 +53,11 @@ onMounted(() => {
     }
 
     if (!currentRun.value) return;
+    // Defer clearing original content until first generated chunk arrives
+    if (!currentRun.value.startedReplacing) {
+      for (const n of currentRun.value.nodes) n.nodeValue = "";
+      currentRun.value.startedReplacing = true;
+    }
     currentRun.value.pending += text;
     processCompleteMarkers();
     flushSafeTail();
@@ -84,9 +90,13 @@ watch(
     const linearized = linearizeTextNodesForInference(textNodes);
     generationId.value = crypto.randomUUID() as string;
 
-    // Prepare run state and clear existing node content for replacement
-    currentRun.value = { nodes: textNodes, i: 0, pending: "" };
-    for (const n of textNodes) n.nodeValue = "";
+    // Prepare run state; do not clear nodes yet. We wait for first LLM chunk.
+    currentRun.value = {
+      nodes: textNodes,
+      i: 0,
+      pending: "",
+      startedReplacing: false,
+    };
 
     await sendMessage("startInference", {
       generationId: generationId.value,
