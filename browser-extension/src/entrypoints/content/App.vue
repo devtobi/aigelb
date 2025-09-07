@@ -15,7 +15,10 @@ import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 import SelectionOverlay from "@/components/content/SelectionOverlay.vue";
 import TranslationOverlay from "@/components/content/TranslationOverlay.vue";
-import { linearizeTextNodesForInference } from "@/utility/conversion.ts";
+import {
+  LINEARIZATION_REGEX,
+  linearizeTextNodesForInference,
+} from "@/utility/conversion.ts";
 import { collectTextNodes } from "@/utility/dom.ts";
 import { onMessage, sendMessage } from "@/utility/messaging.ts";
 
@@ -27,22 +30,53 @@ const selectedElement = ref<HTMLElement | null>(null);
 
 const generationId = ref<string>("");
 
+type Run = { nodes: Text[]; i: number; pending: string };
+const runs = new Map<string, Run>();
+
 onMounted(() => {
   removeSelectionListener.value = onMessage("startSelection", () => {
     selectionEnabled.value = true;
   });
   removeInferenceListener.value = onMessage("inferenceProgress", (progress) => {
-    if (
-      !selectedElement.value ||
-      progress.data.generationId !== generationId.value
-    )
-      return;
-    if (progress.data.status === "completed") {
+    const { generationId: gid, status, text } = progress.data;
+    if (!selectedElement.value || gid !== generationId.value) return;
+
+    if (status === "completed" || status === "error") {
+      runs.delete(gid);
       generationId.value = "";
       selectedElement.value = null;
       return;
     }
-    console.debug(progress.data.text);
+
+    // Streamed delta handling
+    const run = runs.get(gid);
+    if (!run) return;
+    run.pending += text;
+
+    while (true) {
+      LINEARIZATION_REGEX.lastIndex = 0;
+      const m = LINEARIZATION_REGEX.exec(run.pending);
+      // marker not reached
+      if (!m) {
+        const node = run.nodes[run.i];
+        if (!node) return;
+        node.nodeValue = (node.nodeValue ?? "") + run.pending;
+        run.pending = "";
+        break;
+      }
+
+      const chunk = run.pending.slice(0, m.index);
+      const node = run.nodes[run.i];
+      if (node && chunk) node.nodeValue = (node.nodeValue ?? "") + chunk;
+
+      run.i += 1; // advance to next node
+      run.pending = run.pending.slice(m.index + m[0].length); // drop marker
+
+      if (run.i >= run.nodes.length) {
+        run.pending = "";
+        break;
+      }
+    }
   });
 });
 
@@ -71,6 +105,10 @@ watch(
     }
     const linearized = linearizeTextNodesForInference(textNodes);
     generationId.value = crypto.randomUUID() as string;
+
+    // Prepare run state and clear existing node content for replacement
+    runs.set(generationId.value, { nodes: textNodes, i: 0, pending: "" });
+    for (const n of textNodes) n.nodeValue = "";
 
     await sendMessage("startInference", {
       generationId: generationId.value,

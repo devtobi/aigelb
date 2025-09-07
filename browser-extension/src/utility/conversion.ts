@@ -2,6 +2,7 @@ import { filesize } from "filesize";
 
 const LINEARIZATION_PREFIX = "⟦N";
 const LINEARIZATION_SUFFIX = "⟧";
+export const LINEARIZATION_REGEX = new RegExp(`${LINEARIZATION_PREFIX}(\\d+)${LINEARIZATION_SUFFIX}`, "g");
 
 export function convertFileSize(sizeInBytes: number) {
   return filesize(sizeInBytes);
