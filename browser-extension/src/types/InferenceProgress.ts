@@ -1,6 +1,7 @@
 export type InferenceStatus = "generating" | "completed" | "error";
 
 export interface InferenceProgress {
-  text: string;
+  generationId: string;
   status: InferenceStatus;
+  text: string;
 }
