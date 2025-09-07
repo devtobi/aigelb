@@ -1,6 +1,7 @@
 <template>
   <v-expansion-panels model-value="0">
     <setup-card @onboarding-completed-changed="onBoardingCompletedChanged" />
+    <usage-card />
     <uninstall-card />
     <links-card />
   </v-expansion-panels>
@@ -10,6 +11,7 @@
 import LinksCard from "@/components/instructions/LinksCard.vue";
 import SetupCard from "@/components/instructions/SetupCard.vue";
 import UninstallCard from "@/components/instructions/UninstallCard.vue";
+import UsageCard from "@/components/instructions/UsageCard.vue";
 
 const emit = defineEmits<{
   onboardingCompletedChanged: [value: boolean];
