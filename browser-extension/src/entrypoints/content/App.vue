@@ -15,6 +15,7 @@ import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 import SelectionOverlay from "@/components/content/SelectionOverlay.vue";
 import TranslationOverlay from "@/components/content/TranslationOverlay.vue";
+import { collectTextNodes } from "@/utility/dom.ts";
 import { onMessage } from "@/utility/messaging.ts";
 
 const removeSelectionListener = ref<RemoveListenerCallback>();
@@ -43,7 +44,8 @@ watch(
   () => selectedElement.value,
   (selectedElement) => {
     if (!selectedElement) return;
-    console.debug(selectedElement);
+    const textNodes = collectTextNodes(selectedElement);
+    console.debug(textNodes);
   }
 );
 </script>
