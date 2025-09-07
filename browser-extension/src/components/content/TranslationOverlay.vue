@@ -5,12 +5,9 @@
     :scrim="false"
     :absolute="false"
     contained
-    content-class="selection-overlay-content"
+    content-class="translation-overlay-content"
   >
-    <div
-      ref="overlayUi"
-      class="overlay-ui-root"
-    >
+    <div ref="overlayUi">
       <v-skeleton-loader
         v-show="rect.visible"
         class="rect-overlay pointer-events-none position-fixed border border-warning border-md"
@@ -33,7 +30,17 @@
         prominent
         :title="i18n.t('content.translationOverlay.title')"
         :text="i18n.t('content.translationOverlay.description')"
-      />
+      >
+        <template #append>
+          <v-btn
+            variant="text"
+            @click="abortInference"
+            size="small"
+            :loading="aborting"
+            :text="i18n.t('common.cancel')"
+          />
+        </template>
+      </v-alert>
     </div>
   </v-overlay>
 </template>
@@ -46,9 +53,12 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
+  ref,
   useTemplateRef,
   watch,
 } from "vue";
+
+import { sendMessage } from "@/utility/messaging.ts";
 
 const props = defineProps<{
   element: HTMLElement | null;
@@ -58,6 +68,7 @@ const isEnabled = computed(() => !!props.element);
 
 const rect = reactive({ x: 0, y: 0, w: 0, h: 0, visible: false });
 const overlayUi = useTemplateRef<HTMLElement>("overlayUi");
+const aborting = ref<boolean>(false);
 
 let resizeObserver: ResizeObserver | null = null;
 
@@ -115,17 +126,25 @@ watch(
     }
   }
 );
+
+async function abortInference() {
+  aborting.value = true;
+  await sendMessage("abortInference");
+}
+
+watch(
+  () => isEnabled.value,
+  (enabled) => {
+    if (!enabled) aborting.value = false;
+  }
+);
 </script>
 
 <style>
-.overlay-ui-root {
-  pointer-events: none;
-}
-.selection-overlay-content {
+.translation-overlay-content {
   position: fixed;
   inset: 0;
   display: block;
-  pointer-events: none;
 }
 .description-alert {
   left: 16px;

@@ -46,6 +46,55 @@ export function elementAtClientPoint(
   return null;
 }
 
+export function collectTextNodes(root: Element): Text[] {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(n) {
+      const p = (n as Text).parentElement;
+      if (isIncompatibleParent(p)) return NodeFilter.FILTER_REJECT;
+      if (isVisuallyHidden(p)) return NodeFilter.FILTER_REJECT;
+      if (isEmptyTextContent(n)) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    },
+  });
+  const textNodes: Text[] = [];
+  for (let n = walker.nextNode(); n; n = walker.nextNode())
+    textNodes.push(n as Text);
+  return textNodes;
+}
+
+function isIncompatibleParent(el: Element | null): boolean {
+  if (!el) return true;
+  if (el.matches("script,style,noscript,code,pre,iframe")) return true;
+  if ((el as HTMLElement).isContentEditable) return true;
+  return false;
+}
+
+function isVisuallyHidden(el: Element | null): boolean {
+  for (let cur: Element | null = el; cur; cur = cur.parentElement) {
+    const current = cur as HTMLElement;
+
+    if (current.hidden) return true;
+    if (current.getAttribute("aria-hidden") === "true") return true;
+    if (current.inert) return true;
+
+    const style = window.getComputedStyle(cur);
+    if (
+      style.display === "none" ||
+      style.visibility === "hidden" ||
+      style.visibility === "collapse" ||
+      style.opacity === "0"
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function isEmptyTextContent(node: Node | null): boolean {
+  const text = node?.nodeValue?.trim();
+  return !text;
+}
+
 export function getXPathForElement(element: Element | HTMLElement) {
   return getXPath(element);
 }
