@@ -36,6 +36,7 @@
             variant="text"
             @click="abortInference"
             size="small"
+            :loading="aborting"
             :text="i18n.t('common.cancel')"
           />
         </template>
@@ -51,6 +52,7 @@ import {
   computed,
   onBeforeUnmount,
   onMounted,
+  ref,
   reactive,
   useTemplateRef,
   watch,
@@ -66,6 +68,7 @@ const isEnabled = computed(() => !!props.element);
 
 const rect = reactive({ x: 0, y: 0, w: 0, h: 0, visible: false });
 const overlayUi = useTemplateRef<HTMLElement>("overlayUi");
+const aborting = ref<boolean>(false);
 
 let resizeObserver: ResizeObserver | null = null;
 
@@ -125,8 +128,16 @@ watch(
 );
 
 async function abortInference() {
+  aborting.value = true;
   await sendMessage("abortInference");
 }
+
+watch(
+  () => isEnabled.value,
+  (enabled) => {
+    if (!enabled) aborting.value = false;
+  }
+);
 </script>
 
 <style>
