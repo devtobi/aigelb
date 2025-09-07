@@ -5,12 +5,9 @@
     :scrim="false"
     :absolute="false"
     contained
-    content-class="selection-overlay-content"
+    content-class="translation-overlay-content"
   >
-    <div
-      ref="overlayUi"
-      class="overlay-ui-root"
-    >
+    <div ref="overlayUi">
       <v-skeleton-loader
         v-show="rect.visible"
         class="rect-overlay pointer-events-none position-fixed border border-warning border-md"
@@ -33,7 +30,16 @@
         prominent
         :title="i18n.t('content.translationOverlay.title')"
         :text="i18n.t('content.translationOverlay.description')"
-      />
+      >
+        <template #append>
+          <v-btn
+            variant="text"
+            @click="abortInference"
+            size="small"
+            :text="i18n.t('common.cancel')"
+          />
+        </template>
+      </v-alert>
     </div>
   </v-overlay>
 </template>
@@ -49,6 +55,8 @@ import {
   useTemplateRef,
   watch,
 } from "vue";
+
+import { sendMessage } from "@/utility/messaging.ts";
 
 const props = defineProps<{
   element: HTMLElement | null;
@@ -115,17 +123,17 @@ watch(
     }
   }
 );
+
+async function abortInference() {
+  await sendMessage("abortInference");
+}
 </script>
 
 <style>
-.overlay-ui-root {
-  pointer-events: none;
-}
-.selection-overlay-content {
+.translation-overlay-content {
   position: fixed;
   inset: 0;
   display: block;
-  pointer-events: none;
 }
 .description-alert {
   left: 16px;
