@@ -15,23 +15,43 @@ import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 import SelectionOverlay from "@/components/content/SelectionOverlay.vue";
 import TranslationOverlay from "@/components/content/TranslationOverlay.vue";
+import { linearizeTextNodesForInference } from "@/utility/conversion.ts";
 import { collectTextNodes } from "@/utility/dom.ts";
-import { onMessage } from "@/utility/messaging.ts";
+import { onMessage, sendMessage } from "@/utility/messaging.ts";
 
 const removeSelectionListener = ref<RemoveListenerCallback>();
+const removeInferenceListener = ref<RemoveListenerCallback>();
 
 const selectionEnabled = ref<boolean>(false);
 const selectedElement = ref<HTMLElement | null>(null);
 
+const generationId = ref<string>("");
+
 onMounted(() => {
   removeSelectionListener.value = onMessage("startSelection", () => {
     selectionEnabled.value = true;
+  });
+  removeInferenceListener.value = onMessage("inferenceProgress", (progress) => {
+    if (
+      !selectedElement.value ||
+      progress.data.generationId !== generationId.value
+    )
+      return;
+    if (progress.data.status === "completed") {
+      generationId.value = "";
+      selectedElement.value = null;
+      return;
+    }
+    console.debug(progress.data.text);
   });
 });
 
 onBeforeUnmount(() => {
   if (removeSelectionListener.value) {
     removeSelectionListener.value();
+  }
+  if (removeInferenceListener.value) {
+    removeInferenceListener.value();
   }
 });
 
@@ -42,10 +62,20 @@ function onElementSelected(element: HTMLElement) {
 
 watch(
   () => selectedElement.value,
-  (selectedElement) => {
-    if (!selectedElement) return;
-    const textNodes = collectTextNodes(selectedElement);
-    console.debug(textNodes);
+  async (newSelectedElement) => {
+    if (!newSelectedElement) return;
+    const textNodes = collectTextNodes(newSelectedElement);
+    if (!textNodes.length) {
+      selectedElement.value = null;
+      return;
+    }
+    const linearized = linearizeTextNodesForInference(textNodes);
+    generationId.value = crypto.randomUUID() as string;
+
+    await sendMessage("startInference", {
+      generationId: generationId.value,
+      text: linearized,
+    });
   }
 );
 </script>
