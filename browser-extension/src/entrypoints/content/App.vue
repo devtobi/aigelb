@@ -17,7 +17,10 @@ import SelectionOverlay from "@/components/content/SelectionOverlay.vue";
 import TranslationOverlay from "@/components/content/TranslationOverlay.vue";
 import {
   LINEARIZATION_REGEX,
+  LINEARIZATION_PREFIX,
+  LINEARIZATION_SUFFIX,
   linearizeTextNodesForInference,
+  stripAllMarkers,
 } from "@/utility/conversion.ts";
 import { collectTextNodes } from "@/utility/dom.ts";
 import { onMessage, sendMessage } from "@/utility/messaging.ts";
@@ -31,7 +34,7 @@ const selectedElement = ref<HTMLElement | null>(null);
 const generationId = ref<string>("");
 
 type Run = { nodes: Text[]; i: number; pending: string };
-const runs = new Map<string, Run>();
+const currentRun = ref<Run | null>(null);
 
 onMounted(() => {
   removeSelectionListener.value = onMessage("startSelection", () => {
@@ -42,39 +45,85 @@ onMounted(() => {
     if (!selectedElement.value || gid !== generationId.value) return;
 
     if (status === "completed" || status === "error") {
-      runs.delete(gid);
+      // On completion, flush any remaining buffer safely and strip markers
+      if (currentRun.value && currentRun.value.pending) {
+        // Process any final complete markers
+        while (true) {
+          LINEARIZATION_REGEX.lastIndex = 0;
+          const m = LINEARIZATION_REGEX.exec(currentRun.value.pending);
+          if (!m) break;
+
+          const before = currentRun.value.pending.slice(0, m.index);
+          const markerIdx = Number(m[1]);
+          const target = currentRun.value.nodes[markerIdx];
+          if (target && before) target.nodeValue = (target.nodeValue ?? "") + before;
+          currentRun.value.pending = currentRun.value.pending.slice(m.index + m[0].length);
+          currentRun.value.i = markerIdx + 1;
+        }
+        // Append any leftovers (with markers stripped) to current node
+        if (currentRun.value.pending) {
+          const node = currentRun.value.nodes[currentRun.value.i];
+          const chunk = stripAllMarkers(currentRun.value.pending);
+          if (node) node.nodeValue = (node.nodeValue ?? "") + chunk;
+          currentRun.value.pending = "";
+        }
+      }
+
+      currentRun.value = null;
       generationId.value = "";
       selectedElement.value = null;
       return;
     }
 
     // Streamed delta handling
-    const run = runs.get(gid);
-    if (!run) return;
-    run.pending += text;
+    if (!currentRun.value) return;
+    currentRun.value.pending += text;
 
+    // Process all complete segments in the buffer using explicit marker indices
     while (true) {
       LINEARIZATION_REGEX.lastIndex = 0;
-      const m = LINEARIZATION_REGEX.exec(run.pending);
-      // marker not reached
-      if (!m) {
-        const node = run.nodes[run.i];
-        if (!node) return;
-        node.nodeValue = (node.nodeValue ?? "") + run.pending;
-        run.pending = "";
-        break;
+      const m = LINEARIZATION_REGEX.exec(currentRun.value.pending);
+      if (!m) break; // no full segment boundary in buffer yet
+
+      const before = currentRun.value.pending.slice(0, m.index);
+      const markerIdx = Number(m[1]);
+
+      const target = currentRun.value.nodes[markerIdx];
+      if (target && before) {
+        target.nodeValue = (target.nodeValue ?? "") + before;
       }
 
-      const chunk = run.pending.slice(0, m.index);
-      const node = run.nodes[run.i];
-      if (node && chunk) node.nodeValue = (node.nodeValue ?? "") + chunk;
+      // Drop processed content + marker from buffer and set current index to the next node
+      currentRun.value.pending = currentRun.value.pending.slice(m.index + m[0].length);
+      currentRun.value.i = markerIdx + 1;
 
-      run.i += 1; // advance to next node
-      run.pending = run.pending.slice(m.index + m[0].length); // drop marker
-
-      if (run.i >= run.nodes.length) {
-        run.pending = "";
+      if (currentRun.value.i >= currentRun.value.nodes.length) {
+        // We've reached/passed the last node; discard any trailing buffer until more arrives
+        currentRun.value.pending = "";
         break;
+      }
+    }
+
+    // Safely stream whatever remains towards the current target index.
+    // Keep any possible partial marker at the end of the buffer to avoid breaking markers across chunks.
+    if (currentRun.value.pending) {
+      // Find the last possible start of a marker (be tolerant: look for the opening bracket only)
+      const lastOpenPos = currentRun.value.pending.lastIndexOf("⟦");
+      let safeLen = currentRun.value.pending.length;
+      if (lastOpenPos !== -1) {
+        // If there is no closing suffix after the last opening, keep the trailing part (potential partial marker) in the buffer
+        const hasClosing = currentRun.value.pending.indexOf("⟧", lastOpenPos) !== -1;
+        if (!hasClosing) {
+          safeLen = lastOpenPos;
+        }
+      }
+
+      if (safeLen > 0) {
+        const node = currentRun.value.nodes[currentRun.value.i];
+        // Remove any internal complete markers that might have slipped through
+        const chunk = stripAllMarkers(currentRun.value.pending.slice(0, safeLen));
+        if (node && chunk) node.nodeValue = (node.nodeValue ?? "") + chunk;
+        currentRun.value.pending = currentRun.value.pending.slice(safeLen);
       }
     }
   });
@@ -107,7 +156,7 @@ watch(
     generationId.value = crypto.randomUUID() as string;
 
     // Prepare run state and clear existing node content for replacement
-    runs.set(generationId.value, { nodes: textNodes, i: 0, pending: "" });
+    currentRun.value = { nodes: textNodes, i: 0, pending: "" };
     for (const n of textNodes) n.nodeValue = "";
 
     await sendMessage("startInference", {
