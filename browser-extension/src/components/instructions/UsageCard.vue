@@ -49,9 +49,13 @@
                 <v-alert
                   color="warning"
                   type="info"
+                  class="mb-3"
                 >
                   {{ i18n.t("instructions.usageCard.startSelectStep.alert") }}
                 </v-alert>
+
+                <p>{{ i18n.t("common.example") }}:</p>
+                <v-img width="300" :src="getImageUrl('AIGELB_startSelectStep.png')" />
               </v-stepper-vertical-item>
               <v-stepper-vertical-item
                 :title="i18n.t('instructions.usageCard.selectStep.title')"
@@ -65,9 +69,13 @@
                 <v-alert
                   color="warning"
                   type="info"
+                  class="mb-3"
                 >
                   {{ i18n.t("instructions.usageCard.selectStep.alert") }}
                 </v-alert>
+
+                <p>{{ i18n.t("common.example") }}:</p>
+                <v-img :src="getImageUrl('AIGELB_selectStep.png')" />
               </v-stepper-vertical-item>
               <v-stepper-vertical-item
                 :title="i18n.t('instructions.usageCard.waitStep.title')"
@@ -81,9 +89,13 @@
                 <v-alert
                   color="warning"
                   type="info"
+                  class="mb-3"
                 >
                   {{ i18n.t("instructions.usageCard.waitStep.alert") }}
                 </v-alert>
+
+                <p>{{ i18n.t("common.example") }}:</p>
+                <v-img :src="getImageUrl('AIGELB_waitStep.png')" />
               </v-stepper-vertical-item>
               <v-stepper-vertical-item
                 :title="i18n.t('instructions.usageCard.resetStep.title')"
@@ -97,9 +109,13 @@
                 <v-alert
                   color="warning"
                   type="info"
+                  class="mb-3"
                 >
                   {{ i18n.t("instructions.usageCard.resetStep.alert") }}
                 </v-alert>
+
+                <p>{{ i18n.t("common.example") }}:</p>
+                <v-img :src="getImageUrl('AIGELB_resetStep.png')" />
                 <template #next />
               </v-stepper-vertical-item>
             </template>
