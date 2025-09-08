@@ -32,7 +32,10 @@
                 </v-alert>
 
                 <p>{{ i18n.t("common.example") }}:</p>
-                <v-img :src="getImageUrl('AIGELB_openStep.png')" />
+                <v-img
+                  class="w-50"
+                  :src="getImageUrl('AIGELB_openStep.png')"
+                />
                 <template #prev />
               </v-stepper-vertical-item>
               <v-stepper-vertical-item
@@ -55,7 +58,10 @@
                 </v-alert>
 
                 <p>{{ i18n.t("common.example") }}:</p>
-                <v-img width="300" :src="getImageUrl('AIGELB_startSelectStep.png')" />
+                <v-img
+                  class="w-25"
+                  :src="getImageUrl('AIGELB_startSelectStep.png')"
+                />
               </v-stepper-vertical-item>
               <v-stepper-vertical-item
                 :title="i18n.t('instructions.usageCard.selectStep.title')"
@@ -75,7 +81,10 @@
                 </v-alert>
 
                 <p>{{ i18n.t("common.example") }}:</p>
-                <v-img :src="getImageUrl('AIGELB_selectStep.png')" />
+                <v-img
+                  class="w-75"
+                  :src="getImageUrl('AIGELB_selectStep.png')"
+                />
               </v-stepper-vertical-item>
               <v-stepper-vertical-item
                 :title="i18n.t('instructions.usageCard.waitStep.title')"
@@ -95,7 +104,10 @@
                 </v-alert>
 
                 <p>{{ i18n.t("common.example") }}:</p>
-                <v-img :src="getImageUrl('AIGELB_waitStep.png')" />
+                <v-img
+                  class="w-75"
+                  :src="getImageUrl('AIGELB_waitStep.png')"
+                />
               </v-stepper-vertical-item>
               <v-stepper-vertical-item
                 :title="i18n.t('instructions.usageCard.resetStep.title')"
@@ -115,7 +127,10 @@
                 </v-alert>
 
                 <p>{{ i18n.t("common.example") }}:</p>
-                <v-img :src="getImageUrl('AIGELB_resetStep.png')" />
+                <v-img
+                  class="w-75"
+                  :src="getImageUrl('AIGELB_resetStep.png')"
+                />
                 <template #next />
               </v-stepper-vertical-item>
             </template>
