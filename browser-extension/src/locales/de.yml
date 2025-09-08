@@ -84,6 +84,7 @@ instructions:
       title: Inhalt auswählen
       description: Fahren Sie mit der Maus über den zu übersetzenden Inhalt. Der aktuell ausgewählte Inhalt wird farblich hervorgehoben.
       alert: Sie können die Auswahl über die "Abbrechen"-Schaltfläche im Infofenster unten auf der Website abbrechen. Alternativ kann auch die "ESC"-Taste verwendet werden. Über das "Auge"-Symbol kann das Infofenster geschlossen werden, um darunterliegende Inhalte leichter auszuwählen.
+      selectWarning: Bei der Auswahl größerer Teile einer Webseite kann es zu Problemen in der Darstellung des übersetzten Texts kommen. Für die besten Ergebnisse wird empfohlen Textabschnitte einzeln zu übersetzen.
     waitStep:
       title: Übersetzung abwarten
       description: Während die Übersetzung durchgeführt wird, wird der Inhalt farblich hervorgehoben und eine entsprechende Information im Infofenster angezeigt.
