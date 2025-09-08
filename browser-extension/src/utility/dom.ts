@@ -94,27 +94,3 @@ function isEmptyTextContent(node: Node | null): boolean {
   const text = node?.nodeValue?.trim();
   return !text;
 }
-
-export function getXPathForElement(element: Element | HTMLElement) {
-  return getXPath(element);
-}
-
-function getElementByXPath(xPath: string) {
-  const result = document.evaluate(
-    xPath,
-    document,
-    null,
-    XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null
-  );
-  return result.singleNodeValue;
-}
-
-export function replaceElementByXPath(xPath: string, newElement: Node) {
-  const oldEl = getElementByXPath(xPath);
-  if (!oldEl || !oldEl.parentNode) {
-    console.debug("Element not found or has no parent:", xPath);
-    return;
-  }
-  oldEl.parentNode.replaceChild(newElement, oldEl);
-}
