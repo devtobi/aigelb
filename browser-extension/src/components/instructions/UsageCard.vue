@@ -32,7 +32,7 @@
                 </v-alert>
 
                 <p>{{ i18n.t("common.example") }}:</p>
-                <v-img src="@/assets/de/AIGELB_openStep.png" />
+                <v-img :src="getImageUrl('AIGELB_openStep.png')" />
                 <template #prev />
               </v-stepper-vertical-item>
               <v-stepper-vertical-item
@@ -117,11 +117,6 @@ import {
   VStepperVertical,
   VStepperVerticalItem,
 } from "vuetify/labs/VStepperVertical";
-import { getUILanguage } from "@/utility/browser.ts";
 
-const uiLanguage = getUILanguage();
-
-function getImageUrl(filePath: string) {
-  return `${filePath}_${uiLanguage}.png`;
-}
+import { getImageUrl } from "@/utility/i18n.ts";
 </script>
