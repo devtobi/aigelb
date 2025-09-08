@@ -84,7 +84,9 @@
                   type="warning"
                   class="mb-3"
                 >
-                  {{ i18n.t("instructions.usageCard.selectStep.selectWarning") }}
+                  {{
+                    i18n.t("instructions.usageCard.selectStep.selectWarning")
+                  }}
                 </v-alert>
 
                 <p>{{ i18n.t("common.example") }}:</p>
