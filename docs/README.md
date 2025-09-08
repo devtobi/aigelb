@@ -46,32 +46,57 @@ of different LLMs in regard to the use case "Easy Language" in German.
 
 #### Evaluation
 
-* Programming language: [Python](https://www.python.org)
-* Package management: [uv](https://docs.astral.sh/uv/)
-* Model downloads: [HuggingFace Hub](https://huggingface.co)
-* LLM inference: [llama-cpp-python](https://llama-cpp-python.readthedocs.io)
-* Evaluation metrics:
-  * Machine translation: [HuggingFace Evaluate](https://huggingface.co/docs/evaluate/index)
-  * Text readability: [TextStat](https://textstat.org)
-  * Lexical diversity: [LexicalRichness](https://lexicalrichness.readthedocs.io/en/latest/)
+* Programming Language: [Python](https://www.python.org)
+* Package Management: [uv](https://docs.astral.sh/uv/)
+* Model Management: [HuggingFace Hub](https://huggingface.co)
+* LLM Inference: [llama-cpp-python](https://llama-cpp-python.readthedocs.io)
+* Evaluation Metrics:
+  * Machine Translation: [HuggingFace Evaluate](https://huggingface.co/docs/evaluate/index)
+  * Text Readability: [TextStat](https://textstat.org)
+  * Lexical Diversity: [LexicalRichness](https://lexicalrichness.readthedocs.io/en/latest/)
 
 #### Browser extension
 
-* [TypeScript](https://www.typescriptlang.org)
-* [Bun](https://bun.sh)
-* [Vue](https://vuejs.org)
-* [Vuetify](https://vuetifyjs.com)
-* [WXT](https://wxt.dev)
+* Programming language: [TypeScript](https://www.typescriptlang.org)
+* Package Management: [Bun](https://bun.sh)
+* JavaScript Framework: [Vue](https://vuejs.org)
+* Component Framework: [Vuetify](https://vuetifyjs.com)
+* Web Extension Framework: [WXT](https://wxt.dev)
+* Web Extension Messaging: [webext-core/messaging](https://webext-core.aklinker1.io/messaging/installation)
+* Model Metadata: [HuggingFace Hub](https://huggingface.co/docs/huggingface.js/hub/README)
+* Model Management: [ollama-js](https://github.com/ollama/ollama-js)
+* LLM Inference: [AI SDK](https://ai-sdk.dev)
+* DOM Parsing: [cheerio](https://cheerio.js.org)
 
 ## Browser Extension
 
 ### Installation
 
-TODO
+#### Building
+
+Currently, the extension needs to be built manually from source.
+This requires [Bun](https://bun.sh) to be installed on your system.
+
+To build the extension, run the following commands in the `browser-extension` directory:
+1. Install dependencies: `bun install`
+2. Build for Chrome: `bun run build:chrome` or
+3. Build for Firefox: `bun run zip:firefox`
+
+The extension will be built in the `browser-extension/dist` directory.
+
+#### Loading
+
+To load the extension in your browser, you need to follow the instructions for your specific browser:
+- In Chrome, turn on `Developer mode` and then `Load unpacked extension...` and select the `chrome-mv3` folder.
+- In Firefox, the extension can be installed via the URL `about:debugging` and then `Load Temporary Add-on...` and select the `aigelb-browser-extension-*-firefox.zip` file.
+
+After installation the instructions page will be displayed.
 
 ### Usage
 
-TODO
+To use the extension, you need to have [Ollama](https://ollama.com) installed on your system.
+
+Further usage instructions can be found directly in the instructions page of the extension.
 
 ## Evaluation
 
@@ -92,7 +117,7 @@ can be found in the `pyproject.toml` file inside the `evaluation` directory.
 
 When the requirements above are met,
 you only need to execute `uv sync` inside the `evaluation` directory
-to setup the virtual environment and download the required packages.
+to set up the virtual environment and download the required packages.
 
 **Note:** To make inference and hardware acceleration work on your machine, you might have to do additional steps to use the proper backend for your architecture and platform in `llama-cpp-python`. You can pass required environment variables like `CMAKE_ARGS` directly to `uv sync`. E.g. for installing on Apple silicon using Metal acceleration execute `CMAKE_ARGS="-DGGML_METAL=on" uv sync`.
 See [official documentation](https://llama-cpp-python.readthedocs.io/en/latest/#supported-backends)
