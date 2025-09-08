@@ -79,6 +79,15 @@
                 >
                   {{ i18n.t("instructions.usageCard.selectStep.alert") }}
                 </v-alert>
+                <v-alert
+                  color="error"
+                  type="warning"
+                  class="mb-3"
+                >
+                  {{
+                    i18n.t("instructions.usageCard.selectStep.selectWarning")
+                  }}
+                </v-alert>
 
                 <p>{{ i18n.t("common.example") }}:</p>
                 <v-img

@@ -84,6 +84,7 @@ instructions:
       title: Select content
       description: Move your mouse over the content you want to translate. The currently selected content will be highlighted in color.
       alert: You can cancel the selection by clicking the "Cancel" button in the info window at the bottom of the website. Alternatively, you can also use the “ESC” key. The info window can be closed using the “eye” icon to make it easier to select the content below.
+      selectWarning: When selecting larger sections of a web page, problems may arise in the display of the translated text. For best results, it is recommended that text sections be translated individually.
     waitStep:
       title: Wait for translation
       description: While the translation is being performed, the content is highlighted in color and corresponding information is displayed in the info window.
