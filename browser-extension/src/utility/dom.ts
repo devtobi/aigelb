@@ -1,5 +1,4 @@
 import { load } from "cheerio";
-import getXPath from "get-xpath";
 
 export function isInsideElement(e: MouseEvent, element: HTMLElement | null) {
   return element
