@@ -5,7 +5,9 @@ export function closeWindow() {
 }
 
 export function getUILanguage() {
-  return browser.i18n?.getUILanguage();
+  const lang = browser.i18n?.getUILanguage();
+  const part = lang.indexOf("-") === -1 ? lang : (lang.split("-")[0] ?? "");
+  return part.toLowerCase();
 }
 
 export async function isPinnedInToolbar() {

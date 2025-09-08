@@ -14,6 +14,7 @@ common:
   skip: Skip
   cancel: Cancel
   close: Close
+  example: Example
 instructions:
   headerCard:
     subTitle: AI German Easy Language Browsing
@@ -69,6 +70,28 @@ instructions:
   closeDialog:
     title: Setup not finished
     description: The setup of AIGELB is not yet complete. Therefore, the extension will not work yet. This page can be reopened at any time via the AIGELB icon in the browser bar and the setup can be continued.
+  usageCard:
+    title: Usage
+    openStep:
+      title: Open AIGELB
+      description: To open AIGELB, click on the AIGELB icon in the browser bar.
+      alert: Depending on the browser you are using, there may be slight differences in the appearance of the browser bar and in how the extension is called up.
+    startSelectStep:
+      title: Start selection
+      description: To use AIGELB, the selection of content can be started by clicking the “Select content” button.
+      alert: If the button is disabled, either Ollama has not been started or the initial setup has not yet been completed.
+    selectStep:
+      title: Select content
+      description: Move your mouse over the content you want to translate. The currently selected content will be highlighted in color.
+      alert: You can cancel the selection by clicking the "Cancel" button in the info window at the bottom of the website. Alternatively, you can also use the “ESC” key. The info window can be closed using the “eye” icon to make it easier to select the content below.
+    waitStep:
+      title: Wait for translation
+      description: While the translation is being performed, the content is highlighted in color and corresponding information is displayed in the info window.
+      alert: The “Cancel” button can be used to cancel the current translation.
+    resetStep:
+      title: Restore original content
+      description: To restore the original content of the website, simply reload the webpage.
+      alert: You can usually reload the page by clicking the “Refresh” icon in the browser bar or by pressing the key combination “CTRL+R” (Windows) or “CMD+R” (Mac).
   uninstallCard:
     title: Uninstall
     modelStep:
