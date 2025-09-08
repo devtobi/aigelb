@@ -9,9 +9,6 @@ import "@/styles/override.css";
 import { de, en } from "vuetify/locale";
 
 import { getUILanguage } from "@/utility/browser.ts";
-import { mapLangToVuetify } from "@/utility/i18n.ts";
-
-const uiLanguage = mapLangToVuetify(getUILanguage());
 
 export default createVuetify({
   icons: {
@@ -25,7 +22,7 @@ export default createVuetify({
     defaultTheme: "system",
   },
   locale: {
-    locale: uiLanguage,
+    locale: getUILanguage(),
     fallback: "de",
     messages: { de, en },
   },

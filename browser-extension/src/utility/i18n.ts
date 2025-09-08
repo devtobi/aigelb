@@ -1,16 +1,13 @@
+import type { PublicPath } from "wxt/browser";
+
+import { supportedLanguages } from "#locales";
+import { browser } from "wxt/browser";
+
 import { getUILanguage } from "@/utility/browser.ts";
 
-export function mapLangToVuetify(locale: string) {
-  if (locale.startsWith("de")) return "de";
-  if (locale.startsWith("en")) return "en";
-  return "de"; // fallback
-}
-
-export function getAssetUrl(filename: string): string {
+export function getImageUrl(filename: string): string {
   const lang = getUILanguage();
-  const localizedHref = new URL(`../assets/${lang}/${filename}`, import.meta.url).href;
-  if (localizedHref.indexOf("undefined") !== -1) {
-    return new URL(`../assets/en/${filename}`, import.meta.url).href;
-  }
-  return localizedHref;
+  const supported = new Set(supportedLanguages);
+  const folder = supported.has(lang) ? lang : "en";
+  return browser.runtime.getURL(`images/${folder}/${filename}` as PublicPath);
 }
