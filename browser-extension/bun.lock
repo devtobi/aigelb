@@ -5,7 +5,7 @@
       "name": "aigelb-browser-extension",
       "dependencies": {
         "@fontsource/roboto": "5.2.7",
-        "@huggingface/hub": "2.6.2",
+        "@huggingface/hub": "2.6.4",
         "@vueuse/core": "13.9.0",
         "@webext-core/messaging": "2.3.0",
         "ai": "5.0.44",
@@ -154,9 +154,9 @@
 
     "@fontsource/roboto": ["@fontsource/roboto@5.2.7", "", {}, "sha512-fca6Jtyxn6kPR51+TTTMCFm0FOhnKaLEYYiAQc8P/4iFCKoKGR0aX89QR4CfP+N64RPXJus64UxhJaVENnSM6Q=="],
 
-    "@huggingface/hub": ["@huggingface/hub@2.6.2", "", { "dependencies": { "@huggingface/tasks": "^0.19.43" }, "bin": { "hfjs": "dist/cli.js" } }, "sha512-3XioOxMGwyIJEh2fo7bpXD+PExVQ8RcWjcmO9eLm+BCHVsRAvM1zwbEvHPQvRVM3Jqhb+/5iagvA8HbqJN/nzA=="],
+    "@huggingface/hub": ["@huggingface/hub@2.6.4", "", { "dependencies": { "@huggingface/tasks": "^0.19.45" }, "optionalDependencies": { "cli-progress": "^3.12.0" }, "bin": { "hfjs": "dist/cli.js" } }, "sha512-eqJjP0DAIShc8O90neoK1SFAlgikK6jpreTcOue4hXkKRa+BkC4WCLGintI8HIDk2Y+pHgQwUvsdb4Ruo4inSg=="],
 
-    "@huggingface/tasks": ["@huggingface/tasks@0.19.43", "", {}, "sha512-ANO23K3ugclBl6VLwdt+7MxBkRkKEE17USUSqprHb29UB5ISigH+0AJcEuDA064uzn0hqYrG/nOcv1yARRt8bw=="],
+    "@huggingface/tasks": ["@huggingface/tasks@0.19.46", "", {}, "sha512-c6F/r7zRQjmyo6Ji8c2TUbdeeu6WAdZxYLRd+G7Xxvfbadi6iDwk2szt/oinC5v5Ljyc2sjzesaqGB6hLWy/DA=="],
 
     "@humanfs/core": ["@humanfs/core@0.19.1", "", {}, "sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA=="],
 
@@ -489,6 +489,8 @@
     "cli-cursor": ["cli-cursor@5.0.0", "", { "dependencies": { "restore-cursor": "^5.0.0" } }, "sha512-aCj4O5wKyszjMmDT4tZj93kxyydN/K5zPWSCe6/0AV/AA1pqe5ZBIw0a2ZfPQV7lL5/yb5HsUreJ6UFAF1tEQw=="],
 
     "cli-highlight": ["cli-highlight@2.1.11", "", { "dependencies": { "chalk": "^4.0.0", "highlight.js": "^10.7.1", "mz": "^2.4.0", "parse5": "^5.1.1", "parse5-htmlparser2-tree-adapter": "^6.0.0", "yargs": "^16.0.0" }, "bin": { "highlight": "bin/highlight" } }, "sha512-9KDcoEVwyUXrjcJNvHD0NFc/hiwe/WPVYIleQh2O1N2Zro5gWJZ/K+3DGn8w8P/F6FxOgzyC5bxDyHIgCSPhGg=="],
+
+    "cli-progress": ["cli-progress@3.12.0", "", { "dependencies": { "string-width": "^4.2.3" } }, "sha512-tRkV3HJ1ASwm19THiiLIXLO7Im7wlTuKnvkYaTkyoAPefqjNg7W7DHKUlGRxy9vxDvbyCYQkQozvptuMkGCg8A=="],
 
     "cli-spinners": ["cli-spinners@2.9.2", "", {}, "sha512-ywqV+5MmyL4E7ybXgKys4DugZbX0FC6LnwrhjuykIjnK9k8OQacQ7axGKnjDXWNhns0xot3bZI5h55H8yo9cJg=="],
 
