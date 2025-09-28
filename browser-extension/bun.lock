@@ -12,7 +12,7 @@
         "ai-sdk-ollama": "0.6.2",
         "cheerio": "1.1.2",
         "filesize": "11.0.13",
-        "ollama": "0.5.18",
+        "ollama": "0.6.0",
         "vue": "3.5.22",
         "vuetify": "3.10.3",
       },
@@ -920,7 +920,7 @@
 
     "ohash": ["ohash@2.0.11", "", {}, "sha512-RdR9FQrFwNBNXAr4GixM8YaRZRJ5PUWbKYbE5eOsrwAjJW0q2REGcf79oYPsLyskQCZG1PLN+S/K1V00joZAoQ=="],
 
-    "ollama": ["ollama@0.5.18", "", { "dependencies": { "whatwg-fetch": "^3.6.20" } }, "sha512-lTFqTf9bo7Cd3hpF6CviBe/DEhewjoZYd9N/uCe7O20qYTvGqrNOFOBDj3lbZgFWHUgDv5EeyusYxsZSLS8nvg=="],
+    "ollama": ["ollama@0.6.0", "", { "dependencies": { "whatwg-fetch": "^3.6.20" } }, "sha512-FHjdU2Ok5x2HZsxPui/MBJZ5J+HzmxoWYa/p9wk736eT+uAhS8nvIICar5YgwlG5MFNjDR6UA5F3RSKq+JseOA=="],
 
     "on-exit-leak-free": ["on-exit-leak-free@2.1.2", "", {}, "sha512-0eJJY6hXLGf1udHwfNftBqH+g73EU4B504nZeKpz1sYRKafAghwxEJunB2O7rDZkL4PGfsMVnTXZ2EjibbqcsA=="],
 
@@ -1307,6 +1307,8 @@
     "ai-sdk-ollama/@ai-sdk/provider-utils": ["@ai-sdk/provider-utils@3.0.9", "", { "dependencies": { "@ai-sdk/provider": "2.0.0", "@standard-schema/spec": "^1.0.0", "eventsource-parser": "^3.0.5" }, "peerDependencies": { "zod": "^3.25.76 || ^4" } }, "sha512-Pm571x5efqaI4hf9yW4KsVlDBDme8++UepZRnq+kqVBWWjgvGhQlzU8glaFq0YJEB9kkxZHbRRyVeHoV2sRYaQ=="],
 
     "ai-sdk-ollama/ai": ["ai@5.0.51", "", { "dependencies": { "@ai-sdk/gateway": "1.0.28", "@ai-sdk/provider": "2.0.0", "@ai-sdk/provider-utils": "3.0.9", "@opentelemetry/api": "1.9.0" }, "peerDependencies": { "zod": "^3.25.76 || ^4" } }, "sha512-ToKW099QWUJNqePZbWGg8FSfxTxS3UN9U6yCla8rYdW0EBTDNPnpRwK1N6ER9TfV+dFtdUu+ZgKSlhQnEThriQ=="],
+
+    "ai-sdk-ollama/ollama": ["ollama@0.5.18", "", { "dependencies": { "whatwg-fetch": "^3.6.20" } }, "sha512-lTFqTf9bo7Cd3hpF6CviBe/DEhewjoZYd9N/uCe7O20qYTvGqrNOFOBDj3lbZgFWHUgDv5EeyusYxsZSLS8nvg=="],
 
     "bl/readable-stream": ["readable-stream@3.6.2", "", { "dependencies": { "inherits": "^2.0.3", "string_decoder": "^1.1.1", "util-deprecate": "^1.0.1" } }, "sha512-9u/sniCrY3D5WdsERHzHE4G2YCXqoG5FTHUiCC4SIbr6XcLZBY05ya9EKjYek9O5xOAwjGq+1JdGBAS7Q9ScoA=="],
 
