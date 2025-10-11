@@ -5,7 +5,7 @@
       "name": "aigelb-browser-extension",
       "dependencies": {
         "@fontsource/roboto": "5.2.8",
-        "@huggingface/hub": "2.6.10",
+        "@huggingface/hub": "2.6.11",
         "@vueuse/core": "13.9.0",
         "@webext-core/messaging": "2.3.0",
         "ai": "5.0.60",
@@ -154,7 +154,7 @@
 
     "@fontsource/roboto": ["@fontsource/roboto@5.2.8", "", {}, "sha512-oh9g4Cg3loVMz9MWeKWfDI+ooxxG1aRVetkiKIb2ESS2rrryGecQ/y4pAj4z5A5ebyw450dYRi/c4k/I3UBhHA=="],
 
-    "@huggingface/hub": ["@huggingface/hub@2.6.10", "", { "dependencies": { "@huggingface/tasks": "^0.19.49" }, "optionalDependencies": { "cli-progress": "^3.12.0" }, "bin": { "hfjs": "dist/cli.js" } }, "sha512-V5jITCLwNAvmOnIwzF+cEiSJFgE4Ho0xQWZge+OlsbsSYCONlFj5GhNGHX+QpEg0sABc5TKtOH6NEqrSXSf6Rw=="],
+    "@huggingface/hub": ["@huggingface/hub@2.6.11", "", { "dependencies": { "@huggingface/tasks": "^0.19.50" }, "optionalDependencies": { "cli-progress": "^3.12.0" }, "bin": { "hfjs": "dist/cli.js" } }, "sha512-bW7AAfQKHjGPGxy/nFOfw1OfnrQnyEtxaTANgrJYXTIGQRPA8vF7kdoLP40CHIYYhjslXSYiAR0fspODkUKXCg=="],
 
     "@huggingface/tasks": ["@huggingface/tasks@0.19.50", "", {}, "sha512-kHrfiDsJttkuwpdp7PgFiFHaK9rj+COJTIZ+221gk9vdF4B5QySW7hQT4aOGkwwZP+4qbXGhjMNGg/bxOq+LwA=="],
 
