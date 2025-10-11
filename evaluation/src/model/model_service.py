@@ -43,7 +43,7 @@ class ModelService:
       models = FileService.from_csv(Model, filename)
       if len(models) == 0:
         raise ModelFileEmptyError(f"The model file {filename} contains no valid entries.") from None
-      LoggingService.log_list(models, "The following models were found:")
+      LoggingService.log_list(models, "The following models were configured:")
       return models
     except Exception as exc:
       raise ModelFileNotFoundError(f"The model file '{filename}' does not exist.'") from exc
