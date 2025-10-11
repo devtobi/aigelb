@@ -2,7 +2,10 @@
 	$schema: 'https://docs.renovatebot.com/renovate-schema.json',
 	description: 'Custom Renovate configuration',
 	extends: [
+		// Custom Manager Presets (https://docs.renovatebot.com/presets-customManagers/)
 		'customManagers:githubActionsVersions',
+
+		// Default Presets (https://docs.renovatebot.com/presets-default/)
 		':approveMajorUpdates',
 		':assignAndReview(devtobi)',
 		':automergePatch',
@@ -10,16 +13,25 @@
 		':enableVulnerabilityAlertsWithLabel(security)',
 		':label(dependency)',
 		':npm',
+		':maintainLockFilesWeekly',
 		':pinAllExceptPeerDependencies',
 		':rebaseStalePrs',
 		':semanticCommits',
 		':separateMultipleMajorReleases',
 		':timezone(Europe/Berlin)',
+
+		// Full Config Presets (https://docs.renovatebot.com/presets-config/)
 		'config:best-practices',
+
+		// Helper Presets (https://docs.renovatebot.com/presets-helpers/)
 		'helpers:pinGitHubActionDigestsToSemver',
+
+		// Security presets (https://docs.renovatebot.com/presets-security/)
 		'security:minimumReleaseAgeNpm',
-		'schedule:weekly',
 		'security:openssf-scorecard',
+
+		// Schedule presets (https://docs.renovatebot.com/presets-schedule/)
+		'schedule:weekly',
 	],
 	packageRules: [
 		{
@@ -41,7 +53,4 @@
 			automerge: false,
 		},
 	],
-	lockFileMaintenance: {
-		enabled: true,
-	},
 }
