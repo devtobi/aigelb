@@ -1,54 +1,56 @@
 {
-	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"description": "Custom Renovate configuration",
-	"extends": [
+	$schema: 'https://docs.renovatebot.com/renovate-schema.json',
+	description: 'Custom Renovate configuration',
+	extends: [
 		// Custom Manager Presets (https://docs.renovatebot.com/presets-customManagers/)
-		"customManagers:githubActionsVersions", // manages _VERSION variables in GitHub Action workflows
+		'customManagers:githubActionsVersions',
 
 		// Default Presets (https://docs.renovatebot.com/presets-default/)
-		":approveMajorUpdates", // major dependency updates need to be approved via dashboard before PR is created
-		":assignAndReview(devtobi)",
-		":automergePatch",
-		":disableRateLimiting", // allows unlimited creation of PRs
-		":enableVulnerabilityAlertsWithLabel(security)", // custom label for security PRs created by Renovatebot
-		":label(dependency)", // custom label for PRs created by Renovatebot
-		":npm", // updating package.json and package-lock.json
-		":pinAllExceptPeerDependencies", // do version pinning except for peer dependencies
-		":rebaseStalePrs", // rebase Renovate PR branched when base branch is updated
-		":semanticCommits", // enabled semantic commits in PR titles
-		":separateMultipleMajorReleases", // separate major updates of dependencies into separate PRs
-		":timezone(Europe/Berlin)", // sets correct timezone for schedule based operations
+		':approveMajorUpdates',
+		':assignAndReview(devtobi)',
+		':automergePatch',
+		':disableRateLimiting',
+		':enableVulnerabilityAlertsWithLabel(security)',
+		':label(dependency)',
+		':npm',
+		':maintainLockFilesWeekly',
+		':pinAllExceptPeerDependencies',
+		':rebaseStalePrs',
+		':semanticCommits',
+		':separateMultipleMajorReleases',
+		':timezone(Europe/Berlin)',
 
 		// Full Config Presets (https://docs.renovatebot.com/presets-config/)
-		"config:best-practices", // enables best practices by the Renovate team
+		'config:best-practices',
 
 		// Helper Presets (https://docs.renovatebot.com/presets-helpers/)
-		"helpers:pinGitHubActionDigestsToSemver", // enabled pinning the action digest with a semantic version comment
-
-		// npm Presets (https://docs.renovatebot.com/presets-npm/)
-		"npm:unpublishSafe", // used to make sure updates are only done after the npm package is "stable" (at least for 3 days)
-
-		// Schedule presets (https://docs.renovatebot.com/presets-schedule/)
-		"schedule:weekly", // Renovatebot will search weekly for available dependency updates
+		'helpers:pinGitHubActionDigestsToSemver',
 
 		// Security presets (https://docs.renovatebot.com/presets-security/)
-		"security:openssf-scorecard" // show OpenSSF badge on pull requests to evaluate security health metrics for dependencies
+		'security:minimumReleaseAgeNpm',
+		'security:openssf-scorecard',
+
+		// Schedule presets (https://docs.renovatebot.com/presets-schedule/)
+		'schedule:weekly',
 	],
-	"packageRules": [
+	packageRules: [
 		{
-			"description": "Disable automerge for patch-level updates when pre-release version",
-            "matchUpdateTypes": ["patch"],
-			"matchCurrentVersion": "/^0\\./",
-            "automerge": false
+			description: 'Disable automerge for patch-level updates when pre-release version',
+			matchUpdateTypes: [
+				'patch',
+			],
+			matchCurrentVersion: '/^0\\./',
+			automerge: false,
 		},
 		{
-			"description": "Disable automerge for python version",
-			"matchManagers": ["pep621"],
-			"matchPackageNames": ["python"],
-			"automerge": false
-		}
+			description: 'Disable automerge for python version',
+			matchManagers: [
+				'pep621',
+			],
+			matchPackageNames: [
+				'python',
+			],
+			automerge: false,
+		},
 	],
-	"lockFileMaintenance": {
-        "enabled": true
-    }
 }
