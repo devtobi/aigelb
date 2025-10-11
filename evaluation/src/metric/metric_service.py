@@ -44,7 +44,7 @@ class MetricService:
       metrics = FileService.from_csv(Metric, filename)
       if len(metrics) == 0:
         raise MetricFileEmptyError(f"The metric file {filename} contains no valid entries.") from None
-      LoggingService.log_list(metrics, "The following metrics were found:")
+      LoggingService.log_list(metrics, "The following metrics were configured:")
       return metrics
     except Exception as exc:
       raise MetricFileNotFoundError(f"The metric file '{filename}' does not exist.") from exc

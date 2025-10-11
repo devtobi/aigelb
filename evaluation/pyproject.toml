@@ -9,7 +9,7 @@ authors = [
 repository = "https://github.com/devtobi/aigelb"
 readme = "README.md"
 keywords = [ "llm", "evaluation", "metrics", "nlp", "mt", "easylanguage" ]
-requires-python = "==3.13.7"
+requires-python = "==3.13.8"
 dependencies = [
     "dotenv (==0.9.9)",
     "huggingface_hub (==0.35.3)",
@@ -25,8 +25,8 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "pyrefly (==0.35.0)",
-    "ruff (==0.13.3)",
+    "pyrefly (==0.36.2)",
+    "ruff (==0.14.0)",
 ]
 
 [tool.uv]
