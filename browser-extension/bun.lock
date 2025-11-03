@@ -9,7 +9,7 @@
         "@vueuse/core": "14.0.0",
         "@webext-core/messaging": "2.3.0",
         "ai": "5.0.86",
-        "ai-sdk-ollama": "1.0.0",
+        "ai-sdk-ollama": "1.0.1",
         "cheerio": "1.1.2",
         "filesize": "11.0.13",
         "ollama": "0.6.2",
@@ -400,7 +400,7 @@
 
     "ai": ["ai@5.0.86", "", { "dependencies": { "@ai-sdk/gateway": "2.0.5", "@ai-sdk/provider": "2.0.0", "@ai-sdk/provider-utils": "3.0.15", "@opentelemetry/api": "1.9.0" }, "peerDependencies": { "zod": "^3.25.76 || ^4.1.8" } }, "sha512-ooHwNTkLdedFf98iQhtSc5btc/P4UuXuOpYneoifq0190vqosLunNdW8Hs6CiE0Am7YOGNplDK56JIPlHZIL4w=="],
 
-    "ai-sdk-ollama": ["ai-sdk-ollama@1.0.0", "", { "dependencies": { "@ai-sdk/provider": "^2.0.0", "@ai-sdk/provider-utils": "^3.0.12", "ollama": "^0.6.0" }, "peerDependencies": { "ai": "^5.0.69" } }, "sha512-aM9TkpZ1TN2mKEwi3ShiTUOGiV88r3GvJsNTtg6Xs54U2o4GqNShpXxGMGs4qm0p4ChO57/+kzurFCEgCtSYnQ=="],
+    "ai-sdk-ollama": ["ai-sdk-ollama@1.0.1", "", { "dependencies": { "@ai-sdk/provider": "^2.0.0", "@ai-sdk/provider-utils": "^3.0.15", "ollama": "^0.6.2" }, "peerDependencies": { "ai": "^5.0.86" } }, "sha512-3HvKuuv0OKKoy9EKLtSM7BjXucUrdTM6A4a48UpqCsWfXUTiltylC+/nug0qsdDEbNdoTh8bMnEL2skmdkk5ww=="],
 
     "ajv": ["ajv@6.12.6", "", { "dependencies": { "fast-deep-equal": "^3.1.1", "fast-json-stable-stringify": "^2.0.0", "json-schema-traverse": "^0.4.1", "uri-js": "^4.2.2" } }, "sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g=="],
 
@@ -1295,10 +1295,6 @@
     "@vue/server-renderer/@vue/compiler-ssr": ["@vue/compiler-ssr@3.5.22", "", { "dependencies": { "@vue/compiler-dom": "3.5.22", "@vue/shared": "3.5.22" } }, "sha512-GdgyLvg4R+7T8Nk2Mlighx7XGxq/fJf9jaVofc3IL0EPesTE86cP/8DD1lT3h1JeZr2ySBvyqKQJgbS54IX1Ww=="],
 
     "@wxt-dev/storage/@wxt-dev/browser": ["@wxt-dev/browser@0.1.4", "", { "dependencies": { "@types/filesystem": "*", "@types/har-format": "*" } }, "sha512-9x03I15i79XU8qYwjv4le0K2HdMl/Yga2wUBSoUbcrCnamv8P3nvuYxREQ9C5QY/qPAfeEVdAtaTrS3KWak71g=="],
-
-    "ai-sdk-ollama/@ai-sdk/provider-utils": ["@ai-sdk/provider-utils@3.0.12", "", { "dependencies": { "@ai-sdk/provider": "2.0.0", "@standard-schema/spec": "^1.0.0", "eventsource-parser": "^3.0.5" }, "peerDependencies": { "zod": "^3.25.76 || ^4.1.8" } }, "sha512-ZtbdvYxdMoria+2SlNarEk6Hlgyf+zzcznlD55EAl+7VZvJaSg2sqPvwArY7L6TfDEDJsnCq0fdhBSkYo0Xqdg=="],
-
-    "ai-sdk-ollama/ollama": ["ollama@0.6.0", "", { "dependencies": { "whatwg-fetch": "^3.6.20" } }, "sha512-FHjdU2Ok5x2HZsxPui/MBJZ5J+HzmxoWYa/p9wk736eT+uAhS8nvIICar5YgwlG5MFNjDR6UA5F3RSKq+JseOA=="],
 
     "bl/readable-stream": ["readable-stream@3.6.2", "", { "dependencies": { "inherits": "^2.0.3", "string_decoder": "^1.1.1", "util-deprecate": "^1.0.1" } }, "sha512-9u/sniCrY3D5WdsERHzHE4G2YCXqoG5FTHUiCC4SIbr6XcLZBY05ya9EKjYek9O5xOAwjGq+1JdGBAS7Q9ScoA=="],
 
