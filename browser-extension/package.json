@@ -34,7 +34,7 @@
     "cheerio": "1.1.2",
     "filesize": "11.0.13",
     "ollama": "0.6.2",
-    "vue": "3.5.22",
+    "vue": "3.5.23",
     "vuetify": "3.10.8"
   },
   "devDependencies": {
