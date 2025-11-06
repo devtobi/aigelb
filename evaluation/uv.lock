@@ -304,7 +304,7 @@ requires-dist = [
     { name = "llama-cpp-python", specifier = "==0.3.16" },
     { name = "pandas", specifier = "==2.3.3" },
     { name = "pathvalidate", specifier = "==3.3.1" },
-    { name = "textstat", specifier = "==0.7.10" },
+    { name = "textstat", specifier = "==0.7.11" },
     { name = "tqdm", specifier = "==4.67.1" },
 ]
 
@@ -1285,16 +1285,16 @@ wheels = [
 
 [[package]]
 name = "textstat"
-version = "0.7.10"
+version = "0.7.11"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "nltk" },
     { name = "pyphen" },
     { name = "setuptools" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/69/0a/3084c3c8523a59c724a252deb55457531fa41ac602461a6c24050acbf431/textstat-0.7.10.tar.gz", hash = "sha256:b197ada1137cda8b19eadccd2e31ac8b69fb5a9cb281690535154e8af7ba3ba8", size = 164932, upload-time = "2025-08-30T15:58:39.251Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/fc/74/a9a58befc56a371daca5cded6bbc1ddf8dedc91af7e090656129793ea4cb/textstat-0.7.11.tar.gz", hash = "sha256:24ba0b530da9c7ecaae214822231c59a2de64bcc45cba29fb14ccd73177e9ed4", size = 138179, upload-time = "2025-11-05T09:18:39.655Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/18/76/3b2a2677a7ef26573ecf7a55f71b605119a7de9473644d0a828c0d86b11b/textstat-0.7.10-py3-none-any.whl", hash = "sha256:b8cfa0d2cefddc52acb249db9800394c052811ddf9eba5f2d7518064509172fb", size = 239173, upload-time = "2025-08-30T15:58:37.61Z" },
+    { url = "https://files.pythonhosted.org/packages/d2/81/4292f8df530765e5a0b5997447afff8f086f1ccd414fde372c8860756773/textstat-0.7.11-py3-none-any.whl", hash = "sha256:e052da621ea8fa31f7e4024f67c8a3717a2143a7ab17f87cfb1e89d4983c128f", size = 176396, upload-time = "2025-11-05T09:18:37.765Z" },
 ]
 
 [[package]]
