@@ -35,7 +35,7 @@
     "filesize": "11.0.13",
     "ollama": "0.6.2",
     "vue": "3.5.24",
-    "vuetify": "3.10.9"
+    "vuetify": "3.10.11"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.7.0",
