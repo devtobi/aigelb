@@ -25,7 +25,7 @@
     "postinstall": "wxt prepare"
   },
   "dependencies": {
-    "@fontsource/roboto": "5.2.8",
+    "@fontsource/roboto": "5.2.9",
     "@huggingface/hub": "2.7.0",
     "@vueuse/core": "14.0.0",
     "@webext-core/messaging": "2.3.0",
