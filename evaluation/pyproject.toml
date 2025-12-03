@@ -9,7 +9,7 @@ authors = [
 repository = "https://github.com/devtobi/aigelb"
 readme = "README.md"
 keywords = [ "llm", "evaluation", "metrics", "nlp", "mt", "easylanguage" ]
-requires-python = "==3.13.9"
+requires-python = "==3.13.10"
 dependencies = [
     "dotenv (==0.9.9)",
     "huggingface_hub (==0.36.0)",
