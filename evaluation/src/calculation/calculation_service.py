@@ -18,7 +18,6 @@ from .calculation_result import CalculationResult
 from .exception import (
     CalculationDataLengthMismatchError,
     CalculationMetricError,
-    CalculationNoReferencesFoundError,
     CalculationPredictionsFileNotFoundError,
     CalculationReferenceFileNotFoundError,
     CalculationResultsWriteError,
@@ -72,7 +71,7 @@ class CalculationService:
 
     @classmethod
     def _calculate_result(cls, model_name: str, metrics: List[Metric], predictions: List[str], references: Optional[List[str]] = None) -> CalculationResult:
-      metric_results = {}
+      metric_results: dict[str, Optional[float]] = {}
 
       with tqdm(metrics, leave=False) as pbar:
         for metric in pbar:
@@ -92,12 +91,12 @@ class CalculationService:
         raise CalculationResultsWriteError("Error writing calculation results to file") from exc
 
     @classmethod
-    def _calculate_metric(cls, metric: Metric, predictions: List[str], references: Optional[List[str]] = None) -> float:
+    def _calculate_metric(cls, metric: Metric, predictions: List[str], references: Optional[List[str]] = None) -> Optional[float]:
       function, library = MetricService.get_metric_function(metric.name)
       if references is not None and len(predictions) != len(references):
         raise CalculationDataLengthMismatchError("Length of references and predictions did not match!")
       if library is MetricLibrary.EVALUATE and references is None:
-        raise CalculationNoReferencesFoundError(f"No references were found but are required for calculating {metric.name} metric!")
+        return None
       used_references = references if library is MetricLibrary.EVALUATE else None
       if (used_references is None) or (len(used_references) == 0):
         return cls._calculate_no_references(predictions, function, metric)
