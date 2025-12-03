@@ -10,8 +10,5 @@ class CalculationResultsWriteError(Exception):
 class CalculationReferenceFileNotFoundError(Exception):
   pass
 
-class CalculationNoReferencesFoundError(Exception):
-  pass
-
 class CalculationPredictionsFileNotFoundError(Exception):
   pass
