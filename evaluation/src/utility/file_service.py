@@ -111,7 +111,7 @@ class FileService:
       json_series = read_json(buf, typ='series', orient='index')
       df = json_normalize([json_series.to_dict()])
       return str(df.at[0, key])
-    except (ValueError, KeyError, TypeError):
+    except ValueError, KeyError, TypeError:
       return ""
 
   @classmethod
@@ -144,7 +144,7 @@ class FileService:
       elif val_str.startswith('{') or val_str.startswith('[') or val_str.isdigit():
         try:
           result[key] = literal_eval(val_str)
-        except (ValueError, SyntaxError):
+        except ValueError, SyntaxError:
           result[key] = val_str  # Fallback to cleaned string
       else:
         result[key] = val_str
