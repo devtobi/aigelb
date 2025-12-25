@@ -29,7 +29,7 @@
     "@huggingface/hub": "2.7.1",
     "@vueuse/core": "14.1.0",
     "@webext-core/messaging": "2.3.0",
-    "ai": "5.0.116",
+    "ai": "6.0.0",
     "ai-sdk-ollama": "2.2.0",
     "cheerio": "1.1.2",
     "filesize": "11.0.13",
