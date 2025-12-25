@@ -10,7 +10,7 @@
         "@vueuse/core": "14.1.0",
         "@webext-core/messaging": "2.3.0",
         "ai": "5.0.116",
-        "ai-sdk-ollama": "2.1.0",
+        "ai-sdk-ollama": "2.2.0",
         "cheerio": "1.1.2",
         "filesize": "11.0.13",
         "ollama": "0.6.3",
@@ -409,7 +409,7 @@
 
     "ai": ["ai@5.0.116", "", { "dependencies": { "@ai-sdk/gateway": "2.0.23", "@ai-sdk/provider": "2.0.0", "@ai-sdk/provider-utils": "3.0.19", "@opentelemetry/api": "1.9.0" }, "peerDependencies": { "zod": "^3.25.76 || ^4.1.8" } }, "sha512-+2hYJ80/NcDWuv9K2/MLP3cTCFgwWHmHlS1tOpFUKKcmLbErAAlE/S2knsKboc3PNAu8pQkDr2N3K/Vle7ENgQ=="],
 
-    "ai-sdk-ollama": ["ai-sdk-ollama@2.1.0", "", { "dependencies": { "@ai-sdk/provider": "^2.0.0", "@ai-sdk/provider-utils": "^3.0.19", "ollama": "^0.6.3" }, "peerDependencies": { "ai": "^5.0.115" } }, "sha512-VRTT34zt6GG09IxdiO0aqOM6wBMgKj+oUQH2E+28XtPrHL2AV+L87UhU1VnGFfo+eXLMcZKJre5NWM9HMA5L5A=="],
+    "ai-sdk-ollama": ["ai-sdk-ollama@2.2.0", "", { "dependencies": { "@ai-sdk/provider": "^2.0.0", "@ai-sdk/provider-utils": "^3.0.19", "ollama": "^0.6.3" }, "peerDependencies": { "ai": "^5.0.116" } }, "sha512-M7zDxlmnnIyFQCDxgQj+ln4g1KeUWDLfO5a3aZbY334xJUSlrZOqEoRDxNEpmuiZF/NCP7QpxQ4oQA7HEECHBA=="],
 
     "ajv": ["ajv@6.12.6", "", { "dependencies": { "fast-deep-equal": "^3.1.1", "fast-json-stable-stringify": "^2.0.0", "json-schema-traverse": "^0.4.1", "uri-js": "^4.2.2" } }, "sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g=="],
 
