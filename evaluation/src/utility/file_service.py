@@ -2,8 +2,18 @@ from ast import literal_eval
 from csv import QUOTE_ALL
 from io import StringIO
 from os import listdir, makedirs, path, remove
-from typing import Any, List, LiteralString, Optional, Protocol, Type, TypeVar, cast
+from typing import (
+  Any,
+  List,
+  LiteralString,
+  Optional,
+  Protocol,
+  Type,
+  TypeVar,
+  cast,
+)
 
+from numpy import nan
 from pandas import DataFrame, json_normalize, notna, read_csv, read_json
 from pathvalidate import sanitize_filename
 
@@ -12,7 +22,6 @@ class DictSerializable(Protocol):
   def to_dict(self) -> dict: ...
 
 T = TypeVar('T')
-S = TypeVar('S', bound=DictSerializable)
 
 class FileService:
 
@@ -25,7 +34,7 @@ class FileService:
     df = read_csv(abs_path, sep=separator, encoding="utf-8")
 
     # Replace pandas nan with None
-    df = df.astype(object).where(df.notna(), None)
+    df.replace({nan: None}, inplace=True)
 
     if column_name:
       return [cast(T, val) for val in df[column_name]]
@@ -50,7 +59,7 @@ class FileService:
       return file.read()
 
   @classmethod
-  def to_csv(cls, rows: List[S], filepath: str, simple_list: bool = False) -> None:
+  def to_csv(cls, rows: List[T], filepath: str, simple_list: bool = False) -> None:
     if not rows:
       raise ValueError("Cannot write empty row list to CSV")
 
@@ -60,7 +69,7 @@ class FileService:
     if simple_list:
       df = DataFrame([[item] for item in rows])
     else:
-      df = DataFrame([row.to_dict() for row in rows])
+      df = DataFrame([cast(DictSerializable, row).to_dict() for row in rows])
 
     df.to_csv(abs_path, index=False, header=not simple_list, quoting=QUOTE_ALL)
 
@@ -109,7 +118,8 @@ class FileService:
     try:
       buf = StringIO(json_string)
       json_series = read_json(buf, typ='series', orient='index')
-      df = json_normalize([json_series.to_dict()])
+      data: list[dict[str, object]] = [cast(dict[str, object], json_series.to_dict())]
+      df = json_normalize(data)
       return str(df.at[0, key])
     except ValueError, KeyError, TypeError:
       return ""
