@@ -1,2 +1,2 @@
-Bitte übersetzen Sie den folgenden Text ein einfaches Deutsch: {source}
+Folgenden Text bitte in Leichte Sprache übersetzen und dabei die genannten Regeln einhalten: {source}
 Bitte geben Sie nur den übersetzten Text zurück.
