@@ -1,2 +1,3 @@
-Folgenden Text bitte in Leichte Sprache übersetzen und dabei die genannten Regeln einhalten: {source}
-Bitte geben Sie nur den übersetzten Text zurück.
+Folgenden Text bitte unter Einhaltung der genannten Regeln in Leichte Sprache übersetzen und nur den übersetzten Text zurückgeben:
+
+{source}
