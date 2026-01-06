@@ -1,6 +1,10 @@
 _name,_kwargs
-bleu
-bertscore,"{'target': 'f1', 'lang': 'de'}"
-bertscore,"{'target': 'precision', 'lang': 'de'}"
+flesch_reading_ease,"{'lang': 'de'}"
 mtld
-flesch_reading_ease
+sari
+meteor
+chrf,"{'target': 'score', 'word_order': 2}"
+ter,"{'target': 'score'}"
+character,"{'target': 'mean'}"
+bertscore,"{'target': 'f1', 'lang': 'de'}"
+bleurt,"{'target': 'scores', 'config_name': 'BLEURT-20'}"
