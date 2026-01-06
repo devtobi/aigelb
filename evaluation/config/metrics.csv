@@ -1,10 +1,8 @@
 _name,_kwargs
 flesch_reading_ease,"{'lang': 'de'}"
 mtld
-sari
 meteor
 chrf,"{'target': 'score', 'word_order': 2}"
 ter,"{'target': 'score'}"
 character,"{'target': 'mean'}"
 bertscore,"{'target': 'f1', 'lang': 'de'}"
-bleurt,"{'target': 'scores', 'config_name': 'BLEURT-20'}"
