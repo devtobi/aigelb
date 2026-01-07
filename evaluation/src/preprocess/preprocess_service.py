@@ -45,8 +45,12 @@ class PreprocessService:
     sources = FileService.from_csv(str, cls._get_data_filepath(), source_column_name, column_separator)
     references = FileService.from_csv(str, cls._get_data_filepath(), reference_column_name, column_separator)
 
-    FileService.to_csv(sources, cls.get_source_filepath(), simple_list=True)
-    FileService.to_csv(references, cls.get_reference_filepath(), simple_list=True)
+    # Handle \n replacements
+    replaced_sources = [s.replace("\\n", "\n") for s in sources]
+    replaced_references = [s.replace("\\n", "\n") for s in references]
+
+    FileService.to_csv(replaced_sources, cls.get_source_filepath(), simple_list=True)
+    FileService.to_csv(replaced_references, cls.get_reference_filepath(), simple_list=True)
     LoggingService.info(f"Written sources and references to '{cls.get_source_filepath()}' and '{cls.get_reference_filepath()}'.")
 
   @classmethod
