@@ -14,7 +14,7 @@ from typing import (
 )
 
 from numpy import nan
-from pandas import DataFrame, json_normalize, notna, read_csv, read_json
+from pandas import DataFrame, isna, json_normalize, read_csv, read_json
 from pathvalidate import sanitize_filename
 
 
@@ -50,7 +50,14 @@ class FileService:
   def from_csv_to_string_list(cls, filepath: str) -> List[str]:
     abs_path: str = cls.get_absolute_path(filepath)
     df = read_csv(abs_path, header=None, sep=",", encoding="utf-8")
-    return [str(val).strip() for val in df.iloc[:, 0] if notna(val) and str(val).strip()]
+
+    result: List[str] = []
+    for val in df.iloc[:, 0]:
+      if isna(val):
+        result.append("")
+      else:
+        result.append(str(val).strip())
+    return result
 
   @classmethod
   def from_file_to_string(cls, filepath: str) -> str:
