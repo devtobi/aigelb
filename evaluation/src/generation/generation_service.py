@@ -21,7 +21,6 @@ from utility import (
 )
 
 from .exception import (
-  GenerationModelInferenceError,
   GenerationModelLoadError,
   GenerationModelNotFoundError,
   GenerationPredictionWriteError,
@@ -83,8 +82,9 @@ class GenerationService:
       ))
     except KeyboardInterrupt:
         raise KeyboardInterruptError(f"The inference was interrupted by keyboard. Generation will be resumed on next run. Otherwise delete {cls._get_timestamp_filepath()} manually.") from None
-    except Exception as exc:
-      raise GenerationModelInferenceError(f"Failed running chat completion on '{model_name}'") from exc
+    except ValueError as exc:
+      LoggingService.error(f"Failed running chat completion on '{model_name}': {exc}")
+      return ""
     answer = completion_response['choices'][0]['message']['content']
     return "" if answer is None else answer
 
