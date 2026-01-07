@@ -4,5 +4,5 @@ mtld
 meteor
 chrf,"{'target': 'score', 'word_order': 2}"
 ter,"{'target': 'score'}"
-character,"{'target': 'mean'}"
+character,"{'target': 'cer_score'}"
 bertscore,"{'target': 'f1', 'lang': 'de'}"
