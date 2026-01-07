@@ -107,7 +107,7 @@ class GenerationService:
         n_gpu_layers=cls._get_gpu_layers(),
         n_threads=cls._get_num_threads(),
         n_threads_batch=cls._get_num_threads(),
-        n_ctx=cls._get_context_length(),
+        n_ctx=cls._get_max_context_length(),
         verbose=False
       )
     except Exception as exc:
@@ -235,8 +235,8 @@ class GenerationService:
     return float(value) if value is not None else 0.2
 
   @staticmethod
-  def _get_context_length() -> int:
-    value = ConfigurationService.get_environment_variable("CONTEXT_LENGTH")
+  def _get_max_context_length() -> int:
+    value = ConfigurationService.get_environment_variable("MAX_CONTEXT_LENGTH")
     return int(value) if value is not None else 0
 
   @staticmethod
