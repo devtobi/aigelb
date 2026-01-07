@@ -107,7 +107,7 @@ class GenerationService:
         n_gpu_layers=cls._get_gpu_layers(),
         n_threads=cls._get_num_threads(),
         n_threads_batch=cls._get_num_threads(),
-        n_ctx=cls._get_max_context_length(),
+        n_ctx=cls._get_effective_context_length(model),
         verbose=False
       )
     except Exception as exc:
@@ -243,3 +243,9 @@ class GenerationService:
   def _get_num_threads() -> Optional[int]:
     value = ConfigurationService.get_environment_variable("NUM_THREADS")
     return int(value) if value is not None else None
+
+  @classmethod
+  def _get_effective_context_length(cls, model: Model) -> int:
+    max_context_length = cls._get_max_context_length()
+    model_context_length = model.context_length
+    return min(max_context_length, model_context_length) if max_context_length and model_context_length else max(max_context_length, model_context_length)
