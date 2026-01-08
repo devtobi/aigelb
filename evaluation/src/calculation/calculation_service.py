@@ -130,8 +130,13 @@ class CalculationService:
 
     @staticmethod
     def _calculate_with_references(predictions: List[str], references: List[str], func: Callable, metric: Metric) -> float:
+      # handle empty predictions
+      empty_prediction_indexes = [i for i,x in enumerate(predictions) if not x]
+      cleaned_predictions = [i for j, i in enumerate(predictions) if j not in empty_prediction_indexes]
+      cleaned_references = [i for j, i in enumerate(references) if j not in empty_prediction_indexes]
+
       try:
-        return func(predictions=predictions, references=references, **metric.kwargs)
+        return func(predictions=cleaned_predictions, references=cleaned_references, **metric.kwargs)
       except Exception as exc:
         raise CalculationMetricError(f"Error calculating {metric.name}!") from exc
 
