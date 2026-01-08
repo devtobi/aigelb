@@ -144,9 +144,10 @@ The file has the following columns:
 
 * `_repo_id`: repository name of the model (e.g. [bartowski/Llama-3.2-3B-Instruct-GGUF](https://huggingface.co/bartowski/Llama-3.2-3B-Instruct-GGUF)).
 * `_gguf_filename`: filename to select the variant of the model for different quantizations (e.g. [Llama-3.2-3B-Instruct-Q5_K_M.gguf](https://huggingface.co/bartowski/Llama-3.2-3B-Instruct-GGUF/blob/main/Llama-3.2-3B-Instruct-Q5_K_M.gguf))
-* `_gated`: `True` or `False` whether the model is gated
+* `_gated` (optional, default `False`): `True` or `False` whether the model is gated
 (e.g. when a license agreement consent on HuggingFace
 platform is necessary for your account).
+* `_context_length` (optional): an `int` as individual context size for a specific model, if not set global variable `MAX_CONTEXT_LENGTH` will be used -> See configuration for [running inference](#3-running-inference)
 
 Relevant environment variables for the `config.env` file are the following:
 
@@ -232,7 +233,7 @@ Relevant environment variables for the `config.env` are the following:
 
 * `USE_CPU` (optional): `True` or `False` whether CPU or GPU should be used for LLM inference. If not set, will use GPU.
 * `NUM_THREADS` (optional): Number of threads to use when running CPU inference. If not set, will be automatically inferred based on system capabilities
-* `CONTEXT_LENGTH` (optional): Context length to use for inference, can speed up performance when decreased, needs to be bug enough for prompt tokens to fit. If not set, will infer the context length from the given model.
+* `MAX_CONTEXT_LENGTH` (optional): Maximimum context length to use for inference, can speed up performance when decreased, needs to be big enough for prompt tokens to fit. If not set, will infer the context length from the `models.csv`. If not set there, will try to infer from the metadata of the given model.
 * `STRUCTURED_OUTPUT_KEY` (optional): Key for the JSON object to expect from LLM generation used to improve LLM generation via Structured Output, not part of the final result. If not set `result` will be used as key.
 * `TEMPERATURE` (optional): Temperature to use for model inference for controlling creativity. If not set `0.2` will be used.
 

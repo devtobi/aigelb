@@ -149,7 +149,9 @@ class FileService:
         continue
 
       # Convert non-string values to string (if needed) for uniform processing
-      if isinstance(val, str):
+      if isinstance(val, float):
+        val_str = str(int(val))
+      elif isinstance(val, str):
         val_str = val.strip()
       else:
         val_str = str(val).strip()
