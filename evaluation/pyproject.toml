@@ -28,7 +28,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "pandas-stubs (==2.3.3.251219)",
-    "pyrefly (==0.46.3)",
+    "pyrefly (==0.47.0)",
     "ruff (==0.14.10)",
     "types-tqdm (==4.67.0.20250809)"
 ]
