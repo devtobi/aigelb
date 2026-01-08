@@ -147,7 +147,7 @@ The file has the following columns:
 * `_gated` (optional, default `False`): `True` or `False` whether the model is gated
 (e.g. when a license agreement consent on HuggingFace
 platform is necessary for your account).
-* `_context_length` (optional): an `int` as individual context size for a specific model, if not set global variable `MAX_CONTEXT_LENGTH` will be used -> See configuration for [running inference](#3.-Running-inference)
+* `_context_length` (optional): an `int` as individual context size for a specific model, if not set global variable `MAX_CONTEXT_LENGTH` will be used -> See configuration for [running inference](#3-running-inference)
 
 Relevant environment variables for the `config.env` file are the following:
 
