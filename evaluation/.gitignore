@@ -2,7 +2,5 @@
 .idea
 .python-version
 .venv
-results
-predictions
 data
 __pycache__
