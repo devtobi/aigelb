@@ -27,11 +27,12 @@ function stream(
   onAbort?: () => void,
   onError?: () => void
 ) {
+  const ollamaModel = ollama(model);
   const { textStream } = streamText({
     model: supportsStreaming
-      ? ollama(model)
+      ? ollamaModel
       : wrapLanguageModel({
-          model: ollama(model),
+          model: ollamaModel,
           middleware: simulateStreamingMiddleware(),
         }),
     messages: [
