@@ -1,5 +1,5 @@
-export const LLM_HUGGINGFACE_REPO = "bartowski/Llama-3.2-1B-Instruct-GGUF";
-export const LLM_HUGGINGFACE_FILE = "Llama-3.2-1B-Instruct-Q4_K_S.gguf";
+export const LLM_HUGGINGFACE_REPO = "unsloth/gemma-3-12b-it-GGUF";
+export const LLM_HUGGINGFACE_FILE = "gemma-3-12b-it-UD-Q6_K_XL.gguf";
 export const LLM_SUPPORT_STREAMING = true;
 export const SYSTEM_PROMPT = `
 Sie sind ein Vereinfacher. Verwandeln Sie komplexe Sätze in einfaches Deutsch auf dem Leseniveau der 6.Klasse.
