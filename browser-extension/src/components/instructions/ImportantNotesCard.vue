@@ -11,10 +11,13 @@
         {{ i18n.t("instructions.importantNotesCard.description") }}
       </p>
       <p class="mb-3">
+        {{ i18n.t("instructions.importantNotesCard.development") }}
+      </p>
+      <p class="mb-3">
         {{ i18n.t("instructions.importantNotesCard.language") }}
       </p>
       <p>
-        {{ i18n.t("instructions.importantNotesCard.development") }}
+        {{ i18n.t("instructions.importantNotesCard.requirements") }}
       </p>
     </v-card-text>
   </v-card>
