@@ -155,7 +155,7 @@ import ModelDeleteButton from "@/components/instructions/ModelDeleteButton.vue";
 import { useModelAvailability } from "@/composables/useModelAvailability.ts";
 import { useOllama } from "@/composables/useOllama.ts";
 import { useStepperInteractions } from "@/composables/useStepperInteractions.ts";
-import { LLM_HUGGINGFACE_FILE, LLM_HUGGINGFACE_REPO } from "@/config.ts";
+import { LLM_HUGGINGFACE_FILE, LLM_HUGGINGFACE_REPO } from "@/config/config.ts";
 
 onMounted(async () => {
   await jumpToNextUncompletedStep();

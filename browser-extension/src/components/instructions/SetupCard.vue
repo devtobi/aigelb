@@ -179,7 +179,7 @@ import ModelDownloadButton from "@/components/instructions/ModelDownloadButton.v
 import { useModelAvailability } from "@/composables/useModelAvailability.ts";
 import { useOllama } from "@/composables/useOllama.ts";
 import { useStepperInteractions } from "@/composables/useStepperInteractions.ts";
-import { LLM_HUGGINGFACE_FILE, LLM_HUGGINGFACE_REPO } from "@/config.ts";
+import { LLM_HUGGINGFACE_FILE, LLM_HUGGINGFACE_REPO } from "@/config/config.ts";
 import { isPinnedInToolbar } from "@/utility/browser.ts";
 
 const emit = defineEmits<{

@@ -12,9 +12,9 @@ import {
   LLM_HUGGINGFACE_FILE,
   LLM_HUGGINGFACE_REPO,
   LLM_SUPPORT_STREAMING,
-  SYSTEM_PROMPT,
-  USER_PROMPT_TEMPLATE,
-} from "@/config.ts";
+} from "@/config/config.ts";
+import SYSTEM_PROMPT from "@/config/system_prompt.txt?raw";
+import USER_PROMPT_TEMPLATE from "@/config/user_prompt.txt?raw";
 import { convertToOllamaUrl } from "@/utility/conversion.ts";
 
 function stream(
@@ -27,11 +27,12 @@ function stream(
   onAbort?: () => void,
   onError?: () => void
 ) {
+  const ollamaModel = ollama(model);
   const { textStream } = streamText({
     model: supportsStreaming
-      ? ollama(model)
+      ? ollamaModel
       : wrapLanguageModel({
-          model: ollama(model),
+          model: ollamaModel,
           middleware: simulateStreamingMiddleware(),
         }),
     messages: [

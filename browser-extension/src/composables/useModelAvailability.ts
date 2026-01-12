@@ -1,6 +1,6 @@
 import { computed, ref } from "vue";
 
-import { LLM_HUGGINGFACE_FILE, LLM_HUGGINGFACE_REPO } from "@/config.ts";
+import { LLM_HUGGINGFACE_FILE, LLM_HUGGINGFACE_REPO } from "@/config/config.ts";
 import { convertToOllamaUrl } from "@/utility/conversion.ts";
 import { sendMessage } from "@/utility/messaging.ts";
 
