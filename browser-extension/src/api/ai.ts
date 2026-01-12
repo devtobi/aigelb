@@ -12,9 +12,9 @@ import {
   LLM_HUGGINGFACE_FILE,
   LLM_HUGGINGFACE_REPO,
   LLM_SUPPORT_STREAMING,
-  SYSTEM_PROMPT,
-  USER_PROMPT_TEMPLATE,
 } from "@/config.ts";
+import SYSTEM_PROMPT from "@/system_prompt.txt?raw";
+import USER_PROMPT_TEMPLATE from "@/user_prompt.txt?raw";
 import { convertToOllamaUrl } from "@/utility/conversion.ts";
 
 function stream(
