@@ -1,3 +1,3 @@
-Bitte übersetzen Sie den folgenden Text in einfaches Deutsch:
+Folgenden Text bitte unter Einhaltung der genannten Regeln in Leichte Sprache übersetzen und nur den übersetzten Text zurückgeben:
 
 {source}
