@@ -12,6 +12,7 @@ import {
   LLM_HUGGINGFACE_FILE,
   LLM_HUGGINGFACE_REPO,
   LLM_SUPPORT_STREAMING,
+  LLM_TEMPERATURE,
 } from "@/config/config.ts";
 import SYSTEM_PROMPT from "@/config/system_prompt.txt?raw";
 import USER_PROMPT_TEMPLATE from "@/config/user_prompt.txt?raw";
@@ -51,6 +52,7 @@ function stream(
     onAbort,
     onError,
     experimental_transform: smoothStream(),
+    temperature: LLM_TEMPERATURE,
   });
   return textStream;
 }
