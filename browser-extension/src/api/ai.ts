@@ -9,6 +9,7 @@ import {
 import { ollama } from "ai-sdk-ollama/browser";
 
 import {
+  CONTEXT_LENGTH,
   LLM_HUGGINGFACE_FILE,
   LLM_HUGGINGFACE_REPO,
   LLM_SUPPORT_STREAMING,
@@ -28,7 +29,11 @@ function stream(
   onAbort?: () => void,
   onError?: () => void
 ) {
-  const ollamaModel = ollama(model);
+  const ollamaModel = ollama(model, {
+    options: {
+      num_ctx: CONTEXT_LENGTH,
+    },
+  });
   const { textStream } = streamText({
     model: supportsStreaming
       ? ollamaModel
