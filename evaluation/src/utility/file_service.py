@@ -4,6 +4,7 @@ from io import StringIO
 from os import listdir, makedirs, path, remove
 from typing import (
   Any,
+  Dict,
   List,
   LiteralString,
   Optional,
@@ -11,7 +12,6 @@ from typing import (
   Type,
   TypeVar,
   cast,
-  Dict
 )
 
 from numpy import nan
