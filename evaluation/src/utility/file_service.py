@@ -4,6 +4,7 @@ from io import StringIO
 from os import listdir, makedirs, path, remove
 from typing import (
   Any,
+  Dict,
   List,
   LiteralString,
   Optional,
@@ -19,7 +20,7 @@ from pathvalidate import sanitize_filename
 
 
 class DictSerializable(Protocol):
-  def to_dict(self) -> dict: ...
+  def to_dict(self) -> Dict: ...
 
 T = TypeVar('T')
 
@@ -125,7 +126,7 @@ class FileService:
     try:
       buf = StringIO(json_string)
       json_series = read_json(buf, typ='series', orient='index')
-      data: list[dict[str, object]] = [cast(dict[str, object], json_series.to_dict())]
+      data: list[Dict[str, object]] = [cast(Dict[str, object], json_series.to_dict())]
       df = json_normalize(data)
       return str(df.at[0, key])
     except ValueError, KeyError, TypeError:
@@ -140,8 +141,8 @@ class FileService:
     ]
 
   @classmethod
-  def _process_row(cls, row: dict) -> dict:
-    result = {}
+  def _process_row(cls, row: Dict) -> Dict[str, Any]:
+    result: Dict[str, Any] = {}
     for key, val in row.items():
       # Pass through None
       if val is None:
@@ -159,7 +160,7 @@ class FileService:
       # Try to convert boolean-like strings
       if val_str.lower() in ['true', 'false']:
         result[key] = cls._str_to_bool(val_str)
-      # Try to parse lists, dicts, or numeric values
+      # Try to parse lists, Dicts, or numeric values
       elif val_str.startswith('{') or val_str.startswith('[') or val_str.isdigit():
         try:
           result[key] = literal_eval(val_str)
