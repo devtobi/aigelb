@@ -72,22 +72,28 @@ of different LLMs in regard to the use case "Easy Language" in German.
 
 ### Installation
 
-#### Building
+The latest version of the extension can be downloaded on the releases page.
+The extension is available for Chromium-based browsers, Firefox and Safari.
 
-Currently, the extension needs to be built manually from source.
-This requires [Bun](https://bun.sh) to be installed on your system.
+#### Building manually
+
+If you want to build the extension manually from source,
+you need to have [Bun](https://bun.sh) installed on your system.
 
 To build the extension, run the following commands in the `browser-extension` directory:
 1. Install dependencies: `bun install`
-2. Build for Chrome: `bun run build:chrome` or
+2. Build for Chrome/Chromium: `bun run build:chrome` or
 3. Build for Firefox: `bun run zip:firefox`
 
 The extension will be built in the `browser-extension/dist` directory.
 
 #### Loading
 
+The extension is currently unsigned (and not distributed via dedicated extension stores).
+That's why you need to do the following:
+
 To load the extension in your browser, you need to follow the instructions for your specific browser:
-- In Chrome, turn on `Developer mode` and then `Load unpacked extension...` and select the `chrome-mv3` folder.
+- In Chrome (or other Chromium-based browsers), turn on `Developer mode` and then `Load unpacked extension...` and select the `chrome-mv3` folder.
 - In Firefox, the extension can be installed via the URL `about:debugging` and then `Load Temporary Add-on...` and select the `aigelb-browser-extension-*-firefox.zip` file.
 
 After installation the instructions page will be displayed.
