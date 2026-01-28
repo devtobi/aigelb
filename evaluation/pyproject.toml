@@ -18,7 +18,7 @@ dependencies = [
     "huggingface_hub (==0.36.0)",
     "lexicalrichness (==0.5.1)",
     "llama-cpp-python (==0.3.16)",
-    "pandas(==2.3.3)",
+    "pandas(==3.0.0)",
     "pathvalidate (==3.3.1)",
     "sacrebleu (==2.6.0)",
     "textstat (==0.7.12)",
