@@ -113,7 +113,11 @@ function resetState() {
 
 function appendToNodeByIndex(idx: number, text: string) {
   if (!text) return;
-  const node = currentRun.value?.nodes[idx];
+  const availableIndex = Math.min(
+    idx,
+    (currentRun.value?.nodes.length ?? 1) - 1
+  );
+  const node = currentRun.value?.nodes[availableIndex];
   if (node) node.nodeValue = (node.nodeValue ?? "") + text;
 }
 
