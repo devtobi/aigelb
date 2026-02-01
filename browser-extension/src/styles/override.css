@@ -1,4 +1,18 @@
 body {
   font-family:
     "Roboto", sans-serif; /* required to make custom font work in Chrome */
+  font-size: 16px;
+}
+
+.v-alert-title {
+  font-size: 1.25em;
+  line-height: 1.75em;
+}
+
+.v-btn {
+  font-size: 0.875em;
+}
+
+.v-btn .v-btn__content {
+  font-size: inherit;
 }
