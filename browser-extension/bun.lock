@@ -6,7 +6,7 @@
       "name": "aigelb-browser-extension",
       "dependencies": {
         "@fontsource/roboto": "5.2.9",
-        "@huggingface/hub": "2.8.0",
+        "@huggingface/hub": "2.8.1",
         "@vueuse/core": "14.1.0",
         "@webext-core/messaging": "2.3.0",
         "ai": "6.0.62",
@@ -155,7 +155,7 @@
 
     "@fontsource/roboto": ["@fontsource/roboto@5.2.9", "", {}, "sha512-ZTkyHiPk74B/aj8BZWbsxD5Yu+Lq+nR64eV4wirlrac2qXR7jYk2h6JlLYuOuoruTkGQWNw2fMuKNavw7/rg0w=="],
 
-    "@huggingface/hub": ["@huggingface/hub@2.8.0", "", { "dependencies": { "@huggingface/tasks": "^0.19.80" }, "optionalDependencies": { "cli-progress": "^3.12.0" }, "bin": { "hfjs": "dist/cli.js" } }, "sha512-eh7lXCrZeNor2YE+2jn2F75/GEzq+TAh81jLTskiqBNcKuBes0I7TIGP1qiDC+rupP765C5vx3XMNxXQVN3N9w=="],
+    "@huggingface/hub": ["@huggingface/hub@2.8.1", "", { "dependencies": { "@huggingface/tasks": "^0.19.82" }, "optionalDependencies": { "cli-progress": "^3.12.0" }, "bin": { "hfjs": "dist/cli.js" } }, "sha512-VAsXdMiIHPteXQJhrwaBEiePTWiJ0zBSymHdnX4J+AijjNN0h3RzGfkKemXcu75gu/TmRLFY9l8+2Tkdmpis0w=="],
 
     "@huggingface/tasks": ["@huggingface/tasks@0.19.82", "", {}, "sha512-i8TzJb6Zk7KnYRL8unnYRuh/tW7ku3hJtQw972q/ZXvjkr/YIwWAAVxEfXuaj0vtCUbUljamJji6oWVG4+0PLQ=="],
 
@@ -625,7 +625,7 @@
 
     "estraverse": ["estraverse@5.3.0", "", {}, "sha512-MMdARuVEQziNTeJD8DgMqmhwR11BRQ/cBP+pLtYdSTnf3MIO8fFeiINEbX36ZdNlfU/7A9f3gUw49B3oQsvwBA=="],
 
-    "estree-walker": ["estree-walker@3.0.3", "", { "dependencies": { "@types/estree": "^1.0.0" } }, "sha512-7RUKfXgSMMkzt6ZuXmqapOurLGPPfgj6l9uRZ7lRGolvk0y2yocc35LdcxKC5PQZdn2DMqioAQ2NoWcrTKmm6g=="],
+    "estree-walker": ["estree-walker@2.0.2", "", {}, "sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w=="],
 
     "esutils": ["esutils@2.0.3", "", {}, "sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g=="],
 
@@ -1243,10 +1243,6 @@
 
     "@vue/compiler-core/entities": ["entities@7.0.1", "", {}, "sha512-TWrgLOFUQTH994YUyl1yT4uyavY5nNB5muff+RtWaqNVCAK408b5ZnnbNAUEWLTCpum9w6arT70i1XdQ4UeOPA=="],
 
-    "@vue/compiler-core/estree-walker": ["estree-walker@2.0.2", "", {}, "sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w=="],
-
-    "@vue/compiler-sfc/estree-walker": ["estree-walker@2.0.2", "", {}, "sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w=="],
-
     "@wxt-dev/storage/@wxt-dev/browser": ["@wxt-dev/browser@0.1.32", "", { "dependencies": { "@types/filesystem": "*", "@types/har-format": "*" } }, "sha512-jvfSppeLzlH4sOkIvMBJoA1pKoI+U5gTkjDwMKdkTWh0P/fj+KDyze3lzo3S6372viCm8tXUKNez+VKyVz2ZDw=="],
 
     "ai-sdk-ollama/@ai-sdk/provider": ["@ai-sdk/provider@3.0.5", "", { "dependencies": { "json-schema": "^0.4.0" } }, "sha512-2Xmoq6DBJqmSl80U6V9z5jJSJP7ehaJJQMy2iFUqTay06wdCqTnPVBBQbtEL8RCChenL+q5DC5H5WzU3vV3v8w=="],
@@ -1354,6 +1350,8 @@
     "strip-literal/js-tokens": ["js-tokens@9.0.1", "", {}, "sha512-mxa9E9ITFOt0ban3j6L5MpjwegGz6lBQmM1IJkWeBZGcMxto50+eWdjC/52xDbS2vy0k7vIMK0Fe2wfL9OQSpQ=="],
 
     "unimport/escape-string-regexp": ["escape-string-regexp@5.0.0", "", {}, "sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw=="],
+
+    "unimport/estree-walker": ["estree-walker@3.0.3", "", { "dependencies": { "@types/estree": "^1.0.0" } }, "sha512-7RUKfXgSMMkzt6ZuXmqapOurLGPPfgj6l9uRZ7lRGolvk0y2yocc35LdcxKC5PQZdn2DMqioAQ2NoWcrTKmm6g=="],
 
     "unimport/unplugin": ["unplugin@2.3.11", "", { "dependencies": { "@jridgewell/remapping": "^2.3.5", "acorn": "^8.15.0", "picomatch": "^4.0.3", "webpack-virtual-modules": "^0.6.2" } }, "sha512-5uKD0nqiYVzlmCRs01Fhs2BdkEgBS3SAVP6ndrBsuK42iC2+JHyxM05Rm9G8+5mkmRtzMZGY8Ct5+mliZxU/Ww=="],
 
