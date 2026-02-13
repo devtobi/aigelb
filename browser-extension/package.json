@@ -27,7 +27,7 @@
   "dependencies": {
     "@fontsource/roboto": "5.2.9",
     "@huggingface/hub": "2.8.1",
-    "@vueuse/core": "14.1.0",
+    "@vueuse/core": "14.2.1",
     "@webext-core/messaging": "2.3.0",
     "ai": "6.0.73",
     "ai-sdk-ollama": "3.3.0",
