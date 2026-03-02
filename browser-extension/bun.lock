@@ -5,7 +5,7 @@
     "": {
       "name": "aigelb-browser-extension",
       "dependencies": {
-        "@fontsource/roboto": "5.2.9",
+        "@fontsource/roboto": "5.2.10",
         "@huggingface/hub": "2.8.1",
         "@vueuse/core": "14.1.0",
         "@webext-core/messaging": "2.3.0",
@@ -153,7 +153,7 @@
 
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.4.1", "", { "dependencies": { "@eslint/core": "^0.17.0", "levn": "^0.4.1" } }, "sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA=="],
 
-    "@fontsource/roboto": ["@fontsource/roboto@5.2.9", "", {}, "sha512-ZTkyHiPk74B/aj8BZWbsxD5Yu+Lq+nR64eV4wirlrac2qXR7jYk2h6JlLYuOuoruTkGQWNw2fMuKNavw7/rg0w=="],
+    "@fontsource/roboto": ["@fontsource/roboto@5.2.10", "", {}, "sha512-8HlA5FtSfz//oFSr2eL7GFXAiE7eIkcGOtx7tjsLKq+as702x9+GU7K95iDeWFapHC4M2hv9RrpXKRTGGBI8Zg=="],
 
     "@huggingface/hub": ["@huggingface/hub@2.8.1", "", { "dependencies": { "@huggingface/tasks": "^0.19.82" }, "optionalDependencies": { "cli-progress": "^3.12.0" }, "bin": { "hfjs": "dist/cli.js" } }, "sha512-VAsXdMiIHPteXQJhrwaBEiePTWiJ0zBSymHdnX4J+AijjNN0h3RzGfkKemXcu75gu/TmRLFY9l8+2Tkdmpis0w=="],
 
