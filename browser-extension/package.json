@@ -50,7 +50,7 @@
     "eslint": "9.39.3",
     "eslint-plugin-vue": "10.7.0",
     "prettier": "3.8.1",
-    "serve": "14.2.5",
+    "serve": "14.2.6",
     "typescript": "5.9.3",
     "unplugin-fonts": "1.4.0",
     "vite-plugin-vuetify": "2.1.3",
