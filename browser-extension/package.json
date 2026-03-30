@@ -32,7 +32,7 @@
     "ai": "6.0.140",
     "ai-sdk-ollama": "3.3.0",
     "cheerio": "1.2.0",
-    "filesize": "11.0.13",
+    "filesize": "11.0.14",
     "ollama": "0.6.3",
     "vue": "3.5.30",
     "vuetify": "3.11.9"
