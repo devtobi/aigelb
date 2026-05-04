@@ -30,7 +30,7 @@
     "@vueuse/core": "14.1.0",
     "@webext-core/messaging": "2.3.0",
     "ai": "6.0.172",
-    "ai-sdk-ollama": "3.3.0",
+    "ai-sdk-ollama": "3.8.3",
     "cheerio": "1.2.0",
     "filesize": "11.0.17",
     "ollama": "0.6.3",
