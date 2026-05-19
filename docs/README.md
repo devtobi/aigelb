@@ -1,3 +1,11 @@
+## ⚠️ IMPORTANT
+
+This project was originally developed as part of my master’s thesis and is no longer under active development.
+At the moment, I do not have the time to continue maintaining or extending it.
+
+The repository will remain publicly available, and I may revisit the project in the future if time permits.
+In the meantime, feel free to fork the project, experiment with it, or build upon it for your own use cases.
+
 [![Last commit][commit-shield]][commit-url]
 [![License][license-shield]][license-url]
 
