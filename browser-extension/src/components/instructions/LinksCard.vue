@@ -27,6 +27,7 @@
           <card-link
             :title="i18n.t('instructions.linksPanel.paper.title')"
             :subtitle="i18n.t('instructions.linksPanel.paper.subTitle')"
+            link="https://opus4.kobv.de/opus4-hm/frontdoor/index/index/docId/1337"
             :icon="mdiSchool"
           />
         </v-col>

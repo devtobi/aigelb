@@ -63,8 +63,8 @@ instructions:
       title: AIGELB on GitHub
       subTitle: Follow the development of AIGELB
     paper:
-      title: Scientific paper behind AIGELB
-      subTitle: To be published in 2026
+      title: Master thesis behind AIGELB
+      subTitle: Click to read
   closeButton:
     text: Close instructions
     tooltip: The instructions can be opened again at any time by clicking on the AIGELB icon in the browser bar.

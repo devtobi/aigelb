@@ -319,9 +319,19 @@ Distributed under the MIT License. See [LICENSE][license-url] for more informati
 If you reuse my work please cite my thesis as follows:
 
 ```bibtex
+@mastersthesis{Stadler2026,
+  author      = {Tobias Stadler},
+  title       = {Automatisierte {\"U}bersetzung von textuellen Webinhalten in Leichte Sprache : Vergleich von Open-Source-LLMs und Implementierung zur clientseitigen Ausf{\"u}hrung auf Consumer-Hardware},
+  type        = {Master Thesis},
+  school      = {Hochschule f{\"u}r angewandte Wissenschaften M{\"u}nchen},
+  year        = {2026},
+  month       = {4},
+  url         = {https://opus4.kobv.de/opus4-hm/frontdoor/index/index/docId/1337}
+}
 ```
 
-If you are interested in reading the thesis you can find it at [ADD TITLE](https://github.com/devtobi).
+If you are interested in reading the thesis (written in German), you can find it under
+[Automated translation of textual web content into German Easy Language : Comparison of open-source LLMs and implementation for client-side execution on consumer hardware](https://opus4.kobv.de/opus4-hm/frontdoor/index/index/docId/1337).
 
 [license-shield]: https://img.shields.io/github/license/devtobi/aigelb.svg?style=for-the-badge&logo=github
 [license-url]: https://github.com/devtobi/aigelb/blob/main/LICENSE
