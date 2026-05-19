@@ -420,7 +420,7 @@ requires-dist = [
     { name = "evaluate", specifier = "==0.4.6" },
     { name = "huggingface-hub", specifier = "==0.36.0" },
     { name = "lexicalrichness", specifier = "==0.5.1" },
-    { name = "llama-cpp-python", specifier = "==0.3.16" },
+    { name = "llama-cpp-python", specifier = "==0.3.23" },
     { name = "pandas", specifier = "==3.0.3" },
     { name = "pathvalidate", specifier = "==3.3.1" },
     { name = "sacrebleu", specifier = "==2.6.0" },
@@ -720,7 +720,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/d6/4a/f67555e6cce1f3c44
 
 [[package]]
 name = "llama-cpp-python"
-version = "0.3.16"
+version = "0.3.23"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "diskcache" },
@@ -728,7 +728,7 @@ dependencies = [
     { name = "numpy" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e4/b4/c8cd17629ced0b9644a71d399a91145aedef109c0333443bef015e45b704/llama_cpp_python-0.3.16.tar.gz", hash = "sha256:34ed0f9bd9431af045bb63d9324ae620ad0536653740e9bb163a2e1fcb973be6", size = 50688636, upload-time = "2025-08-15T04:58:29.212Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/61/fb/3932d67b89eb7d8f451719b40b67034e031e04b8b598a7f65d13e255ebfb/llama_cpp_python-0.3.23.tar.gz", hash = "sha256:85493cd887b543588941e8704640fef6a54c057443292e527559c30728375ffd", size = 68300621, upload-time = "2026-05-11T10:12:21.665Z" }
 
 [[package]]
 name = "lxml"
